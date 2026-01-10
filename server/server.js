@@ -27,6 +27,20 @@ async function startServer() {
     // Sync models (alter: true updates schema without dropping tables)
     await sequelize.sync({ alter: true });
 
+    // Auto-seed admin if not exists
+    const { User } = require('./models');
+    const adminExists = await User.findByPk('admin');
+    if (!adminExists) {
+      await User.create({
+        id: 'admin',
+        name: 'System Admin',
+        password: 'admin',
+        role: 'admin',
+        department: 'Administration'
+      });
+      console.log('Admin user auto-created.');
+    }
+
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });
