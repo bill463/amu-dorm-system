@@ -19,6 +19,11 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use('/auth', authRoutes);
 app.use('/api', apiRoutes);
 
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', message: 'Backend is running' });
+});
+
 async function startServer() {
   try {
     await sequelize.authenticate();
