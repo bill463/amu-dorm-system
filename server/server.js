@@ -20,12 +20,19 @@ app.use('/auth', authRoutes);
 app.use('/api', apiRoutes);
 
 // Health check endpoint
+// Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Backend is running' });
 });
 
+// Root route
+app.get('/', (req, res) => {
+  res.send('AMU Dorm System API is running. Visit /api/health for status.');
+});
+
 async function startServer() {
   try {
+    console.log('Connecting to database at:', process.env.DB_HOST || 'localhost');
     await sequelize.authenticate();
     console.log('Database connection has been established successfully.');
 
