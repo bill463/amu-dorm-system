@@ -25,18 +25,29 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Backend is running' });
 });
 
-// Root route
-app.get('/', (req, res) => {
-  res.send('AMU Dorm System API is running. Visit /api/health for status.');
+// Diagnostics
+app.get('/api/debug', (req, res) => {
+  res.json({
+    db_host: process.env.DB_HOST || 'not set',
+    db_name: process.env.DB_NAME || 'not set',
+    db_user: process.env.DB_USER || 'not set',
+    db_pass_exists: !!process.env.DB_PASS,
+    port: process.env.PORT || 'not set'
+  });
 });
 
 async function startServer() {
+  // Start listening immediately so Railway health check passes
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+
   try {
-    console.log('Connecting to database at:', process.env.DB_HOST || 'localhost');
+    console.log('Attempting to connect to database at:', process.env.DB_HOST || 'localhost');
     await sequelize.authenticate();
     console.log('Database connection has been established successfully.');
 
-    // Sync models (alter: true updates schema without dropping tables)
+    // Sync models
     await sequelize.sync({ alter: true });
 
     // Auto-seed admin if not exists
@@ -52,12 +63,9 @@ async function startServer() {
       });
       console.log('Admin user auto-created.');
     }
-
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
   } catch (error) {
     console.error('Unable to connect to the database:', error);
+    console.log('Server is still running, check /api/debug for environment variables.');
   }
 }
 
