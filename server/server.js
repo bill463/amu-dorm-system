@@ -26,13 +26,26 @@ app.get('/api/health', (req, res) => {
 });
 
 // Diagnostics
-app.get('/api/debug', (req, res) => {
+app.get('/api/debug', async (req, res) => {
+  const { User } = require('./models');
+  let adminStatus = 'not found';
+  try {
+    const admin = await User.findOne({ where: { role: 'admin' } });
+    if (admin) {
+      const isHashed = admin.password.startsWith('$2a$') || admin.password.startsWith('$2b$');
+      adminStatus = isHashed ? 'found (hashed)' : 'found (NOT HASHED)';
+    }
+  } catch (e) {
+    adminStatus = 'error checking: ' + e.message;
+  }
+
   res.json({
     db_host: process.env.DB_HOST || 'not set',
     db_name: process.env.DB_NAME || 'not set',
     db_user: process.env.DB_USER || 'not set',
     db_pass_exists: !!process.env.DB_PASS,
-    port: process.env.PORT || 'not set'
+    port: process.env.PORT || 'not set',
+    admin_status: adminStatus
   });
 });
 
@@ -59,16 +72,18 @@ async function startServer() {
       await User.create({
         id: 'admin',
         name: 'System Admin',
-        password: 'admin', // Hook will hash this
+        password: 'admin', // beforeCreate hook will handle this
         role: 'admin',
         department: 'Administration'
       });
       console.log('Default admin user created successfully.');
     } else if (!admin.password.startsWith('$2a$') && !admin.password.startsWith('$2b$')) {
-      // If password is not hashed, hash it now
-      console.log('Existing admin password is plain text. Updating to hash...');
-      admin.password = admin.password; // Triggers the 'changed' check in the hook
-      await admin.save();
+      // Force migration if password is plain text
+      console.log('Migrating plain-text admin password...');
+      const bcrypt = require('bcryptjs');
+      const salt = await bcrypt.genSalt(10);
+      const hashed = await bcrypt.hash(admin.password, salt);
+      await admin.update({ password: hashed }, { hooks: false });
       console.log('Admin password migrated to secure hash.');
     }
   } catch (error) {
