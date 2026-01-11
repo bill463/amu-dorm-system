@@ -572,7 +572,7 @@ const updateTabContent = async () => {
         }
 
         if (currentTab === 'register') {
-            renderRegisterTab(container);
+            renderRegisterTab(container, rooms);
             return;
         }
 
