@@ -99,11 +99,12 @@ async function startServer() {
       for (const block of blocks) {
         for (let i = 1; i <= roomsPerBlock; i++) {
           const roomNumber = `${i}`.padStart(2, '0');
+          const roomId = `${block}${roomNumber}`;
           await Room.create({
+            id: roomId,
             block: block,
-            number: `${block}${roomNumber}`,
-            capacity: 4,
-            floor: Math.ceil(i / 5)
+            number: roomId,
+            capacity: 4
           });
         }
       }
