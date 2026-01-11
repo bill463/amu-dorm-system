@@ -107,7 +107,7 @@ router.post('/students', async (req, res) => {
 // Bulk Auto-allocate rooms to unallocated students
 router.post('/students/auto-allocate', async (req, res) => {
   try {
-    const { strategy } = req.body; // 'alphabetical', 'year', 'department'
+    const { strategies = [] } = req.body; // e.g., ['department', 'year', 'alphabetical']
 
     // 1. Get all unallocated students
     const students = await User.findAll({
@@ -118,17 +118,27 @@ router.post('/students/auto-allocate', async (req, res) => {
       return res.json({ message: 'No unallocated students found.', count: 0 });
     }
 
-    // 2. Sort students based on strategy
+    // Extraction helpers
+    const getYear = (id) => (id || '').split('/').pop();
+
+    // 2. Hierarchical Sort based on strategies array
     let sortedStudents = [...students];
-    if (strategy === 'alphabetical') {
-      sortedStudents.sort((a, b) => a.name.localeCompare(b.name));
-    } else if (strategy === 'year') {
-      // Extract year from ID (e.g., "NSR/1234/16" -> "16")
-      const getYear = (id) => id.split('/').pop();
-      sortedStudents.sort((a, b) => getYear(a.id).localeCompare(getYear(b.id)));
-    } else if (strategy === 'department') {
-      sortedStudents.sort((a, b) => (a.department || '').localeCompare(b.department || ''));
-    }
+    sortedStudents.sort((a, b) => {
+      for (const s of strategies) {
+        let cmp = 0;
+        if (s === 'department') {
+          cmp = (a.department || '').localeCompare(b.department || '');
+        } else if (s === 'year') {
+          cmp = getYear(a.id).localeCompare(getYear(b.id));
+        } else if (s === 'alphabetical') {
+          cmp = a.name.localeCompare(b.name);
+        }
+        if (cmp !== 0) return cmp;
+      }
+      return 0;
+    });
+
+    const hasDeptStrategy = strategies.includes('department');
 
     // 3. Get all rooms with current occupancy
     const rooms = await Room.findAll({
@@ -154,8 +164,8 @@ router.post('/students/auto-allocate', async (req, res) => {
     const updates = [];
     let allocationCount = 0;
 
-    if (strategy === 'department') {
-      // Group unallocated students by department
+    if (hasDeptStrategy) {
+      // Group unallocated students by department (they are already sorted within dept if other strategies provided)
       const deptGroups = {};
       sortedStudents.forEach(s => {
         const dept = s.department || 'Unknown';
@@ -209,8 +219,7 @@ router.post('/students/auto-allocate', async (req, res) => {
         }
       }
     } else {
-      // SEQUENTIAL ALLOCATION (Alphabetical or Year)
-      // This follows existing logic where batch/alpha is filled into every available slot
+      // SEQUENTIAL ALLOCATION (Alphabetical or Year only)
       allocationCount = Math.min(sortedStudents.length, availableSlots.length);
       for (let i = 0; i < allocationCount; i++) {
         updates.push(sortedStudents[i].update({ roomId: availableSlots[i] }));
@@ -220,7 +229,7 @@ router.post('/students/auto-allocate', async (req, res) => {
     await Promise.all(updates);
 
     res.json({
-      message: `Successfully allocated ${allocationCount} students using ${strategy} strategy. (Strict department separation applied where applicable)`,
+      message: `Successfully allocated ${allocationCount} students using: ${strategies.join(' > ')}.`,
       count: allocationCount
     });
 

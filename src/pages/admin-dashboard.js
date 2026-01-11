@@ -534,14 +534,30 @@ const renderAllocateTab = (container, rooms, students) => {
     const unallocated = students.filter(s => !s.roomId && s.role !== 'admin');
     const totalCapacity = rooms.reduce((acc, r) => acc + (r.capacity - (r.occupants || []).length), 0);
 
+    let selectedStrategies = [];
+
+    const updateUI = () => {
+        const orderDisplay = document.getElementById('priority-display');
+        const runBtn = document.getElementById('run-allocation-btn');
+
+        if (selectedStrategies.length > 0) {
+            orderDisplay.innerHTML = `<strong>Priority:</strong> ${selectedStrategies.map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' > ')}`;
+            orderDisplay.style.display = 'block';
+            runBtn.disabled = false;
+        } else {
+            orderDisplay.style.display = 'none';
+            runBtn.disabled = true;
+        }
+    };
+
     container.innerHTML = `
         <div style="max-width: 600px; margin: 0 auto;">
             <div style="text-align: center; margin-bottom: 2.5rem;">
                 <div style="display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; background: #f0fdf4; color: var(--primary-color); border-radius: 50%; margin-bottom: 1rem;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
                 </div>
-                <h2>Smart Room Allocation</h2>
-                <p style="color: var(--text-secondary);">Automatically assign rooms to all currently unallocated students using a strategy of your choice.</p>
+                <h2>Advanced Room Allocation</h2>
+                <p style="color: var(--text-secondary);">Combine multiple criteria to define the perfect allocation hierarchy.</p>
             </div>
 
             <div class="grid grid-2" style="margin-bottom: 2rem;">
@@ -556,35 +572,41 @@ const renderAllocateTab = (container, rooms, students) => {
             </div>
 
             <div class="card" style="margin: 0;">
-                <h3 style="margin-bottom: 1.5rem;">Select Allocation Strategy</h3>
+                <h3 style="margin-bottom: 0.5rem;">Select Criteria</h3>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem;">Click in the order you want them prioritized (e.g. Dept first, then Year).</p>
+                
                 <div style="display: flex; flex-direction: column; gap: 1rem;">
-                    <label class="strategy-option" style="display: flex; align-items: flex-start; gap: 1rem; padding: 1rem; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.2s;">
-                        <input type="radio" name="strategy" value="alphabetical" checked style="width: auto; margin-top: 0.3rem;">
+                    <label class="strategy-option" style="display: flex; align-items: center; gap: 1rem; padding: 1rem; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.2s;">
+                        <input type="checkbox" value="department" class="strat-check" style="width: 20px; height: 20px;">
                         <div>
-                            <div style="font-weight: 600;">Alphabetical Order</div>
-                            <div style="font-size: 0.85rem; color: var(--text-secondary);">Sorts students by their full name (A to Z) and fills rooms in sequence.</div>
+                            <div style="font-weight: 600;">Department Grouping</div>
+                            <div style="font-size: 0.8rem; color: var(--text-secondary);">Students from different departments will not mix in rooms.</div>
                         </div>
                     </label>
 
-                    <label class="strategy-option" style="display: flex; align-items: flex-start; gap: 1rem; padding: 1rem; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.2s;">
-                        <input type="radio" name="strategy" value="year" style="width: auto; margin-top: 0.3rem;">
+                    <label class="strategy-option" style="display: flex; align-items: center; gap: 1rem; padding: 1rem; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.2s;">
+                        <input type="checkbox" value="year" class="strat-check" style="width: 20px; height: 20px;">
                         <div>
                             <div style="font-weight: 600;">Batch / Year</div>
-                            <div style="font-size: 0.85rem; color: var(--text-secondary);">Groups students by their entry year (extracted from ID) to keep batches together.</div>
+                            <div style="font-size: 0.8rem; color: var(--text-secondary);">Keep students of the same entry year together.</div>
                         </div>
                     </label>
 
-                    <label class="strategy-option" style="display: flex; align-items: flex-start; gap: 1rem; padding: 1rem; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.2s;">
-                        <input type="radio" name="strategy" value="department" style="width: auto; margin-top: 0.3rem;">
+                    <label class="strategy-option" style="display: flex; align-items: center; gap: 1rem; padding: 1rem; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.2s;">
+                        <input type="checkbox" value="alphabetical" class="strat-check" style="width: 20px; height: 20px;">
                         <div>
-                            <div style="font-weight: 600;">Department</div>
-                            <div style="font-size: 0.85rem; color: var(--text-secondary);">Groups students of the same department together in blocks/rooms.</div>
+                            <div style="font-weight: 600;">Alphabetical Name</div>
+                            <div style="font-size: 0.8rem; color: var(--text-secondary);">Sort students by name within their groups.</div>
                         </div>
                     </label>
                 </div>
 
+                <div id="priority-display" style="margin-top: 1.5rem; padding: 0.75rem; background: var(--surface-hover); border-radius: 8px; font-size: 0.9rem; color: var(--primary-color); display: none;">
+                    Priority: 
+                </div>
+
                 <div style="margin-top: 2rem;">
-                    <button id="run-allocation-btn" class="btn btn-primary" style="width: 100%; height: 50px; font-size: 1.1rem; justify-content: center;" ${unallocated.length === 0 ? 'disabled' : ''}>
+                    <button id="run-allocation-btn" class="btn btn-primary" style="width: 100%; height: 50px; font-size: 1.1rem; justify-content: center;" disabled>
                         Run Smart Allocation
                     </button>
                     ${unallocated.length === 0 ? '<p style="color: var(--success-color); text-align: center; margin-top: 1rem; font-size: 0.9rem;">✓ All students are currently allocated.</p>' : ''}
@@ -593,23 +615,35 @@ const renderAllocateTab = (container, rooms, students) => {
         </div>
         <style>
             .strategy-option:has(input:checked) { border-color: var(--primary-color) !important; background: #f0fdf4; }
+            .strat-check { cursor: pointer; }
         </style>
     `;
 
+    // Handle check logic
+    document.querySelectorAll('.strat-check').forEach(check => {
+        check.addEventListener('change', (e) => {
+            const val = e.target.value;
+            if (e.target.checked) {
+                selectedStrategies.push(val);
+            } else {
+                selectedStrategies = selectedStrategies.filter(s => s !== val);
+            }
+            updateUI();
+        });
+    });
+
     document.getElementById('run-allocation-btn')?.addEventListener('click', async () => {
-        const strategy = document.querySelector('input[name="strategy"]:checked').value;
         const btn = document.getElementById('run-allocation-btn');
 
-        if (!confirm(`Are you sure you want to automatically allocate ${unallocated.length} students using the ${strategy} strategy?`)) return;
+        if (!confirm(`Are you sure you want to allocate students using strictly: ${selectedStrategies.join(' > ')}?`)) return;
 
         try {
             btn.disabled = true;
             btn.textContent = 'Allocating...';
 
-            const res = await apiCall('/api/students/auto-allocate', 'POST', { strategy });
+            const res = await apiCall('/api/students/auto-allocate', 'POST', { strategies: selectedStrategies });
             showToast(res.message, 'success');
 
-            // Refresh dashboard
             await updateTabContent();
         } catch (e) {
             showToast(e.message, 'error');
