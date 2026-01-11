@@ -151,21 +151,76 @@ router.post('/students/auto-allocate', async (req, res) => {
     }
 
     // 5. Assign students to slots
-    const allocationCount = Math.min(sortedStudents.length, availableSlots.length);
     const updates = [];
+    let allocationCount = 0;
 
-    for (let i = 0; i < allocationCount; i++) {
-      const student = sortedStudents[i];
-      const roomId = availableSlots[i];
+    if (strategy === 'department') {
+      // Group unallocated students by department
+      const deptGroups = {};
+      sortedStudents.forEach(s => {
+        const dept = s.department || 'Unknown';
+        if (!deptGroups[dept]) deptGroups[dept] = [];
+        deptGroups[dept].push(s);
+      });
 
-      // Execute updates
-      updates.push(student.update({ roomId }));
+      // Track room state locally during allocation
+      const roomStates = rooms.map(r => ({
+        id: r.id,
+        capacity: r.capacity,
+        occupants: [...(r.occupants || [])],
+        get currentDept() {
+          return this.occupants.length > 0 ? this.occupants[0].department : null;
+        },
+        get remaining() {
+          return this.capacity - this.occupants.length;
+        }
+      }));
+
+      // Allocate department by department
+      for (const [deptName, studentsInDept] of Object.entries(deptGroups)) {
+        let studentIdx = 0;
+
+        // First pass: try to fill rooms that already have this department
+        for (const rs of roomStates) {
+          if (studentIdx >= studentsInDept.length) break;
+          if (rs.currentDept === deptName && rs.remaining > 0) {
+            const spacesToFill = Math.min(rs.remaining, studentsInDept.length - studentIdx);
+            for (let i = 0; i < spacesToFill; i++) {
+              updates.push(studentsInDept[studentIdx].update({ roomId: rs.id }));
+              rs.occupants.push({ department: deptName }); // mock for state tracking
+              studentIdx++;
+              allocationCount++;
+            }
+          }
+        }
+
+        // Second pass: use empty rooms
+        for (const rs of roomStates) {
+          if (studentIdx >= studentsInDept.length) break;
+          if (rs.occupants.length === 0) {
+            const spacesToFill = Math.min(rs.capacity, studentsInDept.length - studentIdx);
+            for (let i = 0; i < spacesToFill; i++) {
+              updates.push(studentsInDept[studentIdx].update({ roomId: rs.id }));
+              rs.occupants.push({ department: deptName }); // mock for state tracking
+              studentIdx++;
+              allocationCount++;
+            }
+          }
+        }
+      }
+    } else {
+      // SEQUENTIAL ALLOCATION (Alphabetical or Year)
+      // This follows existing logic where batch/alpha is filled into every available slot
+      allocationCount = Math.min(sortedStudents.length, availableSlots.length);
+      for (let i = 0; i < allocationCount; i++) {
+        updates.push(sortedStudents[i].update({ roomId: availableSlots[i] }));
+      }
     }
 
     await Promise.all(updates);
 
     res.json({
-      message: `Successfully allocated ${allocationCount} students using ${strategy} strategy.`,
+      message: `Successfully allocated ${allocationCount} students using ${strategy} strategy. (Strict department separation applied where applicable)`,
       count: allocationCount
     });
 
