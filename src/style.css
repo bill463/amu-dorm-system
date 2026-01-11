@@ -290,6 +290,74 @@ tr:last-child td {
   grid-template-columns: repeat(3, 1fr);
 }
 
+/* Mobile Responsiveness - Prevent Horizontal Overflow */
+@media (max-width: 768px) {
+  body {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  .container {
+    padding: 0 1rem;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* Stack grids on mobile */
+  .grid-2,
+  .grid-3 {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  /* Reduce heading sizes */
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.35rem;
+  }
+
+  h3 {
+    font-size: 1.15rem;
+  }
+
+  /* Adjust card padding */
+  .card {
+    padding: 1rem;
+  }
+
+  /* Make buttons full width on mobile when needed */
+  .btn-block-mobile {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Reduce main content padding */
+  #main-content {
+    padding: 1rem 0;
+  }
+
+  /* Ensure all content respects viewport */
+  * {
+    max-width: 100%;
+    word-wrap: break-word;
+  }
+
+  /* Fix any flex containers that might overflow */
+  [style*="display: flex"] {
+    flex-wrap: wrap;
+  }
+}
+
+/* Tablet adjustments */
+@media (max-width: 992px) and (min-width: 769px) {
+  .grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 /* Navbar Classes */
 .navbar {
   background: white;

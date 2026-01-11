@@ -5,12 +5,12 @@ import { showToast } from '../components/Toast.js';
 
 export const render = `
 <div class="container">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div class="admin-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
         <div>
             <h1 style="margin-bottom: 0.5rem;">Admin Dashboard</h1>
             <p style="color: var(--text-secondary);">Manage students, rooms, and requests</p>
         </div>
-        <div style="font-size: 0.9rem; color: var(--text-secondary);">
+        <div class="admin-date" style="font-size: 0.9rem; color: var(--text-secondary);">
             ${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
         </div>
     </div>
@@ -55,6 +55,17 @@ export const render = `
         }
         .card {
             padding: 1.25rem !important;
+        }
+        
+        /* Hide date on very small screens */
+        .admin-date {
+            display: none !important;
+        }
+        
+        /* Make header full width */
+        .admin-header {
+            flex-direction: column;
+            align-items: flex-start !important;
         }
         
         /* Hide table on mobile, show card layout instead */
