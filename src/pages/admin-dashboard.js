@@ -433,10 +433,6 @@ const renderDormChangeTab = (container, requests) => {
 };
 
 const renderRegisterTab = (container, rooms) => {
-    console.log('renderRegisterTab called with rooms:', rooms);
-    console.log('rooms is array?', Array.isArray(rooms));
-    console.log('rooms length:', rooms?.length);
-
     container.innerHTML = `
         <div style="margin-bottom: 1.5rem;">
             <button class="btn btn-outline" onclick="switchTab('students')" style="display: flex; align-items: center; gap: 0.5rem;">

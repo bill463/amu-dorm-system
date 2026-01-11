@@ -86,6 +86,29 @@ async function startServer() {
       await admin.update({ password: hashed }, { hooks: false });
       console.log('Admin password migrated to secure hash.');
     }
+
+    // Auto-seed rooms if none exist
+    const { Room } = require('./models');
+    const roomCount = await Room.count();
+
+    if (roomCount === 0) {
+      console.log('No rooms found. Seeding sample rooms...');
+      const blocks = ['A', 'B', 'C'];
+      const roomsPerBlock = 10;
+
+      for (const block of blocks) {
+        for (let i = 1; i <= roomsPerBlock; i++) {
+          const roomNumber = `${i}`.padStart(2, '0');
+          await Room.create({
+            block: block,
+            number: `${block}${roomNumber}`,
+            capacity: 4,
+            floor: Math.ceil(i / 5)
+          });
+        }
+      }
+      console.log(`Created ${blocks.length * roomsPerBlock} sample rooms (Blocks A, B, C with 10 rooms each).`);
+    }
   } catch (error) {
     console.error('CRITICAL: Server failed to connect to database:', error);
     console.log('Check /api/debug for environment variables.');
