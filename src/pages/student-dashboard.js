@@ -40,8 +40,8 @@ export const init = async () => {
         welcomeTitle.textContent = `Welcome, ${user.name}`;
     }
 
-    // Auto-assign room for demo
-    await autoAssignDemo(user.id);
+    // Auto-assign room for demo is disabled now that we have manual allocation
+    // await autoAssignDemo(user.id);
 
     // Fetch room, requests, and unread messages count
     const [room, requests, unreadRes] = await Promise.all([

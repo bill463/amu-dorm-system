@@ -1,4 +1,5 @@
 import { getUser, logout } from '../utils/auth.js';
+import { apiCall } from '../utils/api.js';
 
 export const renderNavbar = () => {
     const user = getUser();
@@ -121,10 +122,7 @@ export const updateNavBadge = async () => {
     if (!user || user.role !== 'student') return;
 
     try {
-        const response = await fetch(`${window.document.location.origin.replace('5173', '8080')}/api/messages/unread-count?userId=${user.id}`, {
-            headers: { 'Authorization': `Bearer ${localStorage.getItem('amu_dorm_token')}` }
-        });
-        const { count } = await response.json();
+        const { count } = await apiCall(`/api/messages/unread-count?userId=${user.id}`);
         const badge = document.getElementById('nav-unread-badge');
         if (badge) {
             if (count > 0) {
