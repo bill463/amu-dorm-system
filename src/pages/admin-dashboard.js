@@ -176,10 +176,16 @@ const renderStudentsTab = (container, students) => {
     let html = `
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
             <h3 style="margin: 0;">Registered Students</h3>
-            <button class="btn btn-primary" onclick="switchTab('register')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                Add Student
-            </button>
+            <div style="display: flex; gap: 0.75rem;">
+                <button class="btn btn-outline" onclick="window.exportStudentsCSV()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Export CSV
+                </button>
+                <button class="btn btn-primary" onclick="switchTab('register')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    Add Student
+                </button>
+            </div>
         </div>
     `;
 
@@ -288,11 +294,7 @@ const renderStudentsTab = (container, students) => {
 const renderMaintenanceTab = (container, requests) => {
     const sortedRequests = [...requests].sort((a, b) => new Date(b.date) - new Date(a.date));
     if (sortedRequests.length === 0) {
-        container.innerHTML = `
-            <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
-                 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 1rem; opacity: 0.5;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                <p>No maintenance requests found.</p>
-            </div>`;
+        container.innerHTML = `<p class="text-secondary text-center p-4">No maintenance requests.</p>`;
         return;
     }
 
@@ -303,14 +305,21 @@ const renderMaintenanceTab = (container, requests) => {
             : `<span class="badge badge-success">Completed</span>`;
 
         html += `
-            <div class="card" style="padding: 1.25rem; display: flex; justify-content: space-between; align-items: center; margin-bottom: 0;">
+            <div class="card" style="padding: 1.25rem; display: flex; justify-content: space-between; align-items: start; margin-bottom: 0;">
                 <div style="display: flex; gap: 1rem; align-items: flex-start;">
-                    <div style="background: #f1f5f9; padding: 0.75rem; border-radius: 8px; color: var(--text-secondary);">
+                    <div style="background: #f1f5f9; padding: 0.75rem; border-radius: 8px; color: var(--primary-color);">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
                     </div>
                     <div>
                         <div style="font-weight: 600; font-size: 1.05rem; margin-bottom: 0.25rem;">${req.category}</div>
                         <div style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 0.5rem;">${req.description}</div>
+                        
+                        ${req.image ? `
+                            <div style="margin-bottom: 1rem; cursor: pointer;" onclick="window.open('${req.image}')">
+                                <img src="${req.image}" style="max-width: 150px; border-radius: 8px; border: 1px solid var(--border-color);">
+                            </div>
+                        ` : ''}
+
                         <div style="display: flex; gap: 1rem; font-size: 0.8rem; color: var(--text-secondary);">
                             <span>ID: ${req.studentId}</span>
                             <span>Requested: ${new Date(req.date).toLocaleDateString()}</span>
@@ -400,40 +409,99 @@ const renderLostItemsTab = (container, items) => {
     `).join('') + '</div>';
 };
 
-const renderDormChangeTab = (container, requests) => {
-    if (requests.length === 0) {
-        container.innerHTML = '<p class="text-secondary text-center p-4">No dorm change requests.</p>';
-        return;
-    }
-    container.innerHTML = requests.map(req => `
-        <div class="card" style="margin-bottom: 1rem;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
-                 <div>
-                    <strong style="font-size: 1.1rem; display: block;">${req.User ? req.User.name : req.studentId}</strong>
-                    <span style="color: var(--text-secondary); font-size: 0.9rem;">From: ${req.Room ? `${req.Room.block} ${req.Room.number}` : 'N/A'}</span>
-                 </div>
-                 <span class="badge ${req.status === 'Pending' ? 'badge-warning' : (req.status === 'Approved' ? 'badge-success' : 'badge-danger')}">${req.status}</span>
-            </div>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
-                <div style="background: #ffffff; border: 1px solid var(--border-color); padding: 1rem; border-radius: 8px;">
-                    <span style="display: block; font-size: 0.85rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">Preferred Dorm</span>
-                    <span style="font-weight: 600; font-size: 1.1rem;">${req.preferredDorm}</span>
-                </div>
-                <div style="background: #fff7ed; border: 1px solid #ffedd5; padding: 1rem; border-radius: 8px;">
-                    <span style="display: block; font-size: 0.85rem; color: #9a3412; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">Reason</span>
-                    <span style="color: #9a3412;">${req.reason}</span>
-                </div>
-            </div>
+const renderDormChangeTab = async (container, requests) => {
+    // Fetch swaps separately
+    const swaps = await apiCall('/api/swaps?isAdmin=true').catch(() => []);
 
-             ${req.status === 'Pending' ? `
-                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
-                    <button class="btn btn-success" onclick="window.updateDormChange('${req.id}', 'Approved')">Approve Request</button>
-                    <button class="btn btn-danger" onclick="window.updateDormChange('${req.id}', 'Rejected')">Reject</button>
-                </div>
-            ` : ''}
+    container.innerHTML = `
+        <div style="display: flex; gap: 1rem; margin-bottom: 2rem; background: #f1f5f9; padding: 4px; border-radius: 10px; width: fit-content;">
+            <button class="sub-tab active" id="btn-show-standard">🔄 Room Requests (${requests.length})</button>
+            <button class="sub-tab" id="btn-show-swaps">🤝 Roommate Swaps (${swaps.length})</button>
         </div>
-    `).join('');
+        
+        <div id="standard-requests-view">
+            ${requests.length === 0 ? '<p class="text-secondary text-center p-4">No standard requests.</p>' : requests.map(req => `
+                <div class="card" style="margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                         <div>
+                            <strong style="font-size: 1.1rem; display: block;">${req.User ? req.User.name : req.studentId}</strong>
+                            <span style="color: var(--text-secondary); font-size: 0.9rem;">From: ${req.Room ? `${req.Room.block} ${req.Room.number}` : 'N/A'}</span>
+                         </div>
+                         <span class="badge ${req.status === 'Pending' ? 'badge-warning' : (req.status === 'Approved' ? 'badge-success' : 'badge-danger')}">${req.status}</span>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                        <div style="background: #ffffff; border: 1px solid var(--border-color); padding: 1rem; border-radius: 8px;">
+                            <span style="display: block; font-size: 0.85rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">Preferred Dorm</span>
+                            <span style="font-weight: 600; font-size: 1.1rem;">${req.preferredDorm}</span>
+                        </div>
+                        <div style="background: #fff7ed; border: 1px solid #ffedd5; padding: 1rem; border-radius: 8px;">
+                            <span style="display: block; font-size: 0.85rem; color: #9a3412; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">Reason</span>
+                            <span style="color: #9a3412;">${req.reason}</span>
+                        </div>
+                    </div>
+
+                     ${req.status === 'Pending' ? `
+                        <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                            <button class="btn btn-success" onclick="window.updateDormChange('${req.id}', 'Approved')">Approve Request</button>
+                            <button class="btn btn-danger" onclick="window.updateDormChange('${req.id}', 'Rejected')">Reject</button>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('')}
+        </div>
+
+        <div id="swap-requests-view" style="display: none;">
+            ${swaps.length === 0 ? '<p class="text-secondary text-center p-4">No swap proposals.</p>' : swaps.map(s => `
+                <div class="card" style="margin-bottom: 1rem; border-left: 4px solid var(--primary-color);">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                        <div style="display: flex; items: center; gap: 2rem;">
+                            <div>
+                                <span style="font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase;">From</span>
+                                <div style="font-weight: 700;">${s.Sender?.name}</div>
+                                <div style="font-size: 0.8rem; font-family: monospace;">Room: ${s.Sender?.roomId}</div>
+                            </div>
+                            <div style="display: flex; align-items: center; color: var(--primary-color); font-weight: 800; font-size: 1.5rem;">↔</div>
+                            <div>
+                                <span style="font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase;">To</span>
+                                <div style="font-weight: 700;">${s.Receiver?.name}</div>
+                                <div style="font-size: 0.8rem; font-family: monospace;">Room: ${s.Receiver?.roomId}</div>
+                            </div>
+                        </div>
+                        <span class="badge ${s.status === 'Accepted' ? 'badge-success' : s.status === 'Approved' ? 'badge-info' : 'badge-warning'}">${s.status}</span>
+                    </div>
+                    ${s.status === 'Accepted' ? `
+                        <div style="display: flex; gap: 0.5rem; justify-content: flex-end; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                            <button class="btn btn-primary" onclick="window.approveSwap('${s.id}')">Finalize Swap</button>
+                            <button class="btn btn-outline" onclick="window.updateSwapStatus('${s.id}', 'Rejected')">Deny</button>
+                        </div>
+                    ` : s.status === 'Pending' ? `<p style="font-size: 0.85rem; color: var(--text-secondary); text-align: right;">Waiting for students to agree...</p>` : ''}
+                </div>
+            `).join('')}
+        </div>
+
+        <style>
+            .sub-tab { border: none; background: transparent; padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: var(--text-secondary); transition: all 0.2s; }
+            .sub-tab.active { background: white; color: var(--primary-color); box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+        </style>
+    `;
+
+    // Add Tab switching logic
+    const btnStd = document.getElementById('btn-show-standard');
+    const btnSwp = document.getElementById('btn-show-swaps');
+    const viewStd = document.getElementById('standard-requests-view');
+    const viewSwp = document.getElementById('swap-requests-view');
+
+    if (btnStd) {
+        btnStd.onclick = () => {
+            btnStd.classList.add('active'); btnSwp.classList.remove('active');
+            viewStd.style.display = 'block'; viewSwp.style.display = 'none';
+        };
+        btnSwp.onclick = () => {
+            btnSwp.classList.add('active'); btnStd.classList.remove('active');
+            viewStd.style.display = 'none'; viewSwp.style.display = 'block';
+        };
+    }
 };
 
 const renderRegisterTab = (container, rooms) => {
@@ -939,8 +1007,26 @@ export const init = async () => {
     window.resolveRequest = async (reqId) => {
         if (confirm('Mark this request as completed?')) {
             await updateRequestStatus(reqId, 'Completed');
+            showToast('Maintenance issue resolved.', 'success');
             updateTabContent();
         }
+    };
+
+    window.approveSwap = async (id) => {
+        if (!confirm('Finalize this room swap? Both students will be moved immediately.')) return;
+        try {
+            await apiCall(`/api/swaps/${id}`, 'PATCH', { status: 'Approved' });
+            showToast('Swap finalized successfully!', 'success');
+            updateTabContent();
+        } catch (e) { showToast(e.message, 'error'); }
+    };
+
+    window.updateSwapStatus = async (id, status) => {
+        if (!confirm(`Are you sure you want to ${status} this swap?`)) return;
+        try {
+            await apiCall(`/api/swaps/${id}`, 'PATCH', { status });
+            updateTabContent();
+        } catch (e) { showToast(e.message, 'error'); }
     };
 
     window.updateClearance = async (id, status) => {
@@ -948,14 +1034,14 @@ export const init = async () => {
         try {
             await apiCall(`/api/clearance/${id}`, 'PATCH', { status });
             updateTabContent();
-        } catch (e) { alert(e.message); }
+        } catch (e) { showToast(e.message, 'error'); }
     };
 
     window.updateLostItem = async (id, status) => {
         try {
             await apiCall(`/api/lost-items/${id}`, 'PATCH', { status });
             updateTabContent();
-        } catch (e) { alert(e.message); }
+        } catch (e) { showToast(e.message, 'error'); }
     };
 
     window.updateDormChange = async (id, status) => {
@@ -963,6 +1049,26 @@ export const init = async () => {
         try {
             await apiCall(`/api/dorm-change/${id}`, 'PATCH', { status });
             updateTabContent();
-        } catch (e) { alert(e.message); }
+        } catch (e) { showToast(e.message, 'error'); }
+    };
+
+    window.exportStudentsCSV = async () => {
+        try {
+            const students = await getAllStudents();
+            const headers = ['ID', 'Name', 'Department', 'Year', 'RoomID'];
+            const rows = students.map(s => [s.id, s.name, s.department, s.year, s.roomId].join(','));
+            const csvContent = [headers.join(','), ...rows].join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('hidden', '');
+            a.setAttribute('href', url);
+            a.setAttribute('download', `AMU_Students_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            showToast('CSV exported successfully!', 'success');
+        } catch (e) { showToast('Export failed', 'error'); }
     };
 };

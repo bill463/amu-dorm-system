@@ -24,7 +24,6 @@ export const getStudentRoom = async (studentId) => {
       return rooms.find(r => r.id === student.roomId);
     }
 
-    // Fallback search
     const rooms = await getAllRooms();
     return rooms.find(r =>
       (r.occupants || []).some(u => u.id === studentId) ||
@@ -86,7 +85,6 @@ export const updateRequestStatus = async (requestId, status) => {
 
 export const getAllRooms = async () => {
   const rooms = await apiCall('/api/rooms');
-  // Backend already uses 'occupants' alias
   return rooms;
 };
 
@@ -97,4 +95,41 @@ export const getAllStudents = async () => {
 export const getUserById = async (id) => {
   const students = await getAllStudents();
   return students.find(s => s.id === id);
+};
+
+export const showToast = (message, type = 'info') => {
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.innerText = message;
+
+  Object.assign(toast.style, {
+    position: 'fixed',
+    bottom: '2rem',
+    right: '2rem',
+    padding: '1rem 2rem',
+    borderRadius: '12px',
+    background: type === 'success' ? '#10b981' : (type === 'error' ? '#ef4444' : '#1e293b'),
+    color: 'white',
+    boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
+    zIndex: '9999',
+    transition: 'all 0.3s ease',
+    opacity: '0',
+    transform: 'translateY(1rem)'
+  });
+
+  document.body.appendChild(toast);
+  setTimeout(() => {
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateY(0)';
+  }, 10);
+
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateY(1rem)';
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
+};
+
+export const deleteRequest = async (id) => {
+  return await apiCall(`/api/requests/${id}`, 'DELETE');
 };

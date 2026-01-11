@@ -43,14 +43,15 @@ export const init = async () => {
     // Auto-assign room for demo is disabled now that we have manual allocation
     // await autoAssignDemo(user.id);
 
-    // Fetch room, requests, and unread messages count
-    const [room, requests, unreadRes] = await Promise.all([
+    // Fetch room, requests, and latest message
+    const [room, requests, messagesRes] = await Promise.all([
         getStudentRoom(user.id),
         getRequests(user.id),
-        apiCall(`/api/messages/unread-count?userId=${user.id}`).catch(() => ({ count: 0 }))
+        apiCall(`/api/messages?userId=${user.id}`).catch(() => [])
     ]);
 
-    const unreadCount = unreadRes?.count || 0;
+    const latestMessage = messagesRes[0];
+    const unreadCount = messagesRes.filter(m => !m.isRead).length;
     const container = document.getElementById('student-content');
 
     if (!container) return;
@@ -59,6 +60,22 @@ export const init = async () => {
     const completedCount = requests.filter(r => r.status === 'Completed').length;
 
     container.innerHTML = `
+        <!-- Broadcast Banner -->
+        ${latestMessage ? `
+            <div class="card" style="margin-bottom: 2rem; background: linear-gradient(135deg, #1e40af, #3b82f6); border: none; color: white;">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="font-size: 1.5rem;">📢</div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.25rem;">Latest Announcement: ${latestMessage.title}</div>
+                        <div style="font-size: 0.9rem; opacity: 0.9; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;">
+                            ${latestMessage.content}
+                        </div>
+                    </div>
+                    <a href="#/messages" class="btn" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 0.4rem 1rem; font-size: 0.85rem;">View</a>
+                </div>
+            </div>
+        ` : ''}
+
         <div class="grid grid-2" style="margin-bottom: 2rem;">
             <!-- My Room Card -->
             <div class="card" style="margin: 0; position: relative; overflow: hidden;">
