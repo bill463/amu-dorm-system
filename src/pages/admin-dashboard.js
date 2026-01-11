@@ -21,22 +21,40 @@ export const render = `
     </div>
 
     <div class="card" style="padding: 0; overflow: hidden; border: none; box-shadow: var(--shadow-md);">
-        <div style="display: flex; border-bottom: 1px solid var(--border-color); background: #ffffff; padding: 0 1rem; overflow-x: auto;">
-            <button class="tab-btn active" onclick="switchTab('rooms')">Rooms</button>
-            <button class="tab-btn" onclick="switchTab('students')">Students</button>
-            <button class="tab-btn" onclick="switchTab('maintenance')">Maintenance</button>
-            <button class="tab-btn" onclick="switchTab('clearance')">Clearance</button>
-            <button class="tab-btn" onclick="switchTab('lostItems')">Lost & Found</button>
-            <button class="tab-btn" onclick="switchTab('dormChange')">Dorm Change</button>
+        <div class="admin-tabs-container" style="display: flex; border-bottom: 1px solid var(--border-color); background: #ffffff; padding: 0 1rem; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch;">
+            <button class="tab-btn active" onclick="switchTab('rooms')" style="flex: 0 0 auto;">Rooms</button>
+            <button class="tab-btn" onclick="switchTab('students')" style="flex: 0 0 auto;">Students</button>
+            <button class="tab-btn" onclick="switchTab('maintenance')" style="flex: 0 0 auto;">Maintenance</button>
+            <button class="tab-btn" onclick="switchTab('clearance')" style="flex: 0 0 auto;">Clearance</button>
+            <button class="tab-btn" onclick="switchTab('lostItems')" style="flex: 0 0 auto;">Lost & Found</button>
+            <button class="tab-btn" onclick="switchTab('dormChange')" style="flex: 0 0 auto;">Dorm Change</button>
+            <button class="tab-btn" onclick="switchTab('register')" style="flex: 0 0 auto;">Register</button>
         </div>
         
-        <div id="tab-content" style="padding: 2rem; background: #fcfcfc; min-height: 400px;">
+        <div id="tab-content" style="padding: 2rem; background: #fcfcfc; min-height: 400px; overflow-x: auto;">
             <div class="skeleton" style="height: 20px; width: 60%; margin-bottom: 1rem;"></div>
             <div class="skeleton" style="height: 200px; margin-bottom: 1rem;"></div>
             <div class="skeleton" style="height: 100px;"></div>
         </div>
     </div>
 </div>
+<style>
+    .admin-tabs-container::-webkit-scrollbar {
+        height: 4px;
+    }
+    .admin-tabs-container::-webkit-scrollbar-thumb {
+        background: #e2e8f0;
+        border-radius: 4px;
+    }
+    @media (max-width: 768px) {
+        #tab-content {
+            padding: 1rem !important;
+        }
+        .card {
+            padding: 1.25rem !important;
+        }
+    }
+</style>
 `;
 
 let currentTab = 'rooms';
@@ -126,10 +144,10 @@ const renderStudentsTab = (container, students) => {
     let html = `
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
             <h3 style="margin: 0;">Registered Students</h3>
-            <a href="#/add-student" class="btn btn-primary">
+            <button class="btn btn-primary" onclick="switchTab('register')">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                 Add Student
-            </a>
+            </button>
         </div>
     `;
 
@@ -355,7 +373,7 @@ const renderDormChangeTab = (container, requests) => {
     `).join('');
 };
 
-const renderRegisterTab = (container) => {
+const renderRegisterTab = (container, rooms) => {
     container.innerHTML = `
         <div style="margin-bottom: 1.5rem;">
             <button class="btn btn-outline" onclick="switchTab('students')" style="display: flex; align-items: center; gap: 0.5rem;">
@@ -364,17 +382,17 @@ const renderRegisterTab = (container) => {
             </button>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; align-items: start;">
+        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; align-items: start;" class="register-grid">
             <div>
                 <h3 style="margin-bottom: 0.5rem;">Register New Student</h3>
-                <p style="color: var(--text-secondary); margin-bottom: 2rem;">Manually add a new student to the system. They will be able to log in immediately.</p>
+                <p style="color: var(--text-secondary); margin-bottom: 2rem;">Add a new student and assign them a room immediately.</p>
                 
                 <div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 1.5rem; border-radius: 12px; color: #15803d;">
                     <h4 style="color: #15803d; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
                         Tip
                     </h4>
-                    <p style="font-size: 0.9rem;">Default passwords should be changed by the student upon first login.</p>
+                    <p style="font-size: 0.9rem;">Assigning a room during registration speeds up the student onboarding process.</p>
                 </div>
             </div>
 
@@ -384,7 +402,7 @@ const renderRegisterTab = (container) => {
                         <label>Student ID (e.g. NSR/1234/16)</label>
                         <input type="text" id="new-id" class="form-input" placeholder="Enter student ID" required>
                     </div>
-                    <div class="grid grid-2">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;" class="mobile-stack">
                         <div class="form-group" style="margin-bottom: 0;">
                             <label>Full Name</label>
                             <input type="text" id="new-name" class="form-input" placeholder="Enter full name" required>
@@ -394,17 +412,39 @@ const renderRegisterTab = (container) => {
                             <input type="text" id="new-dept" class="form-input" placeholder="e.g. Software Engineering" required>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label>Initial Password</label>
-                        <input type="password" id="new-password" class="form-input" placeholder="Create a strong password" required>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;" class="mobile-stack">
+                         <div class="form-group" style="margin-bottom: 0;">
+                            <label>Assign Room</label>
+                            <select id="new-room" class="form-input" style="background: white;">
+                                <option value="">-- No Room Assigned --</option>
+                                ${rooms.map(r => {
+        const occCount = (r.occupants || []).length;
+        const isFull = occCount >= r.capacity;
+        return `<option value="${r.id}" ${isFull ? 'disabled' : ''}>
+                                        Blk ${r.block} - Rm ${r.number} (${occCount}/${r.capacity})
+                                    </option>`;
+    }).join('')}
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label>Initial Password</label>
+                            <input type="password" id="new-password" class="form-input" placeholder="Create a password" required>
+                        </div>
                     </div>
                     
                     <div style="padding-top: 1rem; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end;">
-                        <button type="submit" class="btn btn-primary">Create Account</button>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Register & Assign Room</button>
                     </div>
                 </form>
             </div>
         </div>
+        <style>
+            @media (max-width: 900px) {
+                .register-grid { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
+                .mobile-stack { grid-template-columns: 1fr !important; gap: 1.25rem !important; }
+            }
+        </style>
     `;
 
     setTimeout(() => {
@@ -417,14 +457,13 @@ const renderRegisterTab = (container) => {
                         id: document.getElementById('new-id').value,
                         name: document.getElementById('new-name').value,
                         department: document.getElementById('new-dept').value,
-                        password: document.getElementById('new-password').value
+                        password: document.getElementById('new-password').value,
+                        roomId: document.getElementById('new-room').value || null
                     });
-                    alert('Student registered successfully!');
+                    showToast('Student registered successfully!', 'success');
                     form.reset();
-                    // Optional: Switch back to students list
-                    // switchTab('students');
                 } catch (error) {
-                    alert(error.message);
+                    showToast(error.message, 'error');
                 }
             });
         }

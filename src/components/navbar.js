@@ -13,6 +13,10 @@ export const renderNavbar = () => {
         } else {
             mainLinks = `<a href="#/dashboard" class="nav-link">Dashboard</a>
                    <a href="#/search" class="nav-link">Search</a>
+                   <a href="#/messages" class="nav-link" style="position: relative;">
+                        Messages
+                        <span id="nav-unread-badge" style="display: none; position: absolute; top: 0; right: -5px; background: var(--danger-color); color: white; border-radius: 50%; width: 16px; height: 16px; font-size: 0.65rem; align-items: center; justify-content: center; border: 1px solid white;"></span>
+                   </a>
                    <a href="#/room" class="nav-link">My Room</a>
                    <a href="#/lost-found" class="nav-link">Lost & Found</a>
                    <a href="#/clearance" class="nav-link">Clearance</a>
@@ -110,3 +114,25 @@ document.addEventListener('click', (e) => {
         if (menu) menu.classList.remove('active');
     }
 });
+
+// Update unread badge count
+export const updateNavBadge = async () => {
+    const user = getUser();
+    if (!user || user.role !== 'student') return;
+
+    try {
+        const response = await fetch(`${window.document.location.origin.replace('5173', '8080')}/api/messages/unread-count?userId=${user.id}`, {
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('amu_dorm_token')}` }
+        });
+        const { count } = await response.json();
+        const badge = document.getElementById('nav-unread-badge');
+        if (badge) {
+            if (count > 0) {
+                badge.textContent = count;
+                badge.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+    } catch (e) { console.error('Failed to fetch unread count', e); }
+};

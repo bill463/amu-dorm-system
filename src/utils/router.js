@@ -1,5 +1,5 @@
 import { getUser } from './auth.js';
-import { renderNavbar } from '../components/navbar.js';
+import { renderNavbar, updateNavBadge } from '../components/navbar.js';
 
 // Simple hash router
 const routes = {
@@ -7,7 +7,6 @@ const routes = {
   '/login': () => import('../pages/login.js'),
   '/dashboard': () => import('../pages/student-dashboard.js'),
   '/room': () => import('../pages/room.js'),
-  '/maintenance': () => import('../pages/maintenance.js'),
   '/maintenance': () => import('../pages/maintenance.js'),
   '/profile': () => import('../pages/profile.js'),
   '/search': () => import('../pages/search.js'),
@@ -31,6 +30,7 @@ async function router() {
 
   // Update Navbar
   navbarContainer.innerHTML = renderNavbar();
+  updateNavBadge(); // Refresh alerts
 
   // Basic Access Control
   const user = getUser();

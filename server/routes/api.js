@@ -362,4 +362,16 @@ router.patch('/messages/:id/read', async (req, res) => {
   }
 });
 
+router.get('/messages/unread-count', async (req, res) => {
+  try {
+    const { userId } = req.query;
+    const count = await Message.count({
+      where: { receiverId: userId, isRead: false }
+    });
+    res.json({ count });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router;

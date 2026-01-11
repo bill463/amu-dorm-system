@@ -5,7 +5,7 @@ export const render = `
 <div class="container">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
         <div>
-            <h1 style="margin-bottom: 0.5rem;">Student Dashboard</h1>
+            <h1 id="welcome-title" style="margin-bottom: 0.5rem;">Welcome, Student</h1>
             <p style="color: var(--text-secondary);">Welcome back to AMIT Dormitory Portal</p>
         </div>
         <div style="font-size: 0.9rem; color: var(--text-secondary);">
@@ -33,11 +33,23 @@ export const init = async () => {
     const user = getUser();
     if (!user) return;
 
+    // Personalize title
+    const welcomeTitle = document.getElementById('welcome-title');
+    if (welcomeTitle) {
+        welcomeTitle.textContent = `Welcome, ${user.name}`;
+    }
+
     // Auto-assign room for demo
     await autoAssignDemo(user.id);
 
-    const room = await getStudentRoom(user.id);
-    const requests = await getRequests(user.id);
+    // Fetch room, requests, and unread messages count
+    const [room, requests, unreadRes] = await Promise.all([
+        getStudentRoom(user.id),
+        getRequests(user.id),
+        apiCall(`/api/messages/unread-count?userId=${user.id}`).catch(() => ({ count: 0 }))
+    ]);
+
+    const unreadCount = unreadRes?.count || 0;
     const container = document.getElementById('student-content');
 
     if (!container) return;
@@ -147,7 +159,12 @@ export const init = async () => {
             </a>
 
             <!-- Messages -->
-             <a href="#/messages" class="card" style="margin: 0; text-decoration: none; transition: transform 0.2s; display: block;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+             <a href="#/messages" class="card" style="margin: 0; text-decoration: none; transition: transform 0.2s; display: block; position: relative;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                ${unreadCount > 0 ? `
+                    <div style="position: absolute; top: -10px; right: -10px; background: var(--danger-color); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                        ${unreadCount}
+                    </div>
+                ` : ''}
                 <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
                     <div style="padding: 0.5rem; background: #eef2ff; border-radius: 8px; color: #4f46e5;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
