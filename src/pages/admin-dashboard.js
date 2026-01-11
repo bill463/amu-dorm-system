@@ -433,6 +433,10 @@ const renderDormChangeTab = (container, requests) => {
 };
 
 const renderRegisterTab = (container, rooms) => {
+    console.log('renderRegisterTab called with rooms:', rooms);
+    console.log('rooms is array?', Array.isArray(rooms));
+    console.log('rooms length:', rooms?.length);
+
     container.innerHTML = `
         <div style="margin-bottom: 1.5rem;">
             <button class="btn btn-outline" onclick="switchTab('students')" style="display: flex; align-items: center; gap: 0.5rem;">
@@ -477,13 +481,13 @@ const renderRegisterTab = (container, rooms) => {
                             <label>Assign Room</label>
                             <select id="new-room" class="form-input" style="background: white;">
                                 <option value="">-- No Room Assigned --</option>
-                                ${rooms.map(r => {
+                                ${Array.isArray(rooms) && rooms.length > 0 ? rooms.map(r => {
         const occCount = (r.occupants || []).length;
         const isFull = occCount >= r.capacity;
         return `<option value="${r.id}" ${isFull ? 'disabled' : ''}>
                                         Blk ${r.block} - Rm ${r.number} (${occCount}/${r.capacity})
                                     </option>`;
-    }).join('')}
+    }).join('') : '<option disabled>No rooms available</option>'}
                             </select>
                         </div>
                         <div class="form-group" style="margin-bottom: 0;">
