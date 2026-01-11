@@ -1,6 +1,7 @@
 import { getAllRooms, getAllStudents, getRequests, updateRequestStatus, assignRoom } from '../utils/data.js';
 import { apiCall } from '../utils/api.js';
 import { getUser } from '../utils/auth.js';
+import { showToast } from '../components/Toast.js';
 
 export const render = `
 <div class="container">
@@ -46,12 +47,28 @@ export const render = `
         background: #e2e8f0;
         border-radius: 4px;
     }
+    
+    /* Mobile-friendly tables */
     @media (max-width: 768px) {
         #tab-content {
             padding: 1rem !important;
         }
         .card {
             padding: 1.25rem !important;
+        }
+        
+        /* Hide table on mobile, show card layout instead */
+        table {
+            display: none;
+        }
+        .mobile-card-list {
+            display: block !important;
+        }
+    }
+    
+    @media (min-width: 769px) {
+        .mobile-card-list {
+            display: none !important;
         }
     }
 </style>
@@ -160,6 +177,7 @@ const renderStudentsTab = (container, students) => {
         return;
     }
 
+    // Desktop table view
     html += `
     <div style="background: white; border-radius: 8px; border: 1px solid var(--border-color); overflow: hidden;">
         <table style="width: 100%; border-collapse: collapse;">
@@ -173,6 +191,7 @@ const renderStudentsTab = (container, students) => {
             </thead>
             <tbody>
     `;
+
     students.forEach(s => {
         html += `
             <tr style="border-bottom: 1px solid var(--border-color);">
@@ -195,7 +214,36 @@ const renderStudentsTab = (container, students) => {
             </tr>
         `;
     });
+
     html += '</tbody></table></div>';
+
+    // Mobile card view
+    html += '<div class="mobile-card-list" style="display: none;">';
+    students.forEach(s => {
+        html += `
+            <div class="card" style="margin-bottom: 1rem;">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                    <div style="width: 48px; height: 48px; background: var(--primary-color); border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: bold; flex-shrink: 0;">
+                        ${s.name.charAt(0).toUpperCase()}
+                    </div>
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="font-weight: 600; margin-bottom: 0.25rem;">${s.name}</div>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary); font-family: monospace;">${s.id}</div>
+                    </div>
+                </div>
+                <div style="padding: 0.75rem; background: var(--background-color); border-radius: 6px; margin-bottom: 1rem;">
+                    <div style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.25rem;">Department</div>
+                    <div style="font-weight: 500;">${s.department}</div>
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="btn btn-outline" style="flex: 1; justify-content: center;" onclick="window.sendMessage('${s.id}', '${s.name}')">Message</button>
+                    <button class="btn btn-danger" style="flex: 1; justify-content: center;">Remove</button>
+                </div>
+            </div>
+        `;
+    });
+    html += '</div>';
+
     container.innerHTML = html;
 
     // Expose sendMessage globally for the onclick handler
