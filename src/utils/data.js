@@ -15,9 +15,25 @@ export const getRoom = async (roomId) => {
 };
 
 export const getStudentRoom = async (studentId) => {
-  const rooms = await getAllRooms();
-  // Backend return rooms with Users. Search through them.
-  return rooms.find(r => (r.Users || []).some(u => u.id === studentId));
+  try {
+    const students = await getAllStudents();
+    const student = students.find(s => s.id === studentId);
+
+    if (student && student.roomId) {
+      const rooms = await getAllRooms();
+      return rooms.find(r => r.id === student.roomId);
+    }
+
+    // Fallback search
+    const rooms = await getAllRooms();
+    return rooms.find(r =>
+      (r.occupants || []).some(u => u.id === studentId) ||
+      (r.Users || []).some(u => u.id === studentId)
+    );
+  } catch (e) {
+    console.error('getStudentRoom Error:', e);
+    return null;
+  }
 };
 
 export const assignRoom = async (studentId, roomId) => {
@@ -37,7 +53,7 @@ export const autoAssignDemo = async (studentId) => {
     if (existingRoom) return;
 
     const rooms = await getAllRooms();
-    const availableRoom = rooms.find(r => (r.Users || []).length < r.capacity);
+    const availableRoom = rooms.find(r => (r.occupants || []).length < r.capacity);
 
     if (availableRoom) {
       await assignRoom(studentId, availableRoom.id);
@@ -70,10 +86,8 @@ export const updateRequestStatus = async (requestId, status) => {
 
 export const getAllRooms = async () => {
   const rooms = await apiCall('/api/rooms');
-  return rooms.map(r => ({
-    ...r,
-    occupants: r.Users || []
-  }));
+  // Backend already uses 'occupants' alias
+  return rooms;
 };
 
 export const getAllStudents = async () => {
