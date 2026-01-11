@@ -53,18 +53,23 @@ async function startServer() {
     // Auto-seed admin if not exists
     const { User } = require('./models');
 
-    // Check if any admin exists instead of just 'admin' ID to be more robust
-    const adminExists = await User.findOne({ where: { role: 'admin' } });
+    const admin = await User.findOne({ where: { role: 'admin' } });
 
-    if (!adminExists) {
+    if (!admin) {
       await User.create({
         id: 'admin',
         name: 'System Admin',
-        password: 'admin', // The beforeCreate hook in User model will hash this automatically
+        password: 'admin', // Hook will hash this
         role: 'admin',
         department: 'Administration'
       });
       console.log('Default admin user created successfully.');
+    } else if (!admin.password.startsWith('$2a$') && !admin.password.startsWith('$2b$')) {
+      // If password is not hashed, hash it now
+      console.log('Existing admin password is plain text. Updating to hash...');
+      admin.password = admin.password; // Triggers the 'changed' check in the hook
+      await admin.save();
+      console.log('Admin password migrated to secure hash.');
     }
   } catch (error) {
     console.error('CRITICAL: Server failed to connect to database:', error);
