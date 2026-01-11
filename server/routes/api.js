@@ -104,6 +104,77 @@ router.post('/students', async (req, res) => {
   }
 });
 
+// Bulk Auto-allocate rooms to unallocated students
+router.post('/students/auto-allocate', async (req, res) => {
+  try {
+    const { strategy } = req.body; // 'alphabetical', 'year', 'department'
+
+    // 1. Get all unallocated students
+    const students = await User.findAll({
+      where: { role: 'student', roomId: null }
+    });
+
+    if (students.length === 0) {
+      return res.json({ message: 'No unallocated students found.', count: 0 });
+    }
+
+    // 2. Sort students based on strategy
+    let sortedStudents = [...students];
+    if (strategy === 'alphabetical') {
+      sortedStudents.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (strategy === 'year') {
+      // Extract year from ID (e.g., "NSR/1234/16" -> "16")
+      const getYear = (id) => id.split('/').pop();
+      sortedStudents.sort((a, b) => getYear(a.id).localeCompare(getYear(b.id)));
+    } else if (strategy === 'department') {
+      sortedStudents.sort((a, b) => (a.department || '').localeCompare(b.department || ''));
+    }
+
+    // 3. Get all rooms with current occupancy
+    const rooms = await Room.findAll({
+      include: [{ model: User, as: 'occupants' }],
+      order: [['block', 'ASC'], ['number', 'ASC']]
+    });
+
+    // 4. Create an array of available slots
+    let availableSlots = [];
+    for (const room of rooms) {
+      const occupiedCount = (room.occupants || []).length;
+      const remaining = room.capacity - occupiedCount;
+      for (let i = 0; i < remaining; i++) {
+        availableSlots.push(room.id);
+      }
+    }
+
+    if (availableSlots.length === 0) {
+      return res.status(400).json({ error: 'No available room capacity found.' });
+    }
+
+    // 5. Assign students to slots
+    const allocationCount = Math.min(sortedStudents.length, availableSlots.length);
+    const updates = [];
+
+    for (let i = 0; i < allocationCount; i++) {
+      const student = sortedStudents[i];
+      const roomId = availableSlots[i];
+
+      // Execute updates
+      updates.push(student.update({ roomId }));
+    }
+
+    await Promise.all(updates);
+
+    res.json({
+      message: `Successfully allocated ${allocationCount} students using ${strategy} strategy.`,
+      count: allocationCount
+    });
+
+  } catch (error) {
+    console.error('Auto-allocate error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 router.patch('/profile', async (req, res) => {
   try {
     const { id, ...updates } = req.body;
