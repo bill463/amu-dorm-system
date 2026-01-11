@@ -6,9 +6,17 @@ const ClearanceRequest = require('./ClearanceRequest');
 const LostItem = require('./LostItem');
 const DormChangeRequest = require('./DormChangeRequest');
 const Message = require('./Message');
+const AuditLog = require('./AuditLog');
+const SwapRequest = require('./SwapRequest');
 
 // Associations
 User.belongsTo(Room, { foreignKey: 'roomId' });
+// ...
+SwapRequest.belongsTo(User, { as: 'Sender', foreignKey: 'senderId' });
+SwapRequest.belongsTo(User, { as: 'Receiver', foreignKey: 'receiverId' });
+// ...
+User.hasMany(AuditLog, { foreignKey: 'adminId' });
+AuditLog.belongsTo(User, { as: 'Admin', foreignKey: 'adminId' });
 Room.hasMany(User, { foreignKey: 'roomId', as: 'occupants' });
 
 MaintenanceRequest.belongsTo(User, { foreignKey: 'studentId' });
@@ -39,5 +47,7 @@ module.exports = {
   ClearanceRequest,
   LostItem,
   DormChangeRequest,
-  Message
+  Message,
+  AuditLog,
+  SwapRequest
 };

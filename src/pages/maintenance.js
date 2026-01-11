@@ -22,11 +22,22 @@ export const render = `
                     </select>
                 </div>
                 
-                <div style="margin-bottom: 1rem;">
+                <div style="margin-bottom: 1.5rem;">
                     <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Description</label>
                     <textarea id="maint-desc" required rows="4" 
                         style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: var(--border-radius); font-family: inherit;"
                         placeholder="Describe the issue in detail..."></textarea>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Attach Photo (Optional)</label>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <input type="file" id="maint-image" accept="image/*" style="display: none;">
+                        <button type="button" onclick="document.getElementById('maint-image').click()" class="btn" style="background: #f1f5f9; color: var(--text-main); font-size: 0.85rem; padding: 0.5rem 1rem;">
+                            📷 Choose Image
+                        </button>
+                        <span id="image-name" style="font-size: 0.8rem; color: var(--text-secondary);">No file chosen</span>
+                    </div>
                 </div>
 
                 <div id="maint-success" style="color: var(--success-color); margin-bottom: 1rem; display: none;">Request submitted successfully!</div>
@@ -71,6 +82,11 @@ export const init = async () => {
                     </span>
                 </div>
                 <p style="margin-bottom: 0.5rem;">${req.description}</p>
+                ${req.image ? `
+                    <div style="margin-bottom: 0.5rem; border-radius: 8px; overflow: hidden; max-width: 150px; cursor: pointer;" onclick="window.open('${req.image}')">
+                        <img src="${req.image}" style="width: 100%; height: auto; display: block;" alt="Evidence">
+                    </div>
+                ` : ''}
                 <div style="font-size: 0.8rem; color: var(--text-secondary);">
                     ${new Date(req.date).toLocaleDateString()}
                 </div>
@@ -83,17 +99,41 @@ export const init = async () => {
 
     await renderHistory();
 
+    const fileInput = document.getElementById('maint-image');
+    const fileNameSpan = document.getElementById('image-name');
+    let base64Image = null;
+
+    if (fileInput) {
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                fileNameSpan.textContent = file.name;
+                const reader = new FileReader();
+                reader.onloadend = () => { base64Image = reader.result; };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
     if (form) {
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const category = document.getElementById('maint-category').value;
             const desc = document.getElementById('maint-desc').value;
 
-            await createRequest(user.id, category, desc);
+            // Update createRequest to pass image
+            await apiCall('/api/requests', 'POST', {
+                studentId: user.id,
+                category,
+                description: desc,
+                image: base64Image
+            });
 
             const successDiv = document.getElementById('maint-success');
             successDiv.style.display = 'block';
             form.reset();
+            fileNameSpan.textContent = 'No file chosen';
+            base64Image = null;
 
             await renderHistory();
 

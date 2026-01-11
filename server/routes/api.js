@@ -1,6 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const { User, Room, MaintenanceRequest, ClearanceRequest, LostItem, DormChangeRequest, Message } = require('../models');
+const { Op } = require('sequelize');
+const { User, Room, MaintenanceRequest, ClearanceRequest, LostItem, DormChangeRequest, Message, AuditLog, SwapRequest } = require('../models');
+
+const logAction = async (adminId, action, details, targetId = null) => {
+  try {
+    await AuditLog.create({ adminId, action, details, targetId });
+  } catch (e) {
+    console.error('Failed to log action:', e);
+  }
+};
 
 // === ROOMS ===
 router.get('/rooms', async (req, res) => {
@@ -227,6 +236,9 @@ router.post('/students/auto-allocate', async (req, res) => {
     }
 
     await Promise.all(updates);
+
+    // LOG ACTION
+    await logAction('ADMIN_DASHBOARD', 'AUTO_ALLOCATE', `Allocated ${allocationCount} students using strategy: ${strategies.join(' > ')}`);
 
     res.json({
       message: `Successfully allocated ${allocationCount} students using: ${strategies.join(' > ')}.`,
@@ -456,6 +468,42 @@ router.patch('/dorm-change/:id', async (req, res) => {
 });
 
 // === MESSAGES ===
+router.post('/messages/broadcast', async (req, res) => {
+  try {
+    const { senderId, targetType, targetValue, title, content } = req.body;
+    // targetType: 'all', 'block', 'department'
+
+    let where = { role: 'student' };
+    if (targetType === 'block') {
+      const rooms = await Room.findAll({ where: { block: targetValue } });
+      const roomIds = rooms.map(r => r.id);
+      where.roomId = roomIds;
+    } else if (targetType === 'department') {
+      where.department = targetValue;
+    }
+
+    const students = await User.findAll({ where });
+
+    const messages = students.map(student => ({
+      senderId,
+      receiverId: student.id,
+      title: title || 'Broadcast Announcement',
+      content,
+      isRead: false
+    }));
+
+    await Message.bulkCreate(messages);
+
+    res.json({
+      success: true,
+      count: messages.length,
+      message: `Broadcast successfully sent to ${messages.length} students.`
+    });
+  } catch (error) {
+    console.error('Broadcast Error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
 router.post('/messages', async (req, res) => {
   try {
     const { senderId, receiverId, content } = req.body;
@@ -504,6 +552,104 @@ router.get('/messages/unread-count', async (req, res) => {
       where: { receiverId: userId, isRead: false }
     });
     res.json({ count });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// === ROOMMATE SWAPS ===
+router.post('/swaps', async (req, res) => {
+  try {
+    const { senderId, receiverId } = req.body;
+
+    // Safety check: both must have a room
+    const students = await User.findAll({
+      where: { id: [senderId, receiverId] }
+    });
+
+    if (students.length < 2) return res.status(404).json({ error: 'One or both students not found.' });
+    if (!students[0].roomId || !students[1].roomId) {
+      return res.status(400).json({ error: 'Both students must be currently allocated to a room to swap.' });
+    }
+
+    const request = await SwapRequest.create({ senderId, receiverId, status: 'Pending' });
+
+    // Trigger a notification message to the receiver
+    await Message.create({
+      senderId,
+      receiverId,
+      title: 'Room Swap Proposal',
+      content: `I would like to propose a room swap with you. Please check the "Dorm Change" section to accept or reject.`,
+      isRead: false
+    });
+
+    res.json(request);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get('/swaps', async (req, res) => {
+  try {
+    const { userId, isAdmin } = req.query;
+    let where = {};
+    if (!isAdmin) {
+      where = {
+        [Op.or]: [{ senderId: userId }, { receiverId: userId }]
+      };
+    }
+    const swaps = await SwapRequest.findAll({
+      where,
+      include: [
+        { model: User, as: 'Sender', attributes: ['name', 'id', 'roomId'] },
+        { model: User, as: 'Receiver', attributes: ['name', 'id', 'roomId'] }
+      ],
+      order: [['createdAt', 'DESC']]
+    });
+    res.json(swaps);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.patch('/swaps/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status, adminComment } = req.body;
+    const swap = await SwapRequest.findByPk(id);
+    if (!swap) return res.status(404).json({ error: 'Swap request not found.' });
+
+    // Logic for Final Approval (Admin Only)
+    if (status === 'Approved') {
+      const studentA = await User.findByPk(swap.senderId);
+      const studentB = await User.findByPk(swap.receiverId);
+
+      const tempRoom = studentA.roomId;
+      studentA.roomId = studentB.roomId;
+      studentB.roomId = tempRoom;
+
+      await studentA.save();
+      await studentB.save();
+    }
+
+    if (status) swap.status = status;
+    if (adminComment) swap.adminComment = adminComment;
+
+    await swap.save();
+    res.json({ success: true, swap });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get('/audit', async (req, res) => {
+  try {
+    const logs = await AuditLog.findAll({
+      include: [{ model: User, as: 'Admin', attributes: ['name'] }],
+      order: [['createdAt', 'DESC']],
+      limit: 100
+    });
+    res.json(logs);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

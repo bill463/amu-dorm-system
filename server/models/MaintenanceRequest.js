@@ -19,6 +19,10 @@ const MaintenanceRequest = sequelize.define('MaintenanceRequest', {
     type: DataTypes.TEXT,
     allowNull: false
   },
+  image: {
+    type: DataTypes.TEXT('long'), // For base64 strings
+    allowNull: true
+  },
   status: {
     type: DataTypes.ENUM('Pending', 'In Progress', 'Completed', 'Rejected'),
     defaultValue: 'Pending'

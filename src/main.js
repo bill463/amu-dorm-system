@@ -1,6 +1,7 @@
 import './style.css';
 import { initRouter } from './utils/router.js';
 import { initAuth } from './utils/auth.js';
+import { initGlobalSearch } from './utils/search.js';
 
 document.querySelector('#app').innerHTML = `
   <div id="navbar-container"></div>
@@ -13,3 +14,11 @@ document.querySelector('#app').innerHTML = `
 // Initialize App
 initAuth();
 initRouter();
+initGlobalSearch();
+
+// Register Service Worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js');
+  });
+}

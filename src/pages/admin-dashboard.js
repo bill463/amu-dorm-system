@@ -30,6 +30,9 @@ export const render = `
             <button class="tab-btn" onclick="switchTab('lostItems')" style="flex: 0 0 auto;">Lost & Found</button>
             <button class="tab-btn" onclick="switchTab('dormChange')" style="flex: 0 0 auto;">Dorm Change</button>
             <button class="tab-btn" onclick="switchTab('allocate')" style="flex: 0 0 auto; color: var(--primary-color); font-weight: 600;">⚡ Smart Allocate</button>
+            <button class="tab-btn" onclick="switchTab('broadcast')" style="flex: 0 0 auto;">📢 Broadcast</button>
+            <button class="tab-btn" onclick="switchTab('analytics')" style="flex: 0 0 auto;">📈 Analytics</button>
+            <button class="tab-btn" onclick="switchTab('audit')" style="flex: 0 0 auto;">📜 Audit Logs</button>
             <button class="tab-btn" onclick="switchTab('register')" style="flex: 0 0 auto;">Register</button>
         </div>
         
@@ -653,6 +656,211 @@ const renderAllocateTab = (container, rooms, students) => {
     });
 };
 
+const renderBroadcastTab = (container, rooms, students) => {
+    const departments = [...new Set(students.map(s => s.department).filter(Boolean))];
+    const blocks = [...new Set(rooms.map(r => r.block).filter(Boolean))];
+
+    container.innerHTML = `
+        <div style="max-width: 600px; margin: 0 auto;">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <h2 style="margin-bottom: 0.5rem;">📢 Broadcast Announcement</h2>
+                <p style="color: var(--text-secondary);">Send a message to a specific group or all students.</p>
+            </div>
+
+            <div class="card" style="margin: 0;">
+                <form id="broadcast-form">
+                    <div style="margin-bottom: 1.5rem;">
+                        <label class="form-label">Title</label>
+                        <input type="text" id="broadcast-title" class="form-input" placeholder="e.g. Water Shortage Alert" required>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                        <div>
+                            <label class="form-label">Send To</label>
+                            <select id="broadcast-target-type" class="form-input">
+                                <option value="all">All Students</option>
+                                <option value="block">Specific Block</option>
+                                <option value="department">Specific Department</option>
+                            </select>
+                        </div>
+                        <div id="target-value-container" style="display: none;">
+                            <label class="form-label" id="target-value-label">Select Block</label>
+                            <select id="broadcast-target-value" class="form-input"></select>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 2rem;">
+                        <label class="form-label">Message Content</label>
+                        <textarea id="broadcast-content" class="form-input" style="min-height: 120px;" placeholder="Type your message here..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; height: 45px;">
+                        Send Broadcast
+                    </button>
+                </form>
+            </div>
+        </div>
+    `;
+
+    const targetType = document.getElementById('broadcast-target-type');
+    const targetValContainer = document.getElementById('target-value-container');
+    const targetValSelect = document.getElementById('broadcast-target-value');
+    const targetValLabel = document.getElementById('target-value-label');
+
+    targetType.addEventListener('change', () => {
+        const type = targetType.value;
+        if (type === 'all') {
+            targetValContainer.style.display = 'none';
+        } else {
+            targetValContainer.style.display = 'block';
+            targetValSelect.innerHTML = '';
+            if (type === 'block') {
+                targetValLabel.textContent = 'Select Block';
+                blocks.forEach(b => {
+                    const opt = document.createElement('option');
+                    opt.value = b;
+                    opt.textContent = `Block ${b}`;
+                    targetValSelect.appendChild(opt);
+                });
+            } else if (type === 'department') {
+                targetValLabel.textContent = 'Select Department';
+                departments.forEach(d => {
+                    const opt = document.createElement('option');
+                    opt.value = d;
+                    opt.textContent = d;
+                    targetValSelect.appendChild(opt);
+                });
+            }
+        }
+    });
+
+    document.getElementById('broadcast-form').onsubmit = async (e) => {
+        e.preventDefault();
+        const user = getUser();
+        const data = {
+            senderId: user.id,
+            targetType: targetType.value,
+            targetValue: targetValSelect.value,
+            title: document.getElementById('broadcast-title').value,
+            content: document.getElementById('broadcast-content').value
+        };
+
+        if (!confirm(`Are you sure you want to send this broadcast to targeting "${data.targetType}: ${data.targetValue || 'All'}"?`)) return;
+
+        try {
+            const btn = e.target.querySelector('button');
+            btn.disabled = true;
+            btn.textContent = 'Sending...';
+
+            const res = await apiCall('/api/messages/broadcast', 'POST', data);
+            showToast(res.message, 'success');
+
+            // Reset form
+            e.target.reset();
+            targetValContainer.style.display = 'none';
+            btn.disabled = false;
+            btn.textContent = 'Send Broadcast';
+        } catch (err) {
+            showToast(err.message, 'error');
+            const btn = e.target.querySelector('button');
+            btn.disabled = false;
+            btn.textContent = 'Send Broadcast';
+        }
+    };
+};
+
+const renderAnalyticsTab = (container, rooms, students, requests) => {
+    // 1. Occupancy by Block
+    const blocks = [...new Set(rooms.map(r => r.block))].sort();
+    const occupancyData = blocks.map(b => {
+        const blockRooms = rooms.filter(r => r.block === b);
+        const totalCap = blockRooms.reduce((acc, r) => acc + r.capacity, 0);
+        const totalOcc = blockRooms.reduce((acc, r) => acc + (r.occupants?.length || 0), 0);
+        return { block: b, rate: Math.round((totalOcc / totalCap) * 100) || 0 };
+    });
+
+    // 2. Request Distribution
+    const pending = requests.filter(r => r.status === 'Pending').length;
+    const completed = requests.filter(r => r.status === 'Completed').length;
+
+    container.innerHTML = `
+        <div class="grid grid-2" style="gap: 2rem;">
+            <div class="card">
+                <h3 style="margin-bottom: 2rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" stroke-width="2"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
+                    Occupancy by Block
+                </h3>
+                <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    ${occupancyData.map(d => `
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem;">
+                                <span style="font-weight: 600;">Block ${d.block}</span>
+                                <span style="color: var(--text-secondary);">${d.rate}%</span>
+                            </div>
+                            <div style="height: 10px; background: #eee; border-radius: 5px; overflow: hidden;">
+                                <div style="height: 100%; width: ${d.rate}%; background: ${d.rate > 90 ? '#ef4444' : 'var(--primary-color)'}; transition: width 1s ease;"></div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+
+            <div class="card" style="display: flex; flex-direction: column;">
+                <h3 style="margin-bottom: 2rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+                    Maintenance Overview
+                </h3>
+                <div style="flex: 1; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 1rem;">
+                    <div style="font-size: 3rem; font-weight: 800; color: var(--primary-color);">${pending}</div>
+                    <div style="color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; font-size: 0.8rem;">Active Issues</div>
+                    <div style="width: 100%; max-width: 200px; height: 1px; background: #eee;"></div>
+                    <div style="font-size: 1.5rem; font-weight: 700; color: var(--success-color);">${completed}</div>
+                    <div style="color: var(--text-secondary); font-size: 0.8rem;">Resolved this Month</div>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+const renderAuditTab = (container, logs) => {
+    container.innerHTML = `
+        <div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+            <h2>System Audit Logs</h2>
+            <div style="background: var(--surface-hover); padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.9rem; color: var(--text-secondary);">
+                Total Events: ${logs.length}
+            </div>
+        </div>
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead style="background: #f8fafc; border-bottom: 1px solid var(--border-color);">
+                    <tr>
+                        <th style="padding: 1rem; text-align: left;">Action</th>
+                        <th style="padding: 1rem; text-align: left;">Admin</th>
+                        <th style="padding: 1rem; text-align: left;">Details</th>
+                        <th style="padding: 1rem; text-align: left;">Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${logs.length > 0 ? logs.map(l => `
+                        <tr style="border-bottom: 1px solid #f1f5f9;">
+                            <td style="padding: 1rem;">
+                                <span class="badge" style="background: #eef2ff; color: #4f46e5;">${l.action}</span>
+                            </td>
+                            <td style="padding: 1rem; font-weight: 500;">${l.Admin?.name || l.adminId}</td>
+                            <td style="padding: 1rem; color: var(--text-secondary); font-size: 0.9rem;">
+                                ${typeof l.details === 'string' ? l.details : JSON.stringify(l.details)}
+                            </td>
+                            <td style="padding: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                                ${new Date(l.createdAt).toLocaleString()}
+                            </td>
+                        </tr>
+                    `).join('') : '<tr><td colspan="4" style="padding: 2rem; text-align: center; color: var(--text-secondary);">No logs found.</td></tr>'}
+                </tbody>
+            </table>
+        </div>
+    `;
+};
+
 const updateTabContent = async () => {
     const container = document.getElementById('tab-content');
     if (!container) return;
@@ -696,6 +904,16 @@ const updateTabContent = async () => {
         }
         if (currentTab === 'allocate') {
             renderAllocateTab(container, rooms, students);
+        }
+        if (currentTab === 'broadcast') {
+            renderBroadcastTab(container, rooms, students);
+        }
+        if (currentTab === 'analytics') {
+            renderAnalyticsTab(container, rooms, students, requests);
+        }
+        if (currentTab === 'audit') {
+            const logs = await apiCall('/api/audit').catch(() => []);
+            renderAuditTab(container, logs);
         }
 
         if (currentTab === 'register') {
