@@ -1,6 +1,7 @@
 import { apiCall } from './api.js';
 
 const STORAGE_KEY = 'amu_dorm_user';
+const TOKEN_KEY = 'amu_dorm_token';
 
 export const initAuth = () => {
   // Logic to check session validity if needed
@@ -20,6 +21,7 @@ export const login = async (id, password) => {
     const result = await apiCall('/auth/login', 'POST', { id, password });
     if (result.success) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(result.user));
+      localStorage.setItem(TOKEN_KEY, result.token);
     }
     return result;
   } catch (error) {
@@ -29,6 +31,7 @@ export const login = async (id, password) => {
 
 export const logout = () => {
   localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(TOKEN_KEY);
   window.location.hash = '#/login';
   window.location.reload();
 };

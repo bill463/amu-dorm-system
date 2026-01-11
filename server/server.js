@@ -52,20 +52,23 @@ async function startServer() {
 
     // Auto-seed admin if not exists
     const { User } = require('./models');
-    const adminExists = await User.findByPk('admin');
+
+    // Check if any admin exists instead of just 'admin' ID to be more robust
+    const adminExists = await User.findOne({ where: { role: 'admin' } });
+
     if (!adminExists) {
       await User.create({
         id: 'admin',
         name: 'System Admin',
-        password: 'admin',
+        password: 'admin', // The beforeCreate hook in User model will hash this automatically
         role: 'admin',
         department: 'Administration'
       });
-      console.log('Admin user auto-created.');
+      console.log('Default admin user created successfully.');
     }
   } catch (error) {
-    console.error('Unable to connect to the database:', error);
-    console.log('Server is still running, check /api/debug for environment variables.');
+    console.error('CRITICAL: Server failed to connect to database:', error);
+    console.log('Check /api/debug for environment variables.');
   }
 }
 

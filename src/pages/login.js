@@ -1,4 +1,5 @@
 import { login } from '../utils/auth.js';
+import { showToast } from '../components/Toast.js';
 
 export const render = `
 <div style="display: flex; min-height: 100vh;">
@@ -45,19 +46,7 @@ export const render = `
                         style="background: white; border-color: #e2e8f0;">
                 </div>
                 
-                <div id="login-error" style="
-                    color: var(--danger-color); 
-                    background: #fef2f2; 
-                    padding: 0.75rem; 
-                    border-radius: 8px; 
-                    margin-bottom: 1.5rem; 
-                    text-align: center; 
-                    font-size: 0.9rem;
-                    display: none;
-                    border: 1px solid #fee2e2;
-                "></div>
-
-                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem; box-shadow: 0 4px 6px -1px rgba(13, 148, 136, 0.4);">Sign In</button>
+                <button type="submit" id="login-submit" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem; box-shadow: 0 4px 6px -1px rgba(13, 148, 136, 0.4);">Sign In</button>
             </form>
             
             <div style="text-align: center; margin-top: 2rem;">
@@ -82,23 +71,30 @@ export const init = () => {
             e.preventDefault();
             const id = document.getElementById('login-id').value;
             const password = document.getElementById('login-password').value;
-            const errorDiv = document.getElementById('login-error');
+            const submitBtn = document.getElementById('login-submit');
 
-            errorDiv.style.opacity = '0';
+            // Loading state
+            const originalBtnText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
 
             const result = await login(id, password);
+
             if (result.success) {
+                showToast('Successfully logged in!', 'success');
                 const user = JSON.parse(localStorage.getItem('amu_dorm_user'));
-                if (user.role === 'admin') {
-                    window.location.hash = '#/admin';
-                } else {
-                    window.location.hash = '#/dashboard';
-                }
+
+                setTimeout(() => {
+                    if (user.role === 'admin') {
+                        window.location.hash = '#/admin';
+                    } else {
+                        window.location.hash = '#/dashboard';
+                    }
+                }, 800);
             } else {
-                errorDiv.textContent = result.message;
-                errorDiv.style.display = 'block';
-                void errorDiv.offsetWidth;
-                errorDiv.style.opacity = '1';
+                showToast(result.message || 'Invalid credentials', 'error');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
             }
         });
     }
