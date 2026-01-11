@@ -13,7 +13,18 @@ export const render = `
         </div>
     </div>
     
-    <div id="student-content">Loading...</div>
+    <div id="student-content">
+        <div class="grid grid-2" style="margin-bottom: 2rem;">
+            <div class="card skeleton" style="height: 300px; margin: 0;"></div>
+            <div class="card skeleton" style="height: 300px; margin: 0;"></div>
+        </div>
+        <div class="skeleton" style="height: 100px; margin-bottom: 1rem;"></div>
+        <div class="grid grid-3">
+            <div class="card skeleton" style="height: 100px; margin: 0;"></div>
+            <div class="card skeleton" style="height: 100px; margin: 0;"></div>
+            <div class="card skeleton" style="height: 100px; margin: 0;"></div>
+        </div>
+    </div>
 </div>
 `;
 

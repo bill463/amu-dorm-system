@@ -415,3 +415,24 @@ tr:last-child td {
     display: none;
   }
 }
+
+/* Skeleton Loader */
+.skeleton {
+  background: #e2e8f0;
+  background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
+  border-radius: 8px;
+  background-size: 200% 100%;
+  animation: 1.5s shine linear infinite;
+}
+
+.skeleton-text {
+  height: 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 4px;
+}
+
+@keyframes shine {
+  to {
+    background-position-x: -200%;
+  }
+}

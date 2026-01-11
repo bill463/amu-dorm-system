@@ -15,8 +15,9 @@ export const render = `
     </div>
     
     <div id="admin-stats" class="grid grid-3" style="margin-bottom: 2rem;">
-        <!-- Stats injected here -->
-        <p>Loading stats...</p>
+        <div class="card skeleton" style="height: 100px; margin: 0;"></div>
+        <div class="card skeleton" style="height: 100px; margin: 0;"></div>
+        <div class="card skeleton" style="height: 100px; margin: 0;"></div>
     </div>
 
     <div class="card" style="padding: 0; overflow: hidden; border: none; box-shadow: var(--shadow-md);">
@@ -30,8 +31,9 @@ export const render = `
         </div>
         
         <div id="tab-content" style="padding: 2rem; background: #fcfcfc; min-height: 400px;">
-            <!-- Dynamic Content -->
-            <p>Loading content...</p>
+            <div class="skeleton" style="height: 20px; width: 60%; margin-bottom: 1rem;"></div>
+            <div class="skeleton" style="height: 200px; margin-bottom: 1rem;"></div>
+            <div class="skeleton" style="height: 100px;"></div>
         </div>
     </div>
 </div>
