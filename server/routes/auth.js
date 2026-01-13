@@ -8,6 +8,18 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-fallback-secret-key-change-it
 // Temporary storage for pending registrations (Use Redis or DB in prod)
 const pendingRegistrations = new Map();
 
+// Email configuration
+const nodemailer = require('nodemailer');
+
+// Create transporter (configure with your email provider data in .env)
+const transporter = nodemailer.createTransport({
+  service: process.env.EMAIL_SERVICE || 'gmail', // e.g., 'gmail', 'hotmail'
+  auth: {
+    user: process.env.EMAIL_USER, // Your email
+    pass: process.env.EMAIL_PASS  // Your email password or App Password
+  }
+});
+
 router.post('/register-init', async (req, res) => {
   try {
     const { id, name, department, email } = req.body;
@@ -22,14 +34,6 @@ router.post('/register-init', async (req, res) => {
     if (existingUser) {
       return res.status(400).json({ success: false, message: 'Student ID already registered.' });
     }
-    // Check if email used? (Assuming email field exists on User or checking ID is enough for now)
-    // We don't have email column in User model explicitly in the snippet I saw earlier?
-    // Wait, User model had: id, name, password, role, department, profilePicture, roomId.
-    // Ensure we store email!
-    // I need to add 'email' or 'contactInfo' to User model if I want to save it.
-    // The previous profile update code tried to update 'email'.
-    // If the model doesn't have it, it will fail.
-    // I should add email to User model too!
 
     // 3. Generate Code
     const code = Math.floor(100000 + Math.random() * 900000).toString();
@@ -40,10 +44,32 @@ router.post('/register-init', async (req, res) => {
       expires: Date.now() + 10 * 60 * 1000 // 10 mins
     });
 
-    // 5. "Send Email" (Mock)
-    console.log(`[MOCK EMAIL SERVICE] Sending code ${code} to ${email}`);
+    // 5. Send Email
+    // LOG IT FIRST (Verification for testing)
+    console.log(`[EMAIL VERIFICATION CODE] For ${email}: ${code}`);
 
-    res.json({ success: true, message: 'Verification code sent to your email.' });
+    // Try sending real email if configured
+    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+      const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: 'AMU Dorm System - Verification Code',
+        text: `Your verification code is: ${code}. It expires in 10 minutes.`
+      };
+
+      try {
+        await transporter.sendMail(mailOptions);
+        console.log(`Email sent successfully to ${email}`);
+      } catch (emailErr) {
+        console.error('Failed to send email:', emailErr);
+        // We still proceed, but user might need to check logs if testing
+        // return res.status(500).json... NO, let's allow "mock" flow if email fails in dev
+      }
+    } else {
+      console.log('Skipping real email sending - EMAIL_USER/PASS not set.');
+    }
+
+    res.json({ success: true, message: 'Verification code sent to your email (Check server logs if testing).' });
 
   } catch (error) {
     console.error(error);

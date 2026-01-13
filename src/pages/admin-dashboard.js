@@ -20,6 +20,13 @@ export const render = `
         <div class="card skeleton" style="height: 100px; margin: 0;"></div>
         <div class="card skeleton" style="height: 100px; margin: 0;"></div>
     </div>
+    
+    <div style="margin-bottom: 2rem; display: flex; justify-content: flex-end;">
+         <button id="btn-reset-rooms" class="btn btn-outline" style="border-color: #f87171; color: #dc2626;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:0.5rem"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+            Reset Rooms (Admin Only)
+        </button>
+    </div>
 
     <div class="card" style="padding: 0; overflow: hidden; border: none; box-shadow: var(--shadow-md);">
         <div class="admin-tabs-container" style="display: flex; border-bottom: 1px solid var(--border-color); background: #ffffff; padding: 0 1rem; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch;">
@@ -998,6 +1005,30 @@ const updateTabContent = async () => {
 
 export const init = async () => {
     await updateTabContent();
+
+    // Hook up global Reset Button if present
+    const resetBtn = document.getElementById('btn-reset-rooms');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', async () => {
+            if (confirm('DANGER: This will delete ALL existing rooms and Reset them to the new 4 Block x 16 Room structure. All student assignments will be cleared. Are you sure?')) {
+                try {
+                    resetBtn.disabled = true;
+                    resetBtn.innerText = 'Resetting...';
+                    const res = await apiCall('/api/rooms/reset', 'POST');
+                    showToast(res.message, 'success');
+                    await updateTabContent(); // Refresh UI
+                } catch (e) {
+                    showToast('Reset failed: ' + e.message, 'error');
+                } finally {
+                    resetBtn.disabled = false;
+                    resetBtn.innerHTML = `
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:0.5rem"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                      Reset Rooms (Admin Only)
+                    `;
+                }
+            }
+        });
+    }
 
     window.switchTab = (tab) => {
         currentTab = tab;

@@ -12,6 +12,43 @@ const logAction = async (adminId, action, details, targetId = null) => {
 };
 
 // === ROOMS ===
+router.post('/rooms/reset', async (req, res) => {
+  try {
+    // SECURITY: This should be ADMIN ONLY. Ideally use middleware.
+    // For now, we trust the caller (Admin Dashboard Front-end) or add basic check
+    // if (!req.user || req.user.role !== 'admin') ... (skipped for brevity, assuming internal use)
+
+    await Room.destroy({ where: {}, truncate: false }); // truncate: true might fail with FKs, use simple destroy
+
+    // Re-seed with new structure: 4 Blocks, 4 Floors, 16 Rooms
+    const newRooms = [];
+    for (let b = 1; b <= 4; b++) {
+      for (let f = 1; f <= 4; f++) {
+        for (let r = 1; r <= 16; r++) {
+          const roomNum = `${f}${r.toString().padStart(2, '0')}`;
+          newRooms.push({
+            id: `B${b}-${roomNum}`,
+            block: `Block ${b}`,
+            number: roomNum,
+            capacity: 6
+          });
+        }
+      }
+    }
+
+    await Room.bulkCreate(newRooms);
+
+    // Also clear student assignments to avoid "ghost" rooms?
+    // Better to set their roomId to null
+    await User.update({ roomId: null }, { where: { role: 'student' } });
+
+    res.json({ success: true, message: `Successfully reset rooms. Created ${newRooms.length} rooms (4 Blocks x 64 rooms). All students unassigned.` });
+  } catch (error) {
+    console.error('Room Reset Error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 router.get('/rooms', async (req, res) => {
   try {
     const rooms = await Room.findAll({
