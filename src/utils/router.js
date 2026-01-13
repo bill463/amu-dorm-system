@@ -16,6 +16,7 @@ const routes = {
   '/dorm-change': () => import('../pages/dorm-change.js'),
   '/add-student': () => import('../pages/add-student.js'),
   '/messages': () => import('../pages/messages.js'),
+  '/register': () => import('../pages/register.js'),
 };
 
 export const initRouter = () => {

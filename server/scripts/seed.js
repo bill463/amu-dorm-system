@@ -27,13 +27,19 @@ async function seed() {
     if (roomCount === 0) {
       const rooms = [];
       for (let b = 1; b <= 4; b++) {
-        for (let r = 101; r <= 120; r++) {
-          rooms.push({
-            id: `B${b}-${r}`,
-            block: `Block ${b}`,
-            number: `${r}`,
-            capacity: 6
-          });
+        for (let f = 1; f <= 4; f++) {
+          for (let r = 1; r <= 16; r++) {
+            // Room number construction: 101, 102... 201, 202...
+            // Use padStart to ensure 01, 02 for single digits if needed, but per request "16 rooms"
+            // Usually standard is 101-116.
+            const roomNum = `${f}${r.toString().padStart(2, '0')}`;
+            rooms.push({
+              id: `B${b}-${roomNum}`,
+              block: `Block ${b}`,
+              number: roomNum,
+              capacity: 6
+            });
+          }
         }
       }
       await Room.bulkCreate(rooms);

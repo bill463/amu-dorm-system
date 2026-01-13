@@ -25,7 +25,22 @@ const User = sequelize.define('User', {
     allowNull: true
   },
   profilePicture: {
+    type: DataTypes.TEXT,
+    allowNull: true
+  },
+  email: {
     type: DataTypes.STRING,
+    allowNull: true,
+    validate: {
+      isEmail: true
+    }
+  },
+  phone: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  bio: {
+    type: DataTypes.TEXT,
     allowNull: true
   },
   roomId: { // Explicitly defining FK for clarity, though belongsTo adds it

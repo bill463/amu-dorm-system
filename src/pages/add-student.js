@@ -32,11 +32,13 @@ export const render = `
                         <label>Department <span style="color: var(--danger-color)">*</span></label>
                         <select id="new-dept" class="form-input" required>
                             <option value="">Select Department</option>
+                            <option value="Architecture">Architecture</option>
+                            <option value="Civil Engineering">Civil Engineering</option>
+                            <option value="Surveying Engineering">Surveying Engineering</option>
                             <option value="Software Engineering">Software Engineering</option>
                             <option value="Computer Science">Computer Science</option>
                             <option value="Information Technology">Information Technology</option>
-                            <option value="Civil Engineering">Civil Engineering</option>
-                            <option value="Electrical Engineering">Electrical Engineering</option>
+                            <option value="Electrical & Computer Engineering">Electrical & Computer Engineering</option>
                             <option value="Mechanical Engineering">Mechanical Engineering</option>
                         </select>
                     </div>

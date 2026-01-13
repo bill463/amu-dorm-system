@@ -4,15 +4,23 @@ import { apiCall } from '../utils/api.js';
 
 export const render = `
 <div class="container">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
         <div>
             <h1 id="welcome-title" style="margin-bottom: 0.5rem;">Welcome, Student</h1>
             <p style="color: var(--text-secondary);">Welcome back to AMIT Dormitory Portal</p>
         </div>
-        <div style="font-size: 0.9rem; color: var(--text-secondary);">
+        <div style="font-size: 0.9rem; color: var(--text-secondary); white-space: nowrap;">
             ${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
         </div>
     </div>
+    <style>
+        @media (max-width: 768px) {
+            .dashboard-header {
+                flex-direction: column-reverse;
+                align-items: flex-start !important;
+            }
+        }
+    </style>
     
     <div id="student-content">
         <div class="grid grid-2" style="margin-bottom: 2rem;">

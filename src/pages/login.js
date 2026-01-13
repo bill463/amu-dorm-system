@@ -33,7 +33,7 @@ export const render = `
             <form id="login-form">
                 <div style="margin-bottom: 1.5rem;">
                     <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; color: var(--text-primary);">User ID</label>
-                    <input type="text" id="login-id" required placeholder="e.g. RAM/1234 or admin" 
+                    <input type="text" id="login-id" required placeholder="NSR, NSRT or NCSR" 
                         style="background: white; border-color: #e2e8f0;">
                 </div>
                 
@@ -53,6 +53,9 @@ export const render = `
                 <p style="color: var(--text-secondary); font-size: 0.95rem;">
                     Having trouble? Contact the System Administrator.
                 </p>
+                <p style="margin-top: 1rem;">
+                    <a href="#/register" style="color: var(--primary-color); font-weight: 500;">First time? Register here</a>
+                </p>
             </div>
         </div>
     </div>
@@ -65,6 +68,17 @@ export const render = `
 `;
 
 export const init = () => {
+    // Redirect if already logged in
+    const user = JSON.parse(localStorage.getItem('amu_dorm_user'));
+    if (user) {
+        if (user.role === 'admin') {
+            window.location.hash = '#/admin';
+        } else {
+            window.location.hash = '#/dashboard';
+        }
+        return;
+    }
+
     const form = document.getElementById('login-form');
     if (form) {
         form.addEventListener('submit', async (e) => {
