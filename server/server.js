@@ -92,23 +92,23 @@ async function startServer() {
     const roomCount = await Room.count();
 
     if (roomCount === 0) {
-      console.log('No rooms found. Seeding sample rooms...');
-      const blocks = ['A', 'B', 'C'];
-      const roomsPerBlock = 10;
-
-      for (const block of blocks) {
-        for (let i = 1; i <= roomsPerBlock; i++) {
-          const roomNumber = `${i}`.padStart(2, '0');
-          const roomId = `${block}${roomNumber}`;
-          await Room.create({
-            id: roomId,
-            block: block,
-            number: roomId,
-            capacity: 4
-          });
+      console.log('No rooms found. Seeding initial rooms...');
+      // 4 Blocks, 4 Floors, 16 Rooms per floor
+      for (let b = 1; b <= 4; b++) {
+        for (let f = 1; f <= 4; f++) {
+          for (let r = 1; r <= 16; r++) {
+            const roomNum = `${f}${r.toString().padStart(2, '0')}`;
+            const roomId = `B${b}-${roomNum}`; // ID Format: B1-101
+            await Room.create({
+              id: roomId,
+              block: `Block ${b}`,
+              number: roomNum,
+              capacity: 6
+            });
+          }
         }
       }
-      console.log(`Created ${blocks.length * roomsPerBlock} sample rooms (Blocks A, B, C with 10 rooms each).`);
+      console.log(`Seeded rooms for 4 Blocks (4 floors, 16 rooms each).`);
     }
   } catch (error) {
     console.error('CRITICAL: Server failed to connect to database:', error);
