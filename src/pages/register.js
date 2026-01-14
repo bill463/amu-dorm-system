@@ -129,11 +129,13 @@ export const init = () => {
       const dept = document.getElementById('reg-dept').value;
       const email = document.getElementById('reg-email').value.trim();
 
-      // Client-side Domain Check
+      // Client-side Domain Check (RELAXED FOR TESTING)
+      /*
       if (!email.endsWith('@amu.edu.et')) {
         showToast('Please use a valid AMU email address ending in @amu.edu.et', 'error');
         return;
       }
+      */
 
       btn.disabled = true;
       btn.innerText = 'Verifying Domain...';

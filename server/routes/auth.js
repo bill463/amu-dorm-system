@@ -25,9 +25,13 @@ router.post('/register-init', async (req, res) => {
     const { id, name, department, email } = req.body;
 
     // 1. Domain Check
+    // 1. Domain Check
+    // RELAXED FOR TESTING: Allow any email so you can test with your personal Gmail
+    /* 
     if (!email.endsWith('@amu.edu.et')) {
       return res.status(400).json({ success: false, message: 'Invalid email domain. Must be @amu.edu.et' });
     }
+    */
 
     // 2. Check Exists
     const existingUser = await User.findOne({ where: { id } });
