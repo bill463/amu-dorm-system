@@ -5,33 +5,14 @@ const jwt = require('jsonwebtoken');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-fallback-secret-key-change-it';
 
-// Temporary storage for pending registrations (Use Redis or DB in prod)
-const pendingRegistrations = new Map();
-
-// Email configuration
-const nodemailer = require('nodemailer');
-
-// Create transporter (configure with your email provider data in .env)
-const transporter = nodemailer.createTransport({
-  service: process.env.EMAIL_SERVICE || 'gmail', // e.g., 'gmail', 'hotmail'
-  auth: {
-    user: process.env.EMAIL_USER, // Your email
-    pass: process.env.EMAIL_PASS  // Your email password or App Password
-  }
-});
-
-router.post('/register-init', async (req, res) => {
+router.post('/register', async (req, res) => {
   try {
-    const { id, name, department, email } = req.body;
+    const { id, name, department, email, password } = req.body;
 
-    // 1. Domain Check
-    // 1. Domain Check
-    // RELAXED FOR TESTING: Allow any email so you can test with your personal Gmail
-    /* 
-    if (!email.endsWith('@amu.edu.et')) {
-      return res.status(400).json({ success: false, message: 'Invalid email domain. Must be @amu.edu.et' });
+    // 1. Basic Validation
+    if (!id || !name || !email || !password) {
+      return res.status(400).json({ success: false, message: 'All fields are required.' });
     }
-    */
 
     // 2. Check Exists
     const existingUser = await User.findOne({ where: { id } });
@@ -39,84 +20,17 @@ router.post('/register-init', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Student ID already registered.' });
     }
 
-    // 3. Generate Code
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
-
-    // 4. Store Pending
-    pendingRegistrations.set(email, {
-      id, name, department, email, code,
-      expires: Date.now() + 10 * 60 * 1000 // 10 mins
-    });
-
-    // 5. Send Email
-    // LOG IT FIRST (Verification for testing)
-    console.log(`[EMAIL VERIFICATION CODE] For ${email}: ${code}`);
-
-    // Try sending real email if configured
-    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-      const mailOptions = {
-        from: process.env.EMAIL_USER,
-        to: email,
-        subject: 'AMU Dorm System - Verification Code',
-        text: `Your verification code is: ${code}. It expires in 10 minutes.`
-      };
-
-      try {
-        await transporter.sendMail(mailOptions);
-        console.log(`Email sent successfully to ${email}`);
-      } catch (emailErr) {
-        console.error('Failed to send email:', emailErr);
-        // We still proceed, but user might need to check logs if testing
-        // return res.status(500).json... NO, let's allow "mock" flow if email fails in dev
-      }
-    } else {
-      console.log('Skipping real email sending - EMAIL_USER/PASS not set.');
-    }
-
-    res.json({ success: true, message: 'Verification code sent to your email (Check server logs if testing).' });
-
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: 'Server error' });
-  }
-});
-
-router.post('/register-verify', async (req, res) => {
-  try {
-    const { email, code, password } = req.body;
-
-    const record = pendingRegistrations.get(email);
-    if (!record) {
-      return res.status(400).json({ success: false, message: 'Registration session expired or invalid.' });
-    }
-
-    if (record.code !== code) {
-      return res.status(400).json({ success: false, message: 'Invalid verification code.' });
-    }
-
-    if (Date.now() > record.expires) {
-      pendingRegistrations.delete(email);
-      return res.status(400).json({ success: false, message: 'Code expired. Please try again.' });
-    }
-
-    // Create User
-    // Use stored data + new password
-    // Need to handle 'email' field in User model if it's not there.
-    // I will add email to User model in next step if checking reveals it's missing.
-    // For now assuming we add it.
-
+    // 3. Create User Directly
     await User.create({
-      id: record.id,
-      name: record.name,
-      department: record.department,
-      password: password,
+      id,
+      name,
+      department,
+      password,
       role: 'student',
-      email: record.email
+      email
     });
 
-    pendingRegistrations.delete(email);
-
-    res.json({ success: true, message: 'Account created successfully.' });
+    res.json({ success: true, message: 'Account created successfully. Please log in.' });
 
   } catch (error) {
     console.error(error);
