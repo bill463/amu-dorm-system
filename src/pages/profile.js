@@ -1,6 +1,7 @@
 import { getUser, updateUser } from '../utils/auth.js';
 import { getUserById } from '../utils/data.js';
 import { apiCall } from '../utils/api.js';
+import { renderNavbar, updateNavBadge } from '../components/navbar.js';
 
 export const render = `
 <div class="container" style="max-width: 800px; margin: 0 auto;">
@@ -267,6 +268,14 @@ export const init = async () => {
         // Refresh user data from storage
         profileUser = getUser();
         renderData();
+
+        // REFRESH NAVBAR
+        const navbarContainer = document.getElementById('navbar-container');
+        if (navbarContainer) {
+          navbarContainer.innerHTML = renderNavbar();
+          updateNavBadge();
+        }
+
         // Switch back to view
         viewMode.style.display = 'block';
         editMode.style.display = 'none';
