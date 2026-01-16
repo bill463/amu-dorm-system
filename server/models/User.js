@@ -25,7 +25,7 @@ const User = sequelize.define('User', {
     allowNull: true
   },
   profilePicture: {
-    type: DataTypes.TEXT,
+    type: DataTypes.TEXT('long'),
     allowNull: true
   },
   email: {
