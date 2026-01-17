@@ -55,43 +55,25 @@ async function router() {
   try {
     const routeLoader = routes[hash];
     if (routeLoader) {
+      // Small fade out effect
+      contentDiv.style.opacity = '0';
+      contentDiv.style.transform = 'translateY(10px)';
+
       const module = await routeLoader();
-      contentDiv.innerHTML = module.render;
 
-      // Re-execute scripts/event listeners if they are embedded in script tags (not encouraged but common in simple vanilla)
-      // Or better, we assume the module might expose an init function.
-      // But our current pattern is `render` string + `setTimeout` in the file.
-      // The `setTimeout` in the module files will NOT run because the module is already loaded.
-      // We need a better pattern. We should export an `init()` function or similar.
-      // However, since we are using `import()`, the module code runs ONCE.
-      // The `setTimeout` I wrote in `login.js` runs when the module is imported.
-      // If I navigate away and back, it won't run again if it's top-level.
+      setTimeout(() => {
+        contentDiv.innerHTML = module.render;
+        contentDiv.style.opacity = '1';
+        contentDiv.style.transform = 'translateY(0)';
 
-      // Correction: usage of `render` string export + top level code is flaky for SPA navigation.
-      // I should have `render()` function that returns string, and `afterRender()` logic.
-      // For now, let's just re-import or rely on a simple trick: 
-      // The modules I wrote have `setTimeout` which runs on import. This is bad for re-visits.
-      // I will fix this in the next step by refactoring pages to export `init` function.
-
-      // For now, to make it work without refactoring everything immediately:
-      // I will assume the modules execute side effects on import.
-      // But multiple visits won't trigger it.
-
-      // Let's change the router to expect an `init` function if present?
-      // Or, since I am in EXECUTION, I should fix the pattern now.
-
-      // I will just execute the styles/scripts.
-
-      // Better approach for this task:
-      // Change page modules to export `init()` function.
-      if (module.init) {
-        module.init();
-      }
+        if (module.init) {
+          module.init();
+        }
+      }, 50);
 
     } else {
       contentDiv.innerHTML = '<h1>404 - Page Not Found</h1>';
     }
-
   } catch (error) {
     console.error('Routing Error:', error);
     contentDiv.innerHTML = '<h1>Error loading page</h1>';

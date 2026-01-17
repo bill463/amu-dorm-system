@@ -1,204 +1,202 @@
 import { getUser } from '../utils/auth.js';
-import { getStudentRoom, getRequests, autoAssignDemo, initData } from '../utils/data.js';
+import { getStudentRoom, getRequests, initData } from '../utils/data.js';
 import { apiCall } from '../utils/api.js';
 
 export const render = `
-<div class="container">
-    <div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+<div class="container" style="padding-bottom: 4rem;">
+    <div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2.5rem; gap: 1rem;">
         <div>
-            <h1 id="welcome-title" style="margin-bottom: 0.5rem;">Welcome, Student</h1>
-            <p style="color: var(--text-secondary);">Welcome back to AMIT Dormitory Portal</p>
+            <h1 id="welcome-title" style="margin-bottom: 0.25rem; font-size: 2.5rem; letter-spacing: -0.02em;">Welcome, Student</h1>
+            <p style="color: var(--text-secondary); font-size: 1.1rem;">Manage your dormitory life with ease.</p>
         </div>
-        <div style="font-size: 0.9rem; color: var(--text-secondary); white-space: nowrap;">
-            ${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+        <div style="text-align: right;">
+            <div style="font-size: 0.9rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Current Date</div>
+            <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary);">
+                ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+            </div>
         </div>
     </div>
-    <style>
-        @media (max-width: 768px) {
-            .dashboard-header {
-                flex-direction: column-reverse;
-                align-items: flex-start !important;
-            }
-        }
-    </style>
     
     <div id="student-content">
-        <div class="grid grid-2" style="margin-bottom: 2rem;">
-            <div class="card skeleton" style="height: 300px; margin: 0;"></div>
-            <div class="card skeleton" style="height: 300px; margin: 0;"></div>
+        <!-- Skeleton Loaders -->
+        <div style="margin-bottom: 2rem; height: 100px; border-radius: var(--border-radius);" class="skeleton"></div>
+        <div class="grid grid-2" style="margin-bottom: 2.5rem;">
+            <div style="height: 350px; border-radius: var(--border-radius);" class="skeleton"></div>
+            <div style="height: 350px; border-radius: var(--border-radius);" class="skeleton"></div>
         </div>
-        <div class="skeleton" style="height: 100px; margin-bottom: 1rem;"></div>
         <div class="grid grid-3">
-            <div class="card skeleton" style="height: 100px; margin: 0;"></div>
-            <div class="card skeleton" style="height: 100px; margin: 0;"></div>
-            <div class="card skeleton" style="height: 100px; margin: 0;"></div>
+            <div style="height: 120px; border-radius: var(--border-radius);" class="skeleton"></div>
+            <div style="height: 120px; border-radius: var(--border-radius);" class="skeleton"></div>
+            <div style="height: 120px; border-radius: var(--border-radius);" class="skeleton"></div>
         </div>
     </div>
 </div>
 `;
 
 export const init = async () => {
-    await initData();
     const user = getUser();
     if (!user) return;
 
     // Personalize title
     const welcomeTitle = document.getElementById('welcome-title');
     if (welcomeTitle) {
-        welcomeTitle.textContent = `Welcome, ${user.name}`;
+        welcomeTitle.textContent = `Welcome, ${user.name.split(' ')[0]}`;
     }
 
-    // Auto-assign room for demo is disabled now that we have manual allocation
-    // await autoAssignDemo(user.id);
+    try {
+        await initData();
 
-    // Fetch room, requests, and latest message
-    const [room, requests, messagesRes] = await Promise.all([
-        getStudentRoom(user.id),
-        getRequests(user.id),
-        apiCall(`/api/messages?userId=${user.id}`).catch(() => [])
-    ]);
+        // Fetch room, requests, and latest message
+        const [room, requests, messagesRes] = await Promise.all([
+            getStudentRoom(user.id),
+            getRequests(user.id),
+            apiCall(`/api/messages?userId=${user.id}`).catch(() => [])
+        ]);
 
-    const latestMessage = messagesRes[0];
-    const unreadCount = messagesRes.filter(m => !m.isRead).length;
-    const container = document.getElementById('student-content');
+        const latestMessage = messagesRes[0];
+        const unreadCount = messagesRes.filter(m => !m.isRead).length;
+        const container = document.getElementById('student-content');
 
-    if (!container) return;
+        if (!container) return;
 
-    const pendingCount = requests.filter(r => r.status === 'Pending').length;
-    const completedCount = requests.filter(r => r.status === 'Completed').length;
+        const pendingCount = requests.filter(r => r.status === 'Pending').length;
+        const completedCount = requests.filter(r => r.status === 'Completed').length;
 
-    container.innerHTML = `
-        <!-- Broadcast Banner -->
-        ${latestMessage ? `
-            <div class="card" style="margin-bottom: 2rem; background: linear-gradient(135deg, #1e40af, #3b82f6); border: none; color: white;">
-                <div style="display: flex; align-items: center; gap: 1rem;">
-                    <div style="font-size: 1.5rem;">📢</div>
+        container.innerHTML = `
+            <!-- Broadcast Banner -->
+            ${latestMessage ? `
+                <div class="card" style="margin-bottom: 2rem; background: var(--primary-color); border: none; color: white; display: flex; align-items: center; gap: 1.5rem; padding: 1.5rem 2rem; box-shadow: var(--shadow-lg);">
+                    <div style="font-size: 2rem;">📢</div>
                     <div style="flex: 1;">
-                        <div style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.25rem;">Latest Announcement: ${latestMessage.title}</div>
-                        <div style="font-size: 0.9rem; opacity: 0.9; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;">
-                            ${latestMessage.content}
-                        </div>
+                        <h4 style="margin: 0; color: white; font-size: 1.1rem;">Broadcast from Admin</h4>
+                        <p style="margin: 0; opacity: 0.9; font-size: 1rem; font-weight: 500;">${latestMessage.title}: ${latestMessage.content}</p>
                     </div>
-                    <a href="#/messages" class="btn" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 0.4rem 1rem; font-size: 0.85rem;">View</a>
+                    <a href="#/messages" class="btn btn-outline" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white;">Open Inbox</a>
                 </div>
-            </div>
-        ` : ''}
+            ` : ''}
 
-        <div class="grid grid-2" style="margin-bottom: 2rem;">
-            <!-- My Room Card -->
-            <div class="card" style="margin: 0; position: relative; overflow: hidden;">
-                <div style="position: absolute; top: 0; right: 0; padding: 1.5rem; opacity: 0.1;">
-                     <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                </div>
-                
-                <h3 style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                    My Room
-                </h3>
-                
-                ${room ? `
-                    <div style="text-align: center; margin-bottom: 1.5rem;">
-                         <div style="font-size: 4rem; font-weight: 800; color: var(--primary-color); line-height: 1;">${room.number}</div>
-                         <div style="font-size: 1.25rem; font-weight: 500; color: var(--text-secondary);">Block ${room.block}</div>
+            <div class="grid grid-2" style="margin-bottom: 2.5rem;">
+                <!-- My Room Card -->
+                <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; border-left: 6px solid var(--primary-color);">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 2rem;">
+                            <h3 style="margin: 0; font-size: 1.5rem;">Dormitory Assignment</h3>
+                            <div style="padding: 0.5rem; background: var(--primary-light); border-radius: 12px; color: var(--primary-dark);">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                            </div>
+                        </div>
+                        
+                        ${room ? `
+                            <div style="display: flex; align-items: center; gap: 2rem;">
+                                <div>
+                                    <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">Room Number</div>
+                                    <div style="font-size: 3.5rem; font-weight: 800; color: var(--primary-color); line-height: 1;">${room.number}</div>
+                                </div>
+                                <div style="height: 50px; width: 2px; background: var(--border-color);"></div>
+                                <div>
+                                    <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">Location</div>
+                                    <div style="font-size: 1.5rem; font-weight: 700;">Block ${room.block}</div>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 2rem; padding: 1rem; background: var(--surface-hover); border-radius: 12px; border: 1px dashed var(--border-color);">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="color: var(--text-secondary); font-weight: 500;">Room Status</span>
+                                    <span class="badge badge-success">Active Allocation</span>
+                                </div>
+                            </div>
+                        ` : `
+                            <div style="text-align: center; padding: 2rem 0;">
+                                <p style="font-weight: 700; color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 0.5rem;">Unallocated</p>
+                                <p style="color: var(--text-muted); font-size: 0.9rem;">You haven't been assigned a room yet.</p>
+                            </div>
+                        `}
                     </div>
                     
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
-                        <div style="background: var(--background-color); padding: 0.75rem; border-radius: 8px; text-align: center;">
-                            <span style="display: block; font-size: 0.8rem; color: var(--text-secondary);">Capacity</span>
-                            <span style="font-weight: 600;">${room.capacity} Students</span>
+                    <a href="#/room" class="btn btn-primary" style="margin-top: 2rem; width: 100%;">View Room Details & Roommates</a>
+                </div>
+
+                <!-- Maintenance Card -->
+                <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; border-left: 6px solid var(--accent-color);">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 2rem;">
+                            <h3 style="margin: 0; font-size: 1.5rem;">Maintenance & Help</h3>
+                            <div style="padding: 0.5rem; background: #fef3c7; border-radius: 12px; color: #d97706;">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+                            </div>
                         </div>
-                        <div style="background: var(--background-color); padding: 0.75rem; border-radius: 8px; text-align: center;">
-                             <span style="display: block; font-size: 0.8rem; color: var(--text-secondary);">Assigned</span>
-                            <span style="font-weight: 600;">Since Jan 2025</span>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div style="background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.2); padding: 1.25rem; border-radius: 12px; text-align: center;">
+                                <div style="font-size: 2.5rem; font-weight: 800; color: var(--accent-color); line-height: 1;">${pendingCount}</div>
+                                <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin-top: 0.5rem;">Pending Issues</div>
+                            </div>
+                            <div style="background: rgba(34, 197, 94, 0.05); border: 1px solid rgba(34, 197, 94, 0.2); padding: 1.25rem; border-radius: 12px; text-align: center;">
+                                <div style="font-size: 2.5rem; font-weight: 800; color: var(--success-color); line-height: 1;">${completedCount}</div>
+                                <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin-top: 0.5rem;">Resolved Repairs</div>
+                            </div>
                         </div>
                     </div>
 
-                    <a href="#/room" class="btn btn-outline" style="width: 100%; justify-content: center;">View Roommates & Details</a>
-                ` : `
-                    <div style="text-align: center; padding: 2rem 0;">
-                        <div style="background: #f1f5f9; width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
-                        </div>
-                        <p style="font-weight: 500; margin-bottom: 0.5rem;">No Room Assigned</p>
-                        <p style="font-size: 0.9rem; color: var(--text-secondary);">Please contact specific admin for allocation.</p>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem;">
+                        <a href="#/maintenance" class="btn btn-outline">Report Issue</a>
+                        <a href="#/lost-found" class="btn btn-outline" style="border-color: var(--accent-color); color: var(--accent-color);">Lost Items</a>
                     </div>
-                `}
+                </div>
             </div>
 
-            <!-- Maintenance Status Card -->
-            <div class="card" style="margin: 0;">
-                <h3 style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem;">
-                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
-                    Maintenance Overview
-                </h3>
-
-                <div style="display: flex; gap: 1rem; margin-bottom: 2rem;">
-                     <div style="flex: 1; background: #fffbeb; padding: 1.5rem; border-radius: 12px; border: 1px solid #fcd34d;">
-                        <div style="font-size: 2.5rem; font-weight: 700; color: #b45309; line-height: 1;">${pendingCount}</div>
-                        <div style="font-weight: 500; color: #b45309;">Pending Active Requests</div>
-                    </div>
-                    <div style="flex: 1; background: #f0fdf4; padding: 1.5rem; border-radius: 12px; border: 1px solid #86efac;">
-                        <div style="font-size: 2.5rem; font-weight: 700; color: #15803d; line-height: 1;">${completedCount}</div>
-                        <div style="font-weight: 500; color: #15803d;">Completed Repairs</div>
-                    </div>
-                </div>
-
-                <h4 style="margin-bottom: 1rem;">Quick Actions</h4>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <a href="#/maintenance" class="btn btn-primary" style="justify-content: center;">Report Issue</a>
-                    <a href="#/lost-found" class="btn btn-outline" style="justify-content: center;">Report Lost Item</a>
-                </div>
+            <!-- Quick Access Services -->
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+                <h3 style="margin: 0;">Online Services</h3>
+                <span style="font-size: 0.9rem; color: var(--text-muted); font-weight: 600;">PORTAL VERSION 2.1</span>
             </div>
-        </div>
 
-        <!-- Secondary Services -->
-        <h3 style="margin-bottom: 1rem;">Services</h3>
-        <div class="grid grid-3">
-             <a href="#/clearance" class="card" style="margin: 0; text-decoration: none; transition: transform 0.2s; display: block;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
-                <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
-                    <div style="padding: 0.5rem; background: #fee2e2; border-radius: 8px; color: #ef4444;">
-                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+            <div class="grid grid-3">
+                <a href="#/messages" class="card" style="padding: 1.5rem; position: relative;">
+                    ${unreadCount > 0 ? `
+                        <div style="position: absolute; top: -8px; right: -8px; background: var(--danger-color); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; border: 3px solid var(--surface-color);">
+                            ${unreadCount}
+                        </div>
+                    ` : ''}
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="width: 44px; height: 44px; background: #e0e7ff; color: #4338ca; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                        </div>
+                        <div>
+                            <div style="font-weight: 700; font-size: 1.1rem;">Messages</div>
+                            <div style="font-size: 0.85rem; color: var(--text-secondary);">Inbox & Notifications</div>
+                        </div>
                     </div>
-                    <strong>Request Clearance</strong>
-                </div>
-                <p style="font-size: 0.85rem; color: var(--text-secondary);">End of semester checkout process.</p>
-            </a>
+                </a>
 
-            <a href="#/dorm-change" class="card" style="margin: 0; text-decoration: none; transition: transform 0.2s; display: block;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
-                <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
-                     <div style="padding: 0.5rem; background: #e0f2fe; border-radius: 8px; color: #3b82f6;">
-                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                <a href="#/dorm-change" class="card" style="padding: 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="width: 44px; height: 44px; background: #f0fdf4; color: #15803d; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
+                        </div>
+                        <div>
+                            <div style="font-weight: 700; font-size: 1.1rem;">Dorm Swap</div>
+                            <div style="font-size: 0.85rem; color: var(--text-secondary);">Request room change</div>
+                        </div>
                     </div>
-                    <strong>Change Dorm</strong>
-                </div>
-                <p style="font-size: 0.85rem; color: var(--text-secondary);">Apply to move to a different room.</p>
-            </a>
+                </a>
 
-            <a href="#/lost-found" class="card" style="margin: 0; text-decoration: none; transition: transform 0.2s; display: block;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
-                 <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
-                     <div style="padding: 0.5rem; background: #fef3c7; border-radius: 8px; color: #d97706;">
-                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <a href="#/clearance" class="card" style="padding: 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="width: 44px; height: 44px; background: #fee2e2; color: #dc2626; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        </div>
+                        <div>
+                            <div style="font-weight: 700; font-size: 1.1rem;">Clearance</div>
+                            <div style="font-size: 0.85rem; color: var(--text-secondary);">End of Semester checkout</div>
+                        </div>
                     </div>
-                    <strong>Lost & Found</strong>
-                </div>
-                <p style="font-size: 0.85rem; color: var(--text-secondary);">View and report lost items.</p>
-            </a>
-
-            <!-- Messages -->
-             <a href="#/messages" class="card" style="margin: 0; text-decoration: none; transition: transform 0.2s; display: block; position: relative;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
-                ${unreadCount > 0 ? `
-                    <div style="position: absolute; top: -10px; right: -10px; background: var(--danger-color); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                        ${unreadCount}
-                    </div>
-                ` : ''}
-                <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
-                    <div style="padding: 0.5rem; background: #eef2ff; border-radius: 8px; color: #4f46e5;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                    </div>
-                    <strong>Messages</strong>
-                </div>
-                <p style="font-size: 0.85rem; color: var(--text-secondary);">Inbox from Admin.</p>
-            </a>
-        </div>
-    `;
+                </a>
+            </div>
+        `;
+    } catch (err) {
+        console.error("Dashboard Load Error:", err);
+        const container = document.getElementById('student-content');
+        if (container) container.innerHTML = '<div class="card" style="text-align:center; color: var(--danger-color);">Failed to load dashboard data. Please try again.</div>';
+    }
 };

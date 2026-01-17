@@ -2,6 +2,7 @@ import './style.css';
 import { initRouter } from './utils/router.js';
 import { initAuth } from './utils/auth.js';
 import { initGlobalSearch } from './utils/search.js';
+import { initSocket } from './utils/socket.js';
 
 document.querySelector('#app').innerHTML = `
   <div id="navbar-container"></div>
@@ -15,6 +16,7 @@ document.querySelector('#app').innerHTML = `
 initAuth();
 initRouter();
 initGlobalSearch();
+initSocket();
 
 // Register Service Worker
 if ('serviceWorker' in navigator) {

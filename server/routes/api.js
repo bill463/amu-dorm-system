@@ -424,11 +424,23 @@ router.patch('/clearance/:id', async (req, res) => {
 });
 
 // === LOST ITEMS ===
-router.post('/lost-items', async (req, res) => {
+router.post('/lost-items', upload.single('image'), async (req, res) => {
   try {
-    const { studentId, itemName, description, location, dateLost, image } = req.body;
+    const { studentId, itemName, description, location, dateLost, status } = req.body;
+
+    let imageUrl = null;
+    if (req.file && req.file.path) {
+      imageUrl = req.file.path;
+    }
+
     const item = await LostItem.create({
-      studentId, itemName, description, location, dateLost, image, status: 'Lost'
+      studentId,
+      itemName,
+      description,
+      location,
+      dateLost,
+      image: imageUrl,
+      status: status || 'Lost'
     });
     res.json(item);
   } catch (error) {
@@ -561,6 +573,16 @@ router.post('/messages/broadcast', async (req, res) => {
 
     await Message.bulkCreate(messages);
 
+    // REAL-TIME NOTIFICATION via Socket.io
+    if (req.io) {
+      students.forEach(student => {
+        req.io.to(student.id).emit('new_notification', {
+          title: title || 'New Announcement',
+          content: content
+        });
+      });
+    }
+
     res.json({
       success: true,
       count: messages.length,
@@ -573,8 +595,17 @@ router.post('/messages/broadcast', async (req, res) => {
 });
 router.post('/messages', async (req, res) => {
   try {
-    const { senderId, receiverId, content } = req.body;
-    const message = await Message.create({ senderId, receiverId, content });
+    const { senderId, receiverId, content, title } = req.body;
+    const message = await Message.create({ senderId, receiverId, content, title: title || 'New Message' });
+
+    // REAL-TIME NOTIFICATION
+    if (req.io) {
+      req.io.to(receiverId).emit('new_notification', {
+        title: title || 'New Message',
+        content: content
+      });
+    }
+
     res.json(message);
   } catch (error) {
     res.status(500).json({ error: error.message });

@@ -2,85 +2,89 @@ import { apiCall } from '../utils/api.js';
 import { getUser } from '../utils/auth.js';
 
 export const render = `
-<div class="container">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">
+<div class="container" style="padding-bottom: 4rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem;">
         <div>
-            <h1 style="margin-bottom: 0.25rem;">Lost & Found</h1>
-            <p style="color: var(--text-secondary);">Report lost items or check for found ones.</p>
+            <h1 style="margin-bottom: 0.25rem; font-size: 2.5rem; letter-spacing: -0.02em;">Lost & Found</h1>
+            <p style="color: var(--text-secondary); font-size: 1.1rem;">Digital lost property office for AMIT students.</p>
         </div>
-        <button id="toggle-report-btn" class="btn btn-primary" style="display: flex; align-items: center; gap: 0.5rem;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            Report Item
+        <button id="toggle-report-btn" class="btn btn-primary" style="display: flex; align-items: center; gap: 0.5rem; padding: 1rem 1.5rem;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Report an Item
         </button>
     </div>
 
-    <div id="report-form-container" class="card" style="display: none; margin-bottom: 2rem; border: 1px solid var(--primary-color);">
-        <h3 style="margin-bottom: 1.5rem; color: var(--primary-color);">Report an Item</h3>
+    <div id="report-form-container" class="card" style="display: none; margin-bottom: 3rem; border: 2px solid var(--primary-color); animation: fadeIn 0.4s ease-out;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h3 style="margin: 0; color: var(--primary-color);">Submit a Report</h3>
+            <button type="button" class="btn btn-outline" id="cancel-report" style="padding: 0.5rem 1rem;">Cancel</button>
+        </div>
+
         <form id="lost-item-form">
-            <!-- Report Type Toggle -->
-            <div style="margin-bottom: 1.5rem; display: flex; gap: 1rem; padding: 0.5rem; background: #f8fafc; border-radius: 8px; width: fit-content;">
-                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                    <input type="radio" name="reportType" value="Lost" checked style="accent-color: var(--danger-color);">
-                    <span style="font-weight: 500;">I Lost something</span>
+            <div style="margin-bottom: 2rem; display: flex; gap: 1rem; padding: 0.75rem; background: var(--surface-hover); border-radius: 12px; width: fit-content;">
+                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 0.5rem 1rem; border-radius: 8px; transition: var(--transition);" id="lost-radio-label">
+                    <input type="radio" name="reportType" value="Lost" checked style="width: auto;">
+                    <span style="font-weight: 600;">I Lost something</span>
                 </label>
-                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                    <input type="radio" name="reportType" value="Found" style="accent-color: var(--success-color);">
-                    <span style="font-weight: 500;">I Found something</span>
+                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 0.5rem 1rem; border-radius: 8px; transition: var(--transition);" id="found-radio-label">
+                    <input type="radio" name="reportType" value="Found" style="width: auto;">
+                    <span style="font-weight: 600;">I Found something</span>
                 </label>
             </div>
 
             <div class="grid grid-2">
                 <div class="form-group">
-                    <label>Item Name <span style="color: var(--danger-color)">*</span></label>
-                    <input type="text" id="lost-item" class="form-input" placeholder="e.g. Blue Wallet" required>
+                    <label>What is the item?</label>
+                    <input type="text" id="lost-item" placeholder="e.g. HP Laptop, Black Wallet" required>
                 </div>
-                 <div class="form-group">
-                    <label id="date-label">Date Lost</label>
-                    <input type="date" id="lost-date" class="form-input">
+                <div class="form-group">
+                    <label id="date-label">When did it happen?</label>
+                    <input type="date" id="lost-date" required>
                 </div>
             </div>
             
             <div class="form-group">
-                <label id="location-label">Last Seen Location</label>
-                <input type="text" id="lost-location" class="form-input" placeholder="e.g. Library, Block 13...">
+                <label id="location-label">Where was it last seen?</label>
+                <input type="text" id="lost-location" placeholder="e.g. Library 2nd Floor, Block 10 Café..." required>
             </div>
 
             <div class="form-group">
-                <label>Description</label>
-                <textarea id="lost-desc" class="form-input" rows="3" placeholder="Provide more details..." required></textarea>
+                <label>Visual Description</label>
+                <textarea id="lost-desc" rows="3" placeholder="Describe unique markings, brand, color, contents..." required></textarea>
             </div>
             
             <div class="form-group">
-                <label>Attach Picture (Optional)</label>
-                <div style="border: 2px dashed var(--border-color); padding: 1.5rem; border-radius: 8px; text-align: center; background: #f8fafc; cursor: pointer;" onclick="document.getElementById('lost-image').click()">
+                <label>Attach Evidence / Proof</label>
+                <div style="border: 2px dashed var(--border-color); padding: 2.5rem; border-radius: var(--border-radius); text-align: center; background: var(--surface-color); cursor: pointer;" id="drag-drop-area">
                     <input type="file" id="lost-image" accept="image/*" style="display: none;">
                     <div id="upload-placeholder">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 0.5rem;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                        <p style="color: var(--text-secondary); margin: 0; font-size: 0.9rem;">Click to upload an image</p>
+                        <div style="width: 56px; height: 56px; background: var(--primary-light); color: var(--primary-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"></polyline></svg>
+                        </div>
+                        <p style="font-weight: 600; margin-bottom: 0.25rem;">Click to upload an image</p>
+                        <p style="color: var(--text-muted); font-size: 0.85rem;">Support JPG, PNG (Max 5MB)</p>
                     </div>
-                     <div id="image-preview" style="display: none; margin-top: 1rem;">
-                        <img src="" style="max-height: 200px; border-radius: 6px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
-                        <p style="font-size: 0.8rem; color: var(--success-color); margin-top: 0.5rem;">Image selected</p>
+                    <div id="image-preview" style="display: none; position: relative;">
+                        <img src="" style="max-height: 250px; border-radius: 12px; box-shadow: var(--shadow-md);">
+                        <button type="button" id="remove-img" style="position: absolute; top: -10px; right: -10px; background: var(--danger-color); color: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">✕</button>
                     </div>
                 </div>
             </div>
 
-            <div style="display: flex; justify-content: flex-end; gap: 1rem;">
-                <button type="button" class="btn btn-outline" id="cancel-report">Cancel</button>
-                <button type="submit" class="btn btn-primary">Submit Report</button>
+            <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1rem;">
+                <button type="submit" class="btn btn-primary" style="padding: 1rem 3rem; font-size: 1.1rem;">Post Report</button>
             </div>
         </form>
     </div>
 
     <div id="lost-items-list" class="grid grid-2">
-        <p>Loading items...</p>
+        <div class="skeleton" style="height: 200px;"></div>
+        <div class="skeleton" style="height: 200px;"></div>
     </div>
 </div>
 `;
 
 export const init = async () => {
-  // initData() is not defined in the provided context, assuming it's a placeholder or defined elsewhere.
-  // await initData(); 
   const user = getUser();
   const reportBtn = document.getElementById('toggle-report-btn');
   const cancelBtn = document.getElementById('cancel-report');
@@ -88,151 +92,146 @@ export const init = async () => {
   const form = document.getElementById('lost-item-form');
   const listContainer = document.getElementById('lost-items-list');
 
-  // Toggle Form
   const toggleForm = (show) => {
+    if (!formContainer) return;
     formContainer.style.display = show ? 'block' : 'none';
     reportBtn.style.display = show ? 'none' : 'flex';
     if (!show && form) {
       form.reset();
-      // Reset to default state
-      const radios = form.querySelectorAll('input[name="reportType"]');
-      if (radios.length) radios[0].checked = true;
-      document.getElementById('date-label').innerText = 'Date Lost';
-      document.getElementById('location-label').innerText = 'Last Seen Location';
-
       const preview = document.getElementById('image-preview');
       const placeholder = document.getElementById('upload-placeholder');
-      if (preview) preview.style.display = 'none';
-      if (placeholder) placeholder.style.display = 'block';
+      preview.style.display = 'none';
+      placeholder.style.display = 'block';
     }
   };
 
   if (reportBtn) reportBtn.addEventListener('click', () => toggleForm(true));
   if (cancelBtn) cancelBtn.addEventListener('click', () => toggleForm(false));
 
-  // Handle Report Type Toggle
-  const reportTypeRadios = document.querySelectorAll('input[name="reportType"]');
-  reportTypeRadios.forEach(radio => {
-    radio.addEventListener('change', (e) => {
-      const isFound = e.target.value === 'Found';
-      document.getElementById('date-label').innerText = isFound ? 'Date Found' : 'Date Lost';
-      document.getElementById('location-label').innerText = isFound ? 'Found Location' : 'Last Seen Location';
-    });
-  });
-
-  // Image Preview Logic
+  // Handle Image Preview
   const fileInput = document.getElementById('lost-image');
+  const dragDropArea = document.getElementById('drag-drop-area');
+  const preview = document.getElementById('image-preview');
+  const placeholder = document.getElementById('upload-placeholder');
+  const previewImg = preview?.querySelector('img');
+
+  if (dragDropArea) dragDropArea.addEventListener('click', () => fileInput.click());
+
   if (fileInput) {
     fileInput.addEventListener('change', (e) => {
       const file = e.target.files[0];
-      const preview = document.getElementById('image-preview');
-      const placeholder = document.getElementById('upload-placeholder');
-      const img = preview.querySelector('img');
-
       if (file) {
         const reader = new FileReader();
-        reader.onload = (e) => {
-          img.src = e.target.result;
-          preview.style.display = 'block';
-          placeholder.style.display = 'none';
+        reader.onload = (ev) => {
+          if (previewImg) previewImg.src = ev.target.result;
+          if (preview) preview.style.display = 'block';
+          if (placeholder) placeholder.style.display = 'none';
         };
         reader.readAsDataURL(file);
       }
     });
   }
 
-  // Load Items
+  const removeImgBtn = document.getElementById('remove-img');
+  if (removeImgBtn) {
+    removeImgBtn.onclick = (e) => {
+      e.stopPropagation();
+      if (fileInput) fileInput.value = '';
+      if (preview) preview.style.display = 'none';
+      if (placeholder) placeholder.style.display = 'block';
+    };
+  }
+
   const loadItems = async () => {
-    if (!listContainer) return;
     try {
       const items = await apiCall('/api/lost-items');
+      if (!listContainer) return;
+
       if (items.length === 0) {
-        listContainer.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-secondary);">No items reported yet.</div>';
+        listContainer.innerHTML = `
+                <div style="grid-column: 1/-1; text-align: center; padding: 5rem 2rem;">
+                    <div style="font-size: 4rem; margin-bottom: 1.5rem;">🔍</div>
+                    <h3 style="margin: 0;">No items found</h3>
+                    <p style="color: var(--text-muted); font-size: 1.1rem;">Everything seems to be in its place... for now.</p>
+                </div>`;
         return;
       }
 
       listContainer.innerHTML = items.map(item => `
-                <div class="card" style="display: flex; gap: 1rem; margin: 0;">
-                    <div style="width: 100px; height: 100px; border-radius: 8px; background: #f1f5f9; flex-shrink: 0; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                <div class="card" style="display: flex; gap: 1.5rem; align-items: stretch; animation: fadeIn 0.4s ease-out;">
+                    <div style="width: 140px; border-radius: 12px; background: var(--surface-hover); overflow: hidden; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid var(--border-color);">
                         ${item.image
-          ? `<img src="${item.image}" style="width: 100%; height: 100%; object-fit: cover; cursor: pointer;" onclick="window.open(this.src)">`
-          : `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/></svg>`
+          ? `<img src="${item.image}" style="width: 100%; height: 100%; object-fit: cover;">`
+          : `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/></svg>`
         }
                     </div>
-                    <div style="flex: 1;">
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-                            <div>
-                                <strong style="font-size: 1.1rem; display: block;">${item.itemName}</strong>
-                                <span style="font-size: 0.75rem; color: var(--text-secondary);">${item.User ? item.User.name : 'Unknown User'}</span>
+                    <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                                <div>
+                                    <span class="badge ${item.status === 'Lost' ? 'badge-danger' : 'badge-success'}" style="margin-bottom: 0.5rem;">${item.status.toUpperCase()}</span>
+                                    <h4 style="margin: 0; font-size: 1.25rem;">${item.itemName}</h4>
+                                </div>
+                                ${user && user.id === item.studentId ? '<span style="font-size: 0.75rem; font-weight: 700; color: var(--primary-color);">MY POST</span>' : ''}
                             </div>
-                            <span class="badge ${item.status === 'Lost' ? 'badge-danger' : (item.status === 'Found' ? 'badge-success' : 'badge-info')}">${item.status}</span>
+                            <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 1rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                ${item.description}
+                            </p>
                         </div>
-                        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem; line-height: 1.4;">${item.description}</p>
-                        <div style="font-size: 0.8rem; color: var(--text-secondary); display: flex; gap: 1rem;">
-                            <span>📍 ${item.location || 'Unknown location'}</span>
-                            <span>📅 ${item.dateLost ? new Date(item.dateLost).toLocaleDateString() : 'Unknown date'}</span>
+                        <div style="display: flex; gap: 1rem; border-top: 1px solid var(--border-color); padding-top: 1rem; font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">
+                            <div style="display: flex; align-items: center; gap: 0.4rem;">
+                                📍 <span style="color: var(--text-secondary);">${item.location}</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.4rem;">
+                                📅 <span style="color: var(--text-secondary);">${new Date(item.dateLost).toLocaleDateString()}</span>
+                            </div>
                         </div>
                     </div>
-                     ${user && user.id === item.studentId && item.status === 'Lost' ? `
-                         <div style="align-self: center;">
-                            <button class="btn btn-outline" style="font-size: 0.8rem;" onclick="alert('Please contact admin to mark as found.')">Found?</button>
-                         </div>
-                    ` : ''}
                 </div>
             `).join('');
-    } catch (error) {
-      console.error(error);
-      listContainer.innerHTML = '<p style="color: red;">Failed to load items.</p>';
+    } catch (e) {
+      console.error(e);
+      if (listContainer) listContainer.innerHTML = '<p style="color: var(--danger-color); text-align: center;">Failed to load items.</p>';
     }
   };
 
   await loadItems();
 
-  // Form Submit
   if (form) {
-    form.addEventListener('submit', async (e) => {
+    form.onsubmit = async (e) => {
       e.preventDefault();
-      if (!user) return alert('Please login to report items.');
-
       const submitBtn = form.querySelector('button[type="submit"]');
-      const originalText = submitBtn.innerText;
-      submitBtn.innerText = 'Submitting...';
-      submitBtn.disabled = true;
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Uploading to Cloud...';
+      }
+
+      const formData = new FormData();
+      formData.append('studentId', user.id);
+      formData.append('itemName', document.getElementById('lost-item').value);
+      formData.append('description', document.getElementById('lost-desc').value);
+      formData.append('location', document.getElementById('lost-location').value);
+      formData.append('dateLost', document.getElementById('lost-date').value);
+      formData.append('status', form.elements['reportType'].value);
+
+      const file = fileInput?.files[0];
+      if (file) {
+        formData.append('image', file);
+      }
 
       try {
-        // Get Type
-        const reportType = document.querySelector('input[name="reportType"]:checked').value; // 'Lost' or 'Found'
-
-        // Read File
-        let imageBase64 = null;
-        const file = document.getElementById('lost-image').files[0];
-        if (file) {
-          imageBase64 = await new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve(reader.result);
-            reader.readAsDataURL(file);
-          });
-        }
-
-        await apiCall('/api/lost-items', 'POST', {
-          studentId: user.id,
-          itemName: document.getElementById('lost-item').value,
-          description: document.getElementById('lost-desc').value,
-          location: document.getElementById('lost-location').value,
-          dateLost: document.getElementById('lost-date').value,
-          status: reportType,
-          image: imageBase64
-        });
-
-        alert('Item reported successfully!');
+        await apiCall('/api/lost-items', 'POST', formData);
+        alert('Your report has been published successfully!');
         toggleForm(false);
         await loadItems();
-      } catch (error) {
-        alert(error.message);
+      } catch (err) {
+        alert('Upload failed: ' + err.message);
       } finally {
-        submitBtn.innerText = originalText;
-        submitBtn.disabled = false;
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Post Report';
+        }
       }
-    });
+    };
   }
 };
