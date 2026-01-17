@@ -25,7 +25,8 @@ export const initRouter = () => {
 };
 
 async function router() {
-  const hash = window.location.hash.slice(1) || '/';
+  const fullHash = window.location.hash.slice(1) || '/';
+  const hash = fullHash.split('?')[0]; // Ignore query params for routing
   const contentDiv = document.getElementById('main-content');
   const navbarContainer = document.getElementById('navbar-container');
 

@@ -112,7 +112,7 @@ export const initGlobalSearch = () => {
           html += `<div style="padding: 0.5rem 1.25rem; font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; background: #f8fafc; border-bottom: 1px solid var(--border-color);">Students</div>`;
           filteredStudents.forEach(s => {
             html += `
-                            <a href="#/search?q=${s.id}" class="search-result-item" onclick="document.getElementById('global-search-modal').style.display='none'">
+                            <a href="#/profile?id=${s.id}" class="search-result-item" onclick="document.getElementById('global-search-modal').style.display='none'">
                                 <div style="width: 32px; height: 32px; border-radius: 50%; background: #f0fdf4; color: #15803d; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem;">${s.name.charAt(0)}</div>
                                 <div>
                                     <div style="font-weight: 600;">${s.name}</div>
