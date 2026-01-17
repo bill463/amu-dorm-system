@@ -288,9 +288,38 @@ router.post('/students/auto-allocate', async (req, res) => {
   }
 });
 
-router.patch('/profile', async (req, res) => {
+// Cloudinary Config
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const multer = require('multer');
+
+if (process.env.CLOUDINARY_CLOUD_NAME) {
+  cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+  });
+}
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'amu-dorm-profiles',
+    allowed_formats: ['jpg', 'png', 'jpeg']
+  }
+});
+
+const upload = multer({ storage: storage });
+
+router.patch('/profile', upload.single('profilePicture'), async (req, res) => {
   try {
     const { id, ...updates } = req.body;
+
+    // If file uploaded, use cloud URL
+    if (req.file && req.file.path) {
+      updates.profilePicture = req.file.path;
+    }
+
     const user = await User.findByPk(id);
     if (!user) return res.status(404).json({ error: 'User not found' });
 
@@ -299,6 +328,7 @@ router.patch('/profile', async (req, res) => {
     delete userData.password;
     res.json({ success: true, user: userData });
   } catch (error) {
+    console.error('Profile Update Error:', error);
     res.status(500).json({ error: error.message });
   }
 });

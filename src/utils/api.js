@@ -11,7 +11,15 @@ export async function apiCall(endpoint, method = 'GET', body = null) {
   }
 
   const config = { method, headers };
-  if (body) config.body = JSON.stringify(body);
+
+  if (body) {
+    if (body instanceof FormData) {
+      delete headers['Content-Type']; // Let browser set boundary
+      config.body = body;
+    } else {
+      config.body = JSON.stringify(body);
+    }
+  }
 
   try {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, config);

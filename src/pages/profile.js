@@ -238,18 +238,23 @@ export const init = async () => {
     editMode.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const updatedData = {
-        id: profileUser.id, // ID is key
-        phone: document.getElementById('edit-phone').value,
-        email: document.getElementById('edit-email').value,
-        bio: document.getElementById('edit-bio').value,
-        profilePicture: tempAvatar // Use correct field name for DB
-      };
+      const formData = new FormData();
+      formData.append('id', profileUser.id);
+      formData.append('phone', document.getElementById('edit-phone').value);
+      formData.append('email', document.getElementById('edit-email').value);
+      formData.append('bio', document.getElementById('edit-bio').value);
+
+      // Handle Image: Check if a new file was selected
+      const fileInput = document.getElementById('edit-avatar-input');
+      if (fileInput.files.length > 0) {
+        formData.append('profilePicture', fileInput.files[0]);
+      }
 
       const currentPassword = document.getElementById('current-password').value;
       const newPassword = document.getElementById('new-password').value;
 
       if (currentPassword && newPassword) {
+        // ... (password logic remains disjoint for now, or could be merged but keeping safe)
         try {
           await apiCall('/auth/change-password', 'PATCH', {
             id: profileUser.id,
@@ -259,11 +264,13 @@ export const init = async () => {
           alert('Password updated successfully!');
         } catch (error) {
           alert(`Failed to update password: ${error.message}`);
-          return; // Stop profile update if password fails
+          return;
         }
       }
 
-      const result = await updateUser(updatedData);
+      // Send FormData using updateUser
+      const result = await updateUser(formData); // updateUser needs to detect FormData
+
       if (result.success) {
         // Refresh user data from storage
         profileUser = getUser();
@@ -286,7 +293,7 @@ export const init = async () => {
         document.getElementById('new-password').value = '';
 
       } else {
-        alert('Error updating profile');
+        alert('Error updating profile: ' + (result.message || 'Unknown error'));
       }
     });
   }
