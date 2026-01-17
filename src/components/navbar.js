@@ -28,7 +28,7 @@ export const renderNavbar = () => {
         width: 32px; height: 32px; 
         border-radius: 50%; 
         background-color: var(--surface-hover);
-        background-image: ${user.profilePic ? `url(${user.profilePic})` : 'none'};
+        background-image: ${user.profilePicture ? `url(${user.profilePicture})` : 'none'};
         background-size: cover;
         background-position: center;
         display: flex; align-items: center; justify-content: center;
@@ -41,7 +41,7 @@ export const renderNavbar = () => {
         <div class="profile-container">
             <a href="#/profile" class="profile-link" style="display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: var(--text-primary);">
                 <div style="${avatarStyle}">
-                    ${user.profilePic ? '' : user.name.charAt(0).toUpperCase()}
+                    ${user.profilePicture ? '' : user.name.charAt(0).toUpperCase()}
                 </div>
                 <div style="display: flex; flex-direction: column; line-height: 1.2;">
                     <span style="font-weight: 600; font-size: 0.85rem;">${user.name}</span>
