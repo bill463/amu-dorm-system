@@ -3,7 +3,7 @@ import { getStudentRoom, getRequests, initData } from '../utils/data.js';
 import { apiCall } from '../utils/api.js';
 
 export const render = `
-<div class="container" style="padding-bottom: 4rem;">
+<div class="container" style="padding-bottom: 4rem; max-width: 1000px; margin: 0 auto;">
     <div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2.5rem; gap: 1rem; flex-wrap: wrap;">
         <div class="welcome-section" style="flex: 1; min-width: 200px;">
             <h1 id="welcome-title" style="margin-bottom: 0.25rem; font-size: 2.5rem; letter-spacing: -0.02em;">Welcome, Student</h1>
