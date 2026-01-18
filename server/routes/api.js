@@ -514,12 +514,20 @@ router.patch('/dorm-change/:id', async (req, res) => {
 
     // Logic for Approving
     if (status === 'Approved' && request.status !== 'Approved') {
-      // Attempt to find the room
-      // Assuming preferredDorm holds the Room Number e.g. "101"
-      const targetRoom = await Room.findOne({ where: { number: request.preferredDorm } });
+      // Attempt to find the room by ID or by Number
+      const targetRoom = await Room.findOne({
+        where: {
+          [Op.or]: [
+            { id: request.preferredDorm },
+            { number: request.preferredDorm },
+            { id: `Block ${request.preferredDorm}` }, // Support "1" -> "Block 1" if user typed just block
+            { number: request.preferredDorm.replace(/[^0-9]/g, '') } // Strip letters if they typed "Room 101"
+          ]
+        }
+      });
 
       if (!targetRoom) {
-        return res.status(400).json({ error: `Preferred room '${request.preferredDorm}' not found.` });
+        return res.status(400).json({ error: `Preferred room '${request.preferredDorm}' not found. Please ensure the room exists (e.g. B1-104).` });
       }
 
       // Check Capacity

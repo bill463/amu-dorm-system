@@ -18,21 +18,27 @@ export const render = `
             <form id="login-form">
                 <div style="margin-bottom: 1.5rem;">
                     <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.95rem; color: #374151;">User ID</label>
-                    <input type="text" id="login-id" required placeholder="e.g. RAM/1234 or admin" 
-                        style="padding: 0.85rem 1rem; font-size: 1rem; border-radius: 10px; border: 1px solid #e5e7eb; background: white;">
+                    <input type="text" id="login-id" required placeholder="NSR/1234/15 or admin" 
+                        style="padding: 0.85rem 1rem; font-size: 1rem; border-radius: 10px; border: 1px solid #e5e7eb; background: white; width: 100%;">
                 </div>
                 
                 <div style="margin-bottom: 2.5rem;">
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                         <label style="font-weight: 600; font-size: 0.95rem; color: #374151;">Password</label>
-                        <a href="#" style="color: #0d9488; font-size: 0.9rem; font-weight: 500;">Forgot?</a>
+                        <a href="#/register" style="color: #0d9488; font-size: 0.9rem; font-weight: 500;">Forgot?</a>
                     </div>
-                    <input type="password" id="login-password" required placeholder="Enter your password"
-                        style="padding: 0.85rem 1rem; font-size: 1rem; border-radius: 10px; border: 1px solid #e5e7eb; background: white;">
+                    <input type="password" id="login-password" required placeholder="••••••••"
+                        style="padding: 0.85rem 1rem; font-size: 1rem; border-radius: 10px; border: 1px solid #e5e7eb; background: white; width: 100%;">
                 </div>
                 
-                <button type="submit" id="login-submit" class="btn btn-primary" style="width: 100%; padding: 0.85rem; font-size: 1.1rem; border-radius: 10px; background: #0d9488; font-weight: 600;">Sign In</button>
+                <button type="submit" id="login-submit" class="btn btn-primary" style="width: 100%; padding: 0.85rem; font-size: 1.1rem; border-radius: 10px; background: #0d9488; font-weight: 600; color: white;">Sign In</button>
             </form>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <p style="color: #6b7280; font-size: 0.95rem;">
+                    Don't have an account? <a href="#/register" style="color: #0d9488; font-weight: 600;">Create Account</a>
+                </p>
+            </div>
         </div>
     </div>
 </div>
