@@ -5,7 +5,7 @@ import { apiCall } from '../utils/api.js';
 export const render = `
 <div class="container" style="padding-bottom: 4rem;">
     <div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2.5rem; gap: 1rem; flex-wrap: wrap;">
-        <div style="flex: 1; min-width: 200px;">
+        <div class="welcome-section" style="flex: 1; min-width: 200px;">
             <h1 id="welcome-title" style="margin-bottom: 0.25rem; font-size: 2.5rem; letter-spacing: -0.02em;">Welcome, Student</h1>
             <p style="color: var(--text-secondary); font-size: 1.1rem;">Manage your dormitory life with ease.</p>
         </div>
@@ -16,6 +16,23 @@ export const render = `
             </div>
         </div>
     </div>
+    <style>
+        @media (max-width: 768px) {
+            .dashboard-header {
+                flex-direction: column-reverse !important;
+                align-items: flex-start !important;
+                gap: 1rem !important;
+                margin-bottom: 2rem !important;
+            }
+            .header-date {
+                text-align: left !important;
+                margin-bottom: 0.5rem !important;
+            }
+            .welcome-section h1 {
+                font-size: 2rem !important;
+            }
+        }
+    </style>
     
     <div id="student-content">
         <!-- Skeleton Loaders -->
