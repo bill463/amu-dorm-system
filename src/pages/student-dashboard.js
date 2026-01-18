@@ -65,13 +65,13 @@ export const init = async () => {
         container.innerHTML = `
             <!-- Broadcast Banner -->
             ${latestMessage ? `
-                <div class="card" style="margin-bottom: 2rem; background: var(--primary-color); border: none; color: white; display: flex; align-items: center; gap: 1.5rem; padding: 1.5rem 2rem;">
-                    <div style="font-size: 2rem;">📢</div>
+                <div class="card" style="margin-bottom: 2rem; background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%); border: none; color: white; display: flex; align-items: center; gap: 1.5rem; padding: 1.5rem 2rem; box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);">
+                    <div style="font-size: 2rem;">${latestMessage.title.includes('Swap') ? '🤝' : '📢'}</div>
                     <div style="flex: 1;">
-                        <h4 style="margin: 0; color: white; font-size: 1.1rem;">Broadcast from Admin</h4>
-                        <p style="margin: 0; opacity: 0.9; font-size: 1rem; font-weight: 500;">${latestMessage.title}: ${latestMessage.content}</p>
+                        <h4 style="margin: 0; color: white; font-size: 1.1rem;">${latestMessage.title.includes('Swap') ? 'Room Swap Invitation' : 'Official Broadcast'}</h4>
+                        <p style="margin: 0; opacity: 0.95; font-size: 1rem; font-weight: 500;">${latestMessage.title}: ${latestMessage.content}</p>
                     </div>
-                    <a href="#/messages" class="btn btn-outline" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white;">Open Inbox</a>
+                    <a href="#/messages" class="btn btn-outline" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; font-size: 0.85rem;">Open Inbox</a>
                 </div>
             ` : ''}
 

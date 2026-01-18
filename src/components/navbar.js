@@ -88,7 +88,7 @@ export const renderNavbar = () => {
     <nav class="navbar">
         <div class="container nav-container" style="display: flex; align-items: center; justify-content: space-between;">
             <div class="nav-header" style="display: flex; align-items: center; gap: 1.5rem;">
-                <a href="${user ? (user.role === 'admin' ? '#/admin' : '#/dashboard') : '#/'}" class="nav-logo" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="${user ? (user.role === 'admin' ? '#/admin' : '#/dashboard') : '#/'}" class="nav-logo" style="display: flex; align-items: center; gap: 0.5rem; transition: transform 0.2s; cursor: pointer;">
                     <img src="/amu-logo.png" alt="AMU Logo" style="height: 28px;">
                     <span style="font-weight: 800; font-size: 1rem; letter-spacing: -0.5px;" class="hide-mobile">AMIT DORM</span>
                 </a>

@@ -252,7 +252,7 @@ const renderRoomsTab = (container, rooms) => {
                 <div class="block-header" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'grid' : 'none'" style="display: flex; align-items: center; justify-content: space-between; padding: 1.25rem; background: #f8fafc; border-bottom: 1px solid var(--border-color);">
                     <div style="display: flex; align-items: center; gap: 0.75rem;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
-                        <h3 style="margin: 0; font-size: 1.1rem;">Block ${block}</h3>
+                        <h3 style="margin: 0; font-size: 1.1rem;">Block ${block.replace(/Block\s+/gi, '')}</h3>
                     </div>
                     <div style="display: flex; align-items: center; gap: 1rem;">
                         <span class="badge" style="background: var(--primary-light); color: var(--primary-dark);">${blockRooms.length} Rooms</span>
