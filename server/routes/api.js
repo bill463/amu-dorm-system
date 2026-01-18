@@ -52,7 +52,7 @@ router.post('/rooms/reset', async (req, res) => {
 router.get('/rooms', async (req, res) => {
   try {
     const rooms = await Room.findAll({
-      include: [{ model: User, as: 'occupants', attributes: ['id', 'name'] }] // Include occupants
+      include: [{ model: User, as: 'occupants', attributes: ['id', 'name', 'profilePicture', 'department', 'bio', 'email', 'phone'] }] // Include occupants with profile details
     });
     // Tranform to match frontend expectation if needed, or update frontend to use this structure
     // Frontend expects 'occupants' as array of IDs. 
