@@ -48,7 +48,7 @@ export const render = `
 </div>
 
 <style>
-    input:focus { border-color: #14b8a6 !important; background: white !important; outline: none; box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.1); }
+    input:focus { border-color: #14b8a6 !important; background: white !important; outline: none; }
     .logo-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1) !important; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 </style>
