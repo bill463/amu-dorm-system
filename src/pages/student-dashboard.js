@@ -4,14 +4,14 @@ import { apiCall } from '../utils/api.js';
 
 export const render = `
 <div class="container" style="padding-bottom: 4rem;">
-    <div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2.5rem; gap: 1rem;">
-        <div>
+    <div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2.5rem; gap: 1rem; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 200px;">
             <h1 id="welcome-title" style="margin-bottom: 0.25rem; font-size: 2.5rem; letter-spacing: -0.02em;">Welcome, Student</h1>
             <p style="color: var(--text-secondary); font-size: 1.1rem;">Manage your dormitory life with ease.</p>
         </div>
-        <div style="text-align: right;">
-            <div style="font-size: 0.9rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Current Date</div>
-            <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary);">
+        <div class="header-date" style="text-align: right; min-width: 120px;">
+            <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px;">Current Date</div>
+            <div style="font-size: 1rem; font-weight: 700; color: var(--text-primary);">
                 ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
             </div>
         </div>
@@ -65,13 +65,13 @@ export const init = async () => {
         container.innerHTML = `
             <!-- Broadcast Banner -->
             ${latestMessage ? `
-                <div class="card" style="margin-bottom: 2rem; background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%); border: none; color: white; display: flex; align-items: center; gap: 1.5rem; padding: 1.5rem 2rem; box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);">
-                    <div style="font-size: 2rem;">${(latestMessage.title || '').includes('Swap') ? '🤝' : '📢'}</div>
+                <div class="card" style="margin-bottom: 2rem; background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%); border: none; color: white; display: flex; align-items: center; gap: 1.25rem; padding: 1.25rem 1.5rem; box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);">
+                    <div style="font-size: 1.5rem;">${(latestMessage.title || '').includes('Swap') ? '🤝' : '📢'}</div>
                     <div style="flex: 1;">
-                        <h4 style="margin: 0; color: white; font-size: 1.1rem;">${(latestMessage.title || '').includes('Swap') ? 'Room Swap Invitation' : 'Official Broadcast'}</h4>
-                        <p style="margin: 0; opacity: 0.95; font-size: 1rem; font-weight: 500;">${latestMessage.title || 'Notification'}: ${latestMessage.content}</p>
+                        <h4 style="margin: 0; color: white; font-size: 1rem; opacity: 0.9;">${(latestMessage.title || '').includes('Swap') ? 'Room Swap Invitation' : 'Official Broadcast'}</h4>
+                        <p style="margin: 0; font-size: 0.95rem; font-weight: 500;">${latestMessage.title || 'Notification'}: ${latestMessage.content}</p>
                     </div>
-                    <a href="#/messages" class="btn btn-outline" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; font-size: 0.85rem;">Open Inbox</a>
+                    <a href="#/messages" class="btn btn-outline" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; font-size: 0.8rem; padding: 0.5rem 0.75rem;">Open Inbox</a>
                 </div>
             ` : ''}
 
@@ -95,7 +95,7 @@ export const init = async () => {
                                 <div style="height: 50px; width: 2px; background: var(--border-color);"></div>
                                 <div>
                                     <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">Location</div>
-                                    <div style="font-size: 1.5rem; font-weight: 700;">Block ${room.block}</div>
+                                    <div style="font-size: 1.5rem; font-weight: 700;">Block ${room.block.replace(/Block\s+/gi, '')}</div>
                                 </div>
                             </div>
                             

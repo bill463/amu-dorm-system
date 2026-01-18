@@ -2,74 +2,40 @@ import { login } from '../utils/auth.js';
 import { showToast } from '../components/Toast.js';
 
 export const render = `
-<div style="display: flex; min-height: 100vh; background: var(--background-color);">
-    <!-- Left Side - Visual Content -->
-    <div style="flex: 1.2; position: relative; overflow: hidden; display: none;" class="desktop-only">
-        <div style="position: absolute; inset: 0; background: linear-gradient(135deg, rgba(13, 148, 136, 0.95), rgba(15, 118, 110, 0.8)), url('/dorm-bg.jpg'); background-size: cover; background-position: center;"></div>
-        <div style="position: relative; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 5rem; color: white;">
-            <div style="max-width: 600px;">
-                <div style="background: rgba(255,255,255,0.2); backdrop-filter: blur(8px); display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 100px; font-weight: 700; font-size: 0.85rem; margin-bottom: 2rem; border: 1px solid rgba(255,255,255,0.3);">
-                    SECURE ACCESS
-                </div>
-                <h1 style="color: white; font-size: 4rem; margin-bottom: 1.5rem; letter-spacing: -0.04em; line-height: 1.1;">Connected Campus Life at <span style="color: #5eead4;">AMIT.</span></h1>
-                <p style="font-size: 1.25rem; opacity: 0.9; line-height: 1.6; margin-bottom: 3rem;">Focus on your studies while we handle your dormitory logistics. Secure, efficient, and student-powered.</p>
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
-                    <div>
-                        <div style="font-size: 1.5rem; font-weight: 800;">Real-time</div>
-                        <div style="opacity: 0.7; font-size: 0.9rem;">Automated Allocations</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 1.5rem; font-weight: 800;">24/7</div>
-                        <div style="opacity: 0.7; font-size: 0.9rem;">Admin Support Line</div>
-                    </div>
-                </div>
-            </div>
+<div style="display: flex; min-height: 100vh; background: #f9fafb; align-items: center; justify-content: center; padding: 2rem;">
+    <div style="width: 100%; max-width: 440px; text-align: center;">
+        <!-- Logo -->
+        <div style="margin-bottom: 2.5rem;">
+            <img src="/amu-logo.png" alt="AMU Logo" style="width: 120px; height: 120px; object-fit: contain;">
         </div>
-    </div>
 
-    <!-- Right Side - Login Form -->
-    <div style="flex: 0.8; display: flex; align-items: center; justify-content: center; padding: 2rem;">
-        <div class="card" style="width: 100%; max-width: 480px; padding: 3rem; border-radius: 24px;">
-            
-            <div style="text-align: center; margin-bottom: 3rem;">
-                <a href="#/" style="display: inline-block; margin-bottom: 1.5rem;">
-                    <img src="/amu-logo.png" alt="AMU Logo" style="width: 80px; height: 80px; object-fit: contain;">
-                </a>
-                <h1 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 2.25rem; letter-spacing: -0.03em;">Welcome Back</h1>
-                <p style="color: var(--text-secondary); font-size: 1.1rem;">Sign in to the student portal</p>
-            </div>
-            
+        <!-- Title -->
+        <h1 style="color: #1f2937; font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: -0.02em;">Welcome Back</h1>
+        <p style="color: #6b7280; font-size: 1.1rem; margin-bottom: 3rem;">Sign in to your account</p>
+
+        <!-- Form Card -->
+        <div class="card" style="padding: 0; background: transparent; border: none; box-shadow: none; text-align: left;">
             <form id="login-form">
                 <div style="margin-bottom: 1.5rem;">
-                    <label style="display: block; margin-bottom: 0.75rem; font-weight: 700; font-size: 0.9rem; color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.05em;">User ID</label>
-                    <input type="text" id="login-id" required placeholder="Student ID (NSR/NCSR...)" 
-                        style="padding: 1rem 1.25rem; font-size: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.95rem; color: #374151;">User ID</label>
+                    <input type="text" id="login-id" required placeholder="e.g. RAM/1234 or admin" 
+                        style="padding: 0.85rem 1rem; font-size: 1rem; border-radius: 10px; border: 1px solid #e5e7eb; background: white;">
                 </div>
                 
-                <div style="margin-bottom: 2rem;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
-                        <label style="font-weight: 700; font-size: 0.9rem; color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.05em;">Password</label>
+                <div style="margin-bottom: 2.5rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <label style="font-weight: 600; font-size: 0.95rem; color: #374151;">Password</label>
+                        <a href="#" style="color: #0d9488; font-size: 0.9rem; font-weight: 500;">Forgot?</a>
                     </div>
-                    <input type="password" id="login-password" required placeholder="••••••••"
-                        style="padding: 1rem 1.25rem; font-size: 1rem;">
+                    <input type="password" id="login-password" required placeholder="Enter your password"
+                        style="padding: 0.85rem 1rem; font-size: 1rem; border-radius: 10px; border: 1px solid #e5e7eb; background: white;">
                 </div>
                 
-                <button type="submit" id="login-submit" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem; border-radius: 12px;">Sign In to Dashboard</button>
+                <button type="submit" id="login-submit" class="btn btn-primary" style="width: 100%; padding: 0.85rem; font-size: 1.1rem; border-radius: 10px; background: #0d9488; font-weight: 600;">Sign In</button>
             </form>
-            
-            <div style="text-align: center; margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
-                <p style="color: var(--text-secondary); margin-bottom: 1rem;">Don't have an account yet?</p>
-                <a href="#/register" class="btn btn-outline" style="width: 100%; border-radius: 12px; font-weight: 700;">Create Student Account</a>
-            </div>
         </div>
     </div>
 </div>
-<style>
-    @media (min-width: 1024px) {
-        .desktop-only { display: block !important; }
-    }
-</style>
 `;
 
 export const init = () => {
@@ -89,7 +55,7 @@ export const init = () => {
 
             const originalBtnText = submitBtn.innerHTML;
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span class="skeleton" style="width: 20px; height: 20px; border-radius: 50%; display: inline-block;"></span> Validating...';
+            submitBtn.innerHTML = 'Signing in...';
 
             const result = await login(id, password);
 
