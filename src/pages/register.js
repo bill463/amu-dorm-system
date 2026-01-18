@@ -19,11 +19,11 @@ export const render = `
                 <div class="reg-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem;">
                     <div class="form-group">
                         <label style="font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); display: block; margin-bottom: 0.5rem;">Student ID</label>
-                        <input type="text" id="reg-id" required placeholder="NSR/1234/15" style="width: 100%;">
+                        <input type="text" id="reg-id" required placeholder="NSR/1234/16" style="width: 100%;">
                     </div>
                     <div class="form-group">
                         <label style="font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); display: block; margin-bottom: 0.5rem;">Full Name</label>
-                        <input type="text" id="reg-name" required placeholder="John Doe" style="width: 100%;">
+                        <input type="text" id="reg-name" required placeholder="Your Name" style="width: 100%;">
                     </div>
                 </div>
 
