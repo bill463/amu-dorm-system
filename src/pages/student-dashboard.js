@@ -10,8 +10,10 @@ export const render = `
             <p style="color: var(--text-secondary); font-size: 1.1rem;">Manage your dormitory life with ease.</p>
         </div>
         <div class="header-date" style="text-align: right; min-width: 120px;">
-            <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px;">Current Date</div>
-            <div style="font-size: 1rem; font-weight: 700; color: var(--text-primary);">
+            <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px;">
+                ${new Date().toLocaleDateString('en-US', { weekday: 'long' })}
+            </div>
+            <div style="font-size: 1rem; font-weight: 700; color: var(--text-primary); line-height: 1;">
                 ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
             </div>
         </div>
@@ -82,13 +84,13 @@ export const init = async () => {
         container.innerHTML = `
             <!-- Broadcast Banner -->
             ${latestMessage ? `
-                <div class="card" style="margin-bottom: 2rem; background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%); border: none; color: white; display: flex; align-items: center; gap: 1.25rem; padding: 1.25rem 1.5rem; box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);">
-                    <div style="font-size: 1.5rem;">${(latestMessage.title || '').includes('Swap') ? '🤝' : '📢'}</div>
-                    <div style="flex: 1;">
-                        <h4 style="margin: 0; color: white; font-size: 1rem; opacity: 0.9;">${(latestMessage.title || '').includes('Swap') ? 'Room Swap Invitation' : 'Official Broadcast'}</h4>
-                        <p style="margin: 0; font-size: 0.95rem; font-weight: 500;">${latestMessage.title || 'Notification'}: ${latestMessage.content}</p>
+                <div class="card" style="margin-bottom: 2rem; background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%); border: none; color: white; display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1.25rem; box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);">
+                    <div style="font-size: 1.25rem;">${(latestMessage.title || '').includes('Swap') ? '🤝' : '📢'}</div>
+                    <div style="flex: 1; line-height: 1.2;">
+                        <h4 style="margin: 0; color: white; font-size: 0.85rem; opacity: 0.8; font-weight: 600;">${(latestMessage.title || '').includes('Swap') ? 'Room Swap Invitation' : 'Official Broadcast'}</h4>
+                        <p style="margin: 0; font-size: 0.9rem; font-weight: 500;">${latestMessage.title || 'Notification'}: ${latestMessage.content}</p>
                     </div>
-                    <a href="#/messages" class="btn btn-outline" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; font-size: 0.8rem; padding: 0.5rem 0.75rem;">Open Inbox</a>
+                    <a href="#/messages" class="btn btn-outline" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; font-size: 0.75rem; padding: 0.4rem 0.6rem; height: fit-content;">Open Inbox</a>
                 </div>
             ` : ''}
 
