@@ -117,7 +117,7 @@ export const render = `
 @media (max-width: 768px) {
     h1 { font-size: 1.8rem !important; text-align: center; }
     p { font-size: 0.9rem !important; max-width: 100% !important; text-align: center; }
-    .landing-btn { min-width: 100%; }
+    .landing-btn { min-width: 140px; padding: 0.75rem 1rem; font-size: 0.85rem; }
     .container { padding: 0 1rem; }
 }
 </style>
