@@ -141,7 +141,7 @@ export const updateNavBadge = async () => {
     if (!user || user.role !== 'student') return;
 
     try {
-        const { count } = await apiCall(\`/api/messages/unread-count?userId=\${user.id}\`);
+        const { count } = await apiCall(`/api/messages/unread-count?userId=${user.id}`);
         const badge = document.getElementById('nav-unread-badge');
         if (badge) {
             if (count > 0) {
