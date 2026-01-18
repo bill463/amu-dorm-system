@@ -58,19 +58,19 @@ export const render = `
                 </a>
             </div>
 
-            <!-- Stats -->
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 2rem; max-width: 600px; margin: 0 auto;">
-                <div style="background: rgba(0,0,0,0.4); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); border-radius: 16px; padding: 1.5rem;">
-                    <div id="stat-students" style="font-size: 2rem; font-weight: 800; color: #000000; margin-bottom: 0.25rem;">...</div>
-                    <div style="color: rgba(255,255,255,0.8); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Students</div>
+            <!-- Stats Section lowered -->
+            <div style="display: flex; justify-content: center; gap: 0.75rem; max-width: 900px; margin: 4rem auto 0 auto; flex-wrap: nowrap;">
+                <div style="background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1rem; flex: 1; min-width: 0;">
+                    <div id="stat-students" style="font-size: clamp(1.25rem, 4vw, 1.75rem); font-weight: 800; color: white; margin-bottom: 0.25rem;">...</div>
+                    <div style="color: rgba(255,255,255,0.6); font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Students</div>
                 </div>
-                <div style="background: rgba(0,0,0,0.4); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); border-radius: 16px; padding: 1.5rem;">
-                    <div id="stat-rooms" style="font-size: 2rem; font-weight: 800; color: #000000; margin-bottom: 0.25rem;">...</div>
-                    <div style="color: rgba(255,255,255,0.8); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Rooms</div>
+                <div style="background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1rem; flex: 1; min-width: 0;">
+                    <div id="stat-rooms" style="font-size: clamp(1.25rem, 4vw, 1.75rem); font-weight: 800; color: white; margin-bottom: 0.25rem;">...</div>
+                    <div style="color: rgba(255,255,255,0.6); font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Rooms</div>
                 </div>
-                <div style="background: rgba(0,0,0,0.4); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); border-radius: 16px; padding: 1.5rem;">
-                    <div style="font-size: 2rem; font-weight: 800; color: #000000; margin-bottom: 0.25rem;">24/7</div>
-                    <div style="color: rgba(255,255,255,0.8); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Support</div>
+                <div style="background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1rem; flex: 1; min-width: 0;">
+                    <div style="font-size: clamp(1.25rem, 4vw, 1.75rem); font-weight: 800; color: white; margin-bottom: 0.25rem;">24/7</div>
+                    <div style="color: rgba(255,255,255,0.6); font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Support</div>
                 </div>
             </div>
         </div>
@@ -115,10 +115,10 @@ export const render = `
     transform: translateY(-2px);
 }
 @media (max-width: 768px) {
-    h1 { font-size: 1.8rem !important; }
-    p { font-size: 0.95rem !important; max-width: 100% !important; }
+    h1 { font-size: 1.8rem !important; text-align: center; }
+    p { font-size: 0.9rem !important; max-width: 100% !important; text-align: center; }
     .landing-btn { min-width: 100%; }
-    div[style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
+    .container { padding: 0 1rem; }
 }
 </style>
 `;
