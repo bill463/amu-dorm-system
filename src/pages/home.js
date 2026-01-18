@@ -82,6 +82,18 @@ export const render = `
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
+a[href="#/login"] {
+    background: #14b8a6;
+    color: white;
+    padding: 0.9rem 2.5rem;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 10px;
+    border: none;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
 a[href="#/login"]:hover {
     background: #0d9488;
     transform: translateY(-2px);

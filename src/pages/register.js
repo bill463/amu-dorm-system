@@ -3,33 +3,43 @@ import { showToast } from '../components/Toast.js';
 
 export const render = `
 <div style="display: flex; min-height: 100vh; background: #ffffff;">
-    <!-- Left Side - Visual Branding (Hidden on mobile) -->
+    <!-- Left Side - Portal Features -->
     <div class="desktop-only" style="flex: 1.25; position: relative; overflow: hidden; background: #000;">
-        <div style="position: absolute; inset: 0; background: linear-gradient(to right, rgba(0,0,0,0.4), rgba(13, 148, 136, 0.2)), url('/landing-bg.jpg'); background-size: cover; background-position: center; filter: brightness(0.8);"></div>
+        <div style="position: absolute; inset: 0; background: linear-gradient(to right, rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url('/dorm-bg.jpg'); background-size: cover; background-position: center;"></div>
         
-        <div style="position: relative; height: 100%; display: flex; flex-direction: column; justify-content: space-between; padding: 4rem; z-index: 2; color: white;">
+        <div style="position: relative; height: 100%; display: flex; flex-direction: column; justify-content: space-between; padding: 3rem; z-index: 2; color: white;">
             <div>
-                <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 0.75rem 1.5rem; border-radius: 100px; display: inline-flex; align-items: center; gap: 0.75rem; border: 1px solid rgba(255,255,255,0.2);">
-                    <img src="/amu-logo.png" style="width: 24px; height: 24px;">
-                    <span style="font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase;">Arba Minch University</span>
+                <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 0.6rem 1.25rem; border-radius: 100px; display: inline-flex; align-items: center; gap: 0.75rem; border: 1px solid rgba(255,255,255,0.2);">
+                    <img src="/amu-logo.png" style="width: 20px; height: 20px;">
+                    <span style="font-weight: 700; font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase;">Arba Minch University</span>
                 </div>
             </div>
 
-            <div style="max-width: 500px; animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);">
-                <h2 style="font-size: 4rem; font-weight: 850; line-height: 1; letter-spacing: -0.05em; margin-bottom: 2rem;">Digitalize <br>Your <span style="color: #14b8a6;">Residence</span>.</h2>
-                <div style="display: grid; gap: 1.5rem;">
-                    <div style="display: flex; gap: 1rem; align-items: center; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 16px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);">
-                        <div style="width: 40px; height: 40px; background: #14b8a6; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">✓</div>
-                        <p style="font-weight: 500; font-size: 1rem;">Instant Room Allocation Status</p>
+            <div style="max-width: 450px; animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);">
+                <h2 style="font-size: 3.5rem; font-weight: 900; line-height: 1.1; letter-spacing: -0.04em; margin-bottom: 2.5rem;">
+                    Digitalize<br>Your <span style="color: #14b8a6;">Residence</span>.
+                </h2>
+                
+                <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+                    <div style="display: flex; gap: 1rem; align-items: start; background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: 16px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);">
+                        <div style="width: 40px; height: 40px; background: #14b8a6; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;">✓</div>
+                        <div>
+                            <h4 style="font-weight: 700; font-size: 1.05rem; margin-bottom: 0.25rem;">Instant Room Allocation Status</h4>
+                            <p style="font-size: 0.9rem; opacity: 0.8; line-height: 1.5; margin: 0;">Check your room assignment and availability in real-time.</p>
+                        </div>
                     </div>
-                    <div style="display: flex; gap: 1rem; align-items: center; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 16px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);">
-                        <div style="width: 40px; height: 40px; background: #14b8a6; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">⚡</div>
-                        <p style="font-weight: 500; font-size: 1rem;">Seamless Maintenance Requests</p>
+
+                    <div style="display: flex; gap: 1rem; align-items: start; background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: 16px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);">
+                        <div style="width: 40px; height: 40px; background: #14b8a6; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;">⚡</div>
+                        <div>
+                            <h4 style="font-weight: 700; font-size: 1.05rem; margin-bottom: 0.25rem;">Seamless Maintenance Requests</h4>
+                            <p style="font-size: 0.9rem; opacity: 0.8; line-height: 1.5; margin: 0;">Report issues and track resolution progress instantly.</p>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div style="font-size: 0.9rem; opacity: 0.7; font-weight: 500;">
+            <div style="font-size: 0.85rem; opacity: 0.6; font-weight: 500;">
                 © ${new Date().getFullYear()} AMU Housing Division. All rights reserved.
             </div>
         </div>
@@ -89,7 +99,7 @@ export const render = `
 
             <div style="text-align: center; margin-top: 2rem;">
                 <p style="color: #64748b; font-size: 1rem; font-weight: 500;">
-                    Have an account? <a href="#/login" style="color: #14b8a6; font-weight: 800; text-decoration: none;">Sign in ➔</a>
+                    Have an account? <a href="#/login" style="color: #14b8a6; font-weight: 800; text-decoration: none;">Sign in →</a>
                 </p>
             </div>
         </div>
