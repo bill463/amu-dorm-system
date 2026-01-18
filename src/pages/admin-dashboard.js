@@ -29,18 +29,51 @@ export const render = `
     </div>
 
     <div class="card" style="padding: 0; overflow: hidden; border: none; box-shadow: var(--shadow-md);">
-        <div class="admin-tabs-container" style="display: flex; border-bottom: 1px solid var(--border-color); background: #ffffff; padding: 0 1rem; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch;">
-            <button class="tab-btn active" onclick="switchTab('rooms')" style="flex: 0 0 auto;">Rooms</button>
-            <button class="tab-btn" onclick="switchTab('students')" style="flex: 0 0 auto;">Students</button>
-            <button class="tab-btn" onclick="switchTab('maintenance')" style="flex: 0 0 auto;">Maintenance</button>
-            <button class="tab-btn" onclick="switchTab('clearance')" style="flex: 0 0 auto;">Clearance</button>
-            <button class="tab-btn" onclick="switchTab('lostItems')" style="flex: 0 0 auto;">Lost & Found</button>
-            <button class="tab-btn" onclick="switchTab('dormChange')" style="flex: 0 0 auto;">Dorm Change</button>
-            <button class="tab-btn" onclick="switchTab('allocate')" style="flex: 0 0 auto; color: var(--primary-color); font-weight: 600;">⚡ Smart Allocate</button>
-            <button class="tab-btn" onclick="switchTab('broadcast')" style="flex: 0 0 auto;">📢 Broadcast</button>
-            <button class="tab-btn" onclick="switchTab('analytics')" style="flex: 0 0 auto;">📈 Analytics</button>
-            <button class="tab-btn" onclick="switchTab('audit')" style="flex: 0 0 auto;">📜 Audit Logs</button>
-            <button class="tab-btn" onclick="switchTab('register')" style="flex: 0 0 auto;">Register</button>
+        <div class="admin-tabs-container" style="display: flex; border-bottom: 1px solid var(--border-color); background: #ffffff; padding: 0 1rem; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; gap: 0.5rem;">
+            <button class="tab-btn active" onclick="switchTab('rooms')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                Rooms
+            </button>
+            <button class="tab-btn" onclick="switchTab('students')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                Students
+            </button>
+            <button class="tab-btn" onclick="switchTab('maintenance')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+                Maintenance
+            </button>
+            <button class="tab-btn" onclick="switchTab('clearance')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Clearance
+            </button>
+            <button class="tab-btn" onclick="switchTab('lostItems')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4l3 3"></path></svg>
+                Lost & Found
+            </button>
+            <button class="tab-btn" onclick="switchTab('dormChange')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line></svg>
+                Dorm Change
+            </button>
+            <button class="tab-btn" onclick="switchTab('allocate')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
+                Smart Allocate
+            </button>
+            <button class="tab-btn" onclick="switchTab('broadcast')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;"><path d="M10.3 21l1.9-4.9-4.9-1.9L10.3 21z"></path><path d="M15 3c-4.4 0-8 3.6-8 8 0 1.9.6 3.6 1.7 5L3 21l4.4-1.1c1.5 1 3.2 1.6 5 1.6 4.4 0 8-3.6 8-8s-3.6-8-8-8z"></path></svg>
+                Broadcast
+            </button>
+            <button class="tab-btn" onclick="switchTab('analytics')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                Analytics
+            </button>
+            <button class="tab-btn" onclick="switchTab('audit')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                Audit Logs
+            </button>
+            <button class="tab-btn" onclick="switchTab('register')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" y1="8" x2="19" y2="14"></line><line x1="16" y1="11" x2="22" y2="11"></line></svg>
+                Register
+            </button>
         </div>
         
         <div id="tab-content" style="padding: 2rem; background: #fcfcfc; min-height: 400px; overflow-x: auto;">
@@ -52,39 +85,78 @@ export const render = `
 </div>
 <style>
     .admin-tabs-container::-webkit-scrollbar {
-        height: 4px;
+        display: none;
     }
-    .admin-tabs-container::-webkit-scrollbar-thumb {
-        background: #e2e8f0;
-        border-radius: 4px;
+    .admin-tabs-container {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    
+    .tab-btn {
+        padding: 1rem 1.5rem;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        font-weight: 600;
+        color: var(--text-secondary);
+        transition: all 0.2s;
+        border-bottom: 3px solid transparent;
+        font-size: 0.9rem;
+    }
+    
+    .tab-btn.active {
+        color: var(--primary-color);
+        border-bottom-color: var(--primary-color);
     }
     
     /* Mobile-friendly tables */
     @media (max-width: 768px) {
-        #tab-content {
+        .container {
             padding: 1rem !important;
+        }
+        #tab-content {
+            padding: 1.25rem 0.75rem !important;
         }
         .card {
             padding: 1.25rem !important;
+            margin-bottom: 1rem;
         }
         
-        /* Hide date on very small screens */
         .admin-date {
             display: none !important;
         }
         
-        /* Make header full width */
         .admin-header {
             flex-direction: column;
             align-items: flex-start !important;
+            gap: 0.5rem !important;
+            margin-bottom: 1.5rem !important;
+        }
+
+        .admin-header h1 {
+            font-size: 1.75rem !important;
         }
         
-        /* Hide table on mobile, show card layout instead */
         table {
             display: none;
         }
         .mobile-card-list {
             display: block !important;
+        }
+
+        /* Stats grid stacking */
+        #admin-stats {
+            grid-template-columns: 1fr !important;
+            gap: 1rem !important;
+        }
+
+        /* Tabs segmented control feel on mobile */
+        .admin-tabs-container {
+            padding: 0 0.5rem !important;
+        }
+        .tab-btn {
+            padding: 0.75rem 1rem !important;
+            font-size: 0.85rem !important;
         }
     }
     
@@ -421,9 +493,9 @@ const renderDormChangeTab = async (container, requests) => {
     const swaps = await apiCall('/api/swaps?isAdmin=true').catch(() => []);
 
     container.innerHTML = `
-        <div style="display: flex; gap: 1rem; margin-bottom: 2rem; background: #f1f5f9; padding: 4px; border-radius: 10px; width: fit-content;">
-            <button class="sub-tab active" id="btn-show-standard">🔄 Room Requests (${requests.length})</button>
-            <button class="sub-tab" id="btn-show-swaps">🤝 Roommate Swaps (${swaps.length})</button>
+        <div class="sub-tab-container" style="display: flex; gap: 0.5rem; margin-bottom: 2rem; background: var(--surface-hover); padding: 0.4rem; border-radius: 12px; width: fit-content;">
+            <button class="sub-tab active" id="btn-show-standard">Room Requests (${requests.length})</button>
+            <button class="sub-tab" id="btn-show-swaps">Roommate Swaps (${swaps.length})</button>
         </div>
         
         <div id="standard-requests-view">
@@ -488,8 +560,13 @@ const renderDormChangeTab = async (container, requests) => {
         </div>
 
         <style>
-            .sub-tab { border: none; background: transparent; padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: var(--text-secondary); transition: all 0.2s; }
-            .sub-tab.active { background: white; color: var(--primary-color); box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+            .sub-tab-container { width: fit-content; }
+            .sub-tab { border: none; background: transparent; padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); transition: all 0.2s; white-space: nowrap; }
+            .sub-tab.active { background: var(--surface-color); color: var(--primary-color); box-shadow: var(--shadow-sm); }
+            @media (max-width: 768px) {
+                .sub-tab-container { width: 100%; display: grid; grid-template-columns: 1fr 1fr; }
+                .sub-tab { padding: 0.6rem 0.5rem; text-align: center; }
+            }
         </style>
     `;
 
@@ -905,7 +982,7 @@ const renderAuditTab = (container, logs) => {
                 Total Events: ${logs.length}
             </div>
         </div>
-        <div class="card" style="padding: 0; overflow: hidden;">
+        <div class="card" style="padding: 0; overflow: hidden; border: none;">
             <table style="width: 100%; border-collapse: collapse;">
                 <thead style="background: #f8fafc; border-bottom: 1px solid var(--border-color);">
                     <tr>
@@ -932,6 +1009,21 @@ const renderAuditTab = (container, logs) => {
                     `).join('') : '<tr><td colspan="4" style="padding: 2rem; text-align: center; color: var(--text-secondary);">No logs found.</td></tr>'}
                 </tbody>
             </table>
+
+            <div class="mobile-card-list">
+                ${logs.length > 0 ? logs.map(l => `
+                    <div class="card" style="margin-bottom: 1rem; border-left: 4px solid #4f46e5;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.75rem;">
+                            <span class="badge" style="background: #eef2ff; color: #4f46e5;">${l.action}</span>
+                            <span style="font-size: 0.75rem; color: var(--text-secondary);">${new Date(l.createdAt).toLocaleString()}</span>
+                        </div>
+                        <div style="font-weight: 600; margin-bottom: 0.5rem;">${l.Admin?.name || l.adminId}</div>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary); background: var(--background-color); padding: 0.75rem; border-radius: 6px;">
+                            ${typeof l.details === 'string' ? l.details : JSON.stringify(l.details)}
+                        </div>
+                    </div>
+                `).join('') : '<div style="padding: 2rem; text-align: center; color: var(--text-secondary);">No logs found.</div>'}
+            </div>
         </div>
     `;
 };

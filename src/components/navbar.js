@@ -13,19 +13,46 @@ export const renderNavbar = () => {
 
     if (user) {
         if (user.role === 'admin') {
-            mainLinks = `<a href="#/admin" class="nav-link">Dashboard</a>
-                   <a href="#/search" class="nav-link">Search</a>`;
+            mainLinks = `
+                <a href="#/admin" class="nav-link" title="Dashboard">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+                <a href="#/search" class="nav-link" title="Search">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <span class="nav-text">Search</span>
+                </a>`;
         } else {
-            mainLinks = `<a href="#/dashboard" class="nav-link">Dashboard</a>
-                   <a href="#/search" class="nav-link">Search</a>
-                   <a href="#/messages" class="nav-link" style="position: relative;">
-                        Messages
-                        <span id="nav-unread-badge" style="display: none; position: absolute; top: -5px; right: -5px; background: var(--danger-color); color: white; border-radius: 50%; width: 16px; height: 16px; font-size: 0.65rem; align-items: center; justify-content: center; border: 1px solid white;"></span>
-                   </a>
-                   <a href="#/room" class="nav-link">My Room</a>
-                   <a href="#/lost-found" class="nav-link">Lost & Found</a>
-                   <a href="#/clearance" class="nav-link">Clearance</a>
-                   <a href="#/dorm-change" class="nav-link">Change Dorm</a>`;
+            mainLinks = `
+                <a href="#/dashboard" class="nav-link" title="Dashboard">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+                <a href="#/search" class="nav-link" title="Search">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <span class="nav-text">Search</span>
+                </a>
+                <a href="#/messages" class="nav-link" title="Messages" style="position: relative;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    <span class="nav-text">Messages</span>
+                    <span id="nav-unread-badge" style="display: none; position: absolute; top: 0; right: 0; background: var(--danger-color); color: white; border-radius: 50%; width: 14px; height: 14px; font-size: 0.6rem; align-items: center; justify-content: center; border: 1.5px solid var(--surface-color);"></span>
+                </a>
+                <a href="#/room" class="nav-link" title="My Room">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><path d="M9 22V12h6v10"></path></svg>
+                    <span class="nav-text">My Room</span>
+                </a>
+                <a href="#/lost-found" class="nav-link" title="Lost & Found">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4l3 3"></path></svg>
+                    <span class="nav-text">Lost & Found</span>
+                </a>
+                <a href="#/clearance" class="nav-link" title="Clearance">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    <span class="nav-text">Clearance</span>
+                </a>
+                <a href="#/dorm-change" class="nav-link" title="Change Dorm">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line></svg>
+                    <span class="nav-text">Change Dorm</span>
+                </a>`;
         }
 
         const avatarStyle = `
@@ -42,18 +69,20 @@ export const renderNavbar = () => {
     `;
 
         rightSection = `
-        <div class="profile-container" style="display: flex; align-items: center; gap: 1rem;">
+        <div class="profile-container" style="display: flex; align-items: center; gap: 0.75rem;">
             <button id="theme-toggle" class="theme-toggle" title="Toggle Dark/Light Mode">${themeIcon}</button>
-            <a href="#/profile" class="profile-link" style="display: flex; align-items: center; gap: 0.75rem; color: var(--text-primary);">
+            <a href="#/profile" class="profile-link" style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary);">
                 <div style="${avatarStyle}">
                     ${user.profilePicture ? '' : user.name.charAt(0).toUpperCase()}
                 </div>
-                <div style="display: flex; flex-direction: column; line-height: 1.1;">
-                    <span style="font-weight: 600; font-size: 0.85rem; white-space: nowrap;">${user.name}</span>
-                    <span style="font-size: 0.7rem; color: var(--text-secondary); white-space: nowrap;">${user.department}</span>
+                <div style="display: flex; flex-direction: column; line-height: 1.1;" class="nav-text">
+                    <span style="font-weight: 600; font-size: 0.8rem; white-space: nowrap;">${user.name.split(' ')[0]}</span>
+                    <span style="font-size: 0.65rem; color: var(--text-secondary); white-space: nowrap;">${user.id}</span>
                 </div>
             </a>
-            <button id="logout-btn" class="btn btn-outline" style="padding: 0.35rem 0.7rem; font-size: 0.8rem;">Logout</button>
+            <button id="logout-btn" class="btn btn-outline" style="padding: 0.35rem; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;" title="Logout">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            </button>
         </div>
     `;
     } else {
@@ -69,13 +98,10 @@ export const renderNavbar = () => {
     return `
     <nav class="navbar">
         <div class="container nav-container" style="display: flex; align-items: center; justify-content: space-between;">
-            <div class="nav-header" style="display: flex; align-items: center; gap: 2rem;">
-                <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
-                    ☰
-                </button>
-                <a href="${user ? (user.role === 'admin' ? '#/admin' : '#/dashboard') : '#/'}" class="nav-logo" style="display: flex; align-items: center; gap: 0.75rem;">
-                    <img src="/amu-logo.png" alt="AMU Logo" style="height: 32px;">
-                    <span style="font-weight: 800; font-size: 1.1rem; letter-spacing: -0.5px;">AMIT DORM</span>
+            <div class="nav-header" style="display: flex; align-items: center; gap: 1.5rem;">
+                <a href="${user ? (user.role === 'admin' ? '#/admin' : '#/dashboard') : '#/'}" class="nav-logo" style="display: flex; align-items: center; gap: 0.5rem;">
+                    <img src="/amu-logo.png" alt="AMU Logo" style="height: 28px;">
+                    <span style="font-weight: 800; font-size: 1rem; letter-spacing: -0.5px;" class="hide-mobile">AMIT DORM</span>
                 </a>
                 <div class="nav-menu" id="nav-menu">
                     ${mainLinks}
@@ -89,10 +115,13 @@ export const renderNavbar = () => {
     </nav>
     <style>
         .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
             font-weight: 600;
             color: var(--text-secondary);
-            padding: 0.5rem 0.75rem;
-            border-radius: 8px;
+            padding: 0.6rem;
+            border-radius: 10px;
             transition: var(--transition);
             font-size: 0.9rem;
         }
@@ -100,32 +129,35 @@ export const renderNavbar = () => {
             color: var(--primary-color);
             background: var(--surface-hover);
         }
-        .nav-menu { display: flex; gap: 0.5rem; }
-        @media (max-width: 992px) {
-            .nav-menu { display: none; }
-            .nav-menu.active { display: flex; position: absolute; top: 100%; left: 0; right: 0; background: var(--surface-color); flex-direction: column; padding: 1rem; border-bottom: 1px solid var(--border-color); }
+        .nav-menu { display: flex; gap: 0.25rem; }
+        
+        @media (max-width: 1024px) {
+            .nav-text { display: none !important; }
+            .hide-mobile { display: none !important; }
+            .nav-header { gap: 0.5rem !important; }
+            .nav-link { padding: 0.5rem; }
         }
+
         .theme-toggle {
             background: var(--surface-hover);
             border: 1px solid var(--border-color);
             color: var(--text-primary);
             cursor: pointer;
-            width: 36px; height: 36px;
+            width: 32px; height: 32px;
             border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.1rem;
+            font-size: 1rem;
             transition: var(--transition);
         }
         .theme-toggle:hover {
             transform: rotate(15deg) scale(1.1);
-            background: var(--border-color);
         }
     </style>
     `;
 };
 
 document.addEventListener('click', (e) => {
-    if (e.target.id === 'logout-btn') {
+    if (e.target.id === 'logout-btn' || e.target.closest('#logout-btn')) {
         logout();
     }
 
@@ -138,14 +170,6 @@ document.addEventListener('click', (e) => {
 
         const btn = document.getElementById('theme-toggle');
         if (btn) btn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
-    }
-
-    if (e.target.closest('#nav-toggle')) {
-        const menu = document.getElementById('nav-menu');
-        menu.classList.toggle('active');
-    } else if (!e.target.closest('#nav-menu')) {
-        const menu = document.getElementById('nav-menu');
-        if (menu) menu.classList.remove('active');
     }
 });
 
