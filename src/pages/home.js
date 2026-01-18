@@ -16,7 +16,7 @@ export const init = async () => {
         const stats = await apiCall('/api/public/stats');
         const studentsEl = document.getElementById('stat-students');
         const roomsEl = document.getElementById('stat-rooms');
-        if (studentsEl) studentsEl.textContent = stats.students.toLocaleString() + ' + students';
+        if (studentsEl) studentsEl.textContent = stats.students.toLocaleString() + ' +';
         if (roomsEl) roomsEl.textContent = stats.rooms.toLocaleString();
     } catch (e) {
         console.error('Failed to load stats', e);
@@ -102,7 +102,6 @@ export const render = `
 .landing-btn-primary:hover {
     background: #0d9488;
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(20, 184, 166, 0.4);
 }
 .landing-btn-outline {
     background: rgba(255,255,255,0.1);

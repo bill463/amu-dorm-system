@@ -7,48 +7,45 @@ export const render = `
     <div class="desktop-only" style="flex: 1.25; position: relative; overflow: hidden; background: #000;">
         <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.4) 60%, transparent 100%), url('/dorm-bg.jpg'); background-size: cover; background-position: center;"></div>
         
-        <div style="position: relative; height: 100%; display: flex; flex-direction: column; justify-content: space-between; padding: 3rem; z-index: 2; color: white;">
-            <div>
-                <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 0.5rem 1rem; border-radius: 100px; display: inline-flex; align-items: center; gap: 0.6rem; border: 1px solid rgba(255,255,255,0.2);">
+        <div style="position: relative; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; padding: 4rem 3rem; z-index: 2; color: white;">
+            <!-- Main Content Lowered -->
+            <div style="max-width: 500px; animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);">
+                <!-- University Badge -->
+                <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 0.5rem 1rem; border-radius: 100px; display: inline-flex; align-items: center; gap: 0.6rem; border: 1px solid rgba(255,255,255,0.2); margin-bottom: 2rem;">
                     <img src="/amu-logo.png" style="width: 18px; height: 18px;">
                     <span style="font-weight: 700; font-size: 0.7rem; letter-spacing: 0.05em; text-transform: uppercase;">Arba Minch University</span>
                 </div>
-            </div>
 
-            <div style="max-width: 450px; animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);">
-                <h2 style="font-size: 3.5rem; font-weight: 900; line-height: 1.1; letter-spacing: -0.04em; margin-bottom: 2.5rem;">
+                <h2 style="font-size: 3.25rem; font-weight: 900; line-height: 1.1; letter-spacing: -0.04em; margin-bottom: 2.5rem;">
                     Digitalize<br>Your <span style="color: #14b8a6;">Residence</span>.
                 </h2>
                 
-                <div style="display: flex; flex-direction: column; gap: 2rem; margin-top: 1rem;">
-                    <div style="display: flex; gap: 1.25rem; align-items: start;">
+                <!-- Functionalities as Cards at the Bottom -->
+                <div style="display: grid; gap: 1rem; margin-top: 1rem;">
+                    <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 1.25rem; display: flex; gap: 1rem; align-items: start; transition: all 0.3s ease;">
                         <div style="color: #14b8a6; font-size: 1.25rem; line-height: 1; padding-top: 0.2rem;">✓</div>
                         <div>
-                            <h4 style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.4rem; color: white;">Instant Room Allocation Status</h4>
-                            <p style="font-size: 0.95rem; opacity: 0.75; line-height: 1.6; margin: 0;">Check your room assignment and availability in real-time. No more manual queues.</p>
+                            <h4 style="font-weight: 700; font-size: 1rem; margin-bottom: 0.3rem; color: white;">Instant Room Allocation Status</h4>
+                            <p style="font-size: 0.85rem; opacity: 0.75; line-height: 1.5; margin: 0;">Check your room assignment and availability in real-time.</p>
                         </div>
                     </div>
 
-                    <div style="display: flex; gap: 1.25rem; align-items: start;">
+                    <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 1.25rem; display: flex; gap: 1rem; align-items: start; transition: all 0.3s ease;">
                         <div style="color: #14b8a6; font-size: 1.25rem; line-height: 1; padding-top: 0.2rem;">✓</div>
                         <div>
-                            <h4 style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.4rem; color: white;">Seamless Maintenance Requests</h4>
-                            <p style="font-size: 0.95rem; opacity: 0.75; line-height: 1.6; margin: 0;">Report issues and track resolution progress instantly through our unified dashboard.</p>
+                            <h4 style="font-weight: 700; font-size: 1rem; margin-bottom: 0.3rem; color: white;">Seamless Maintenance Requests</h4>
+                            <p style="font-size: 0.85rem; opacity: 0.75; line-height: 1.5; margin: 0;">Report issues and track resolution progress instantly.</p>
                         </div>
                     </div>
 
-                    <div style="display: flex; gap: 1.25rem; align-items: start;">
+                    <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 1.25rem; display: flex; gap: 1rem; align-items: start; transition: all 0.3s ease;">
                         <div style="color: #14b8a6; font-size: 1.25rem; line-height: 1; padding-top: 0.2rem;">✓</div>
                         <div>
-                            <h4 style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.4rem; color: white;">Direct Communication</h4>
-                            <p style="font-size: 0.95rem; opacity: 0.75; line-height: 1.6; margin: 0;">Communicate directly with dormitory administration and stay updated with official broadcasts.</p>
+                            <h4 style="font-weight: 700; font-size: 1rem; margin-bottom: 0.3rem; color: white;">Direct Communication</h4>
+                            <p style="font-size: 0.85rem; opacity: 0.75; line-height: 1.5; margin: 0;">Communicate directly with dormitory administration.</p>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div style="font-size: 0.85rem; opacity: 0.6; font-weight: 500;">
-                © ${new Date().getFullYear()} AMU Housing Division. All rights reserved.
             </div>
         </div>
     </div>
