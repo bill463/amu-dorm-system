@@ -7,43 +7,37 @@ export const render = `
     <div class="desktop-only" style="flex: 1.25; position: relative; overflow: hidden; background: #000;">
         <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.4) 60%, transparent 100%), url('/dorm-bg.jpg'); background-size: cover; background-position: center;"></div>
         
-        <div style="position: relative; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; padding: 4rem 3rem; z-index: 2; color: white;">
-            <!-- Main Content Lowered -->
-            <div style="max-width: 500px; animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);">
+        <div style="position: relative; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; padding: 2.5rem 2rem; z-index: 2; color: white;">
+            <!-- Main Content Lowered Even More -->
+            <div style="width: 100%; animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);">
                 <!-- University Badge -->
-                <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 0.5rem 1rem; border-radius: 100px; display: inline-flex; align-items: center; gap: 0.6rem; border: 1px solid rgba(255,255,255,0.2); margin-bottom: 2rem;">
-                    <img src="/amu-logo.png" style="width: 18px; height: 18px;">
-                    <span style="font-weight: 700; font-size: 0.7rem; letter-spacing: 0.05em; text-transform: uppercase;">Arba Minch University</span>
+                <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 0.4rem 0.9rem; border-radius: 100px; display: inline-flex; align-items: center; gap: 0.5rem; border: 1px solid rgba(255,255,255,0.2); margin-bottom: 2rem;">
+                    <img src="/amu-logo.png" style="width: 16px; height: 16px;">
+                    <span style="font-weight: 700; font-size: 0.65rem; letter-spacing: 0.05em; text-transform: uppercase;">Arba Minch University</span>
                 </div>
 
-                <h2 style="font-size: 3.25rem; font-weight: 900; line-height: 1.1; letter-spacing: -0.04em; margin-bottom: 2.5rem;">
+                <h2 style="font-size: 3rem; font-weight: 900; line-height: 1.1; letter-spacing: -0.04em; margin-bottom: 2rem;">
                     Digitalize<br>Your <span style="color: #14b8a6;">Residence</span>.
                 </h2>
                 
-                <!-- Functionalities as Cards at the Bottom -->
-                <div style="display: grid; gap: 1rem; margin-top: 1rem;">
-                    <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 1.25rem; display: flex; gap: 1rem; align-items: start; transition: all 0.3s ease;">
-                        <div style="color: #14b8a6; font-size: 1.25rem; line-height: 1; padding-top: 0.2rem;">✓</div>
-                        <div>
-                            <h4 style="font-weight: 700; font-size: 1rem; margin-bottom: 0.3rem; color: white;">Instant Room Allocation Status</h4>
-                            <p style="font-size: 0.85rem; opacity: 0.75; line-height: 1.5; margin: 0;">Check your room assignment and availability in real-time.</p>
-                        </div>
+                <!-- Functionalities as Inline Cards at the very Bottom -->
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-top: 1rem;">
+                    <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 1rem; transition: all 0.3s ease;">
+                        <div style="color: #14b8a6; font-size: 1.1rem; margin-bottom: 0.5rem;">✓</div>
+                        <h4 style="font-weight: 700; font-size: 0.85rem; margin-bottom: 0.25rem; color: white; line-height: 1.3;">Allocation Status</h4>
+                        <p style="font-size: 0.75rem; opacity: 0.7; line-height: 1.4; margin: 0;">Real-time room status updates.</p>
                     </div>
 
-                    <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 1.25rem; display: flex; gap: 1rem; align-items: start; transition: all 0.3s ease;">
-                        <div style="color: #14b8a6; font-size: 1.25rem; line-height: 1; padding-top: 0.2rem;">✓</div>
-                        <div>
-                            <h4 style="font-weight: 700; font-size: 1rem; margin-bottom: 0.3rem; color: white;">Seamless Maintenance Requests</h4>
-                            <p style="font-size: 0.85rem; opacity: 0.75; line-height: 1.5; margin: 0;">Report issues and track resolution progress instantly.</p>
-                        </div>
+                    <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 1rem; transition: all 0.3s ease;">
+                        <div style="color: #14b8a6; font-size: 1.1rem; margin-bottom: 0.5rem;">✓</div>
+                        <h4 style="font-weight: 700; font-size: 0.85rem; margin-bottom: 0.25rem; color: white; line-height: 1.3;">Maintenance</h4>
+                        <p style="font-size: 0.75rem; opacity: 0.7; line-height: 1.4; margin: 0;">Track requests instantly.</p>
                     </div>
 
-                    <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 1.25rem; display: flex; gap: 1rem; align-items: start; transition: all 0.3s ease;">
-                        <div style="color: #14b8a6; font-size: 1.25rem; line-height: 1; padding-top: 0.2rem;">✓</div>
-                        <div>
-                            <h4 style="font-weight: 700; font-size: 1rem; margin-bottom: 0.3rem; color: white;">Direct Communication</h4>
-                            <p style="font-size: 0.85rem; opacity: 0.75; line-height: 1.5; margin: 0;">Communicate directly with dormitory administration.</p>
-                        </div>
+                    <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 1rem; transition: all 0.3s ease;">
+                        <div style="color: #14b8a6; font-size: 1.1rem; margin-bottom: 0.5rem;">✓</div>
+                        <h4 style="font-weight: 700; font-size: 0.85rem; margin-bottom: 0.25rem; color: white; line-height: 1.3;">Direct Comms</h4>
+                        <p style="font-size: 0.75rem; opacity: 0.7; line-height: 1.4; margin: 0;">Instant admin messaging.</p>
                     </div>
                 </div>
             </div>
