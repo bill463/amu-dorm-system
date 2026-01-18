@@ -22,10 +22,12 @@ export const init = async () => {
         console.error('Failed to load stats', e);
     }
 
-    // Make navbar transparent on landing page
+    // Make navbar truly transparent on landing page
     const navbar = document.querySelector('nav');
     if (navbar) {
         navbar.style.background = 'transparent';
+        navbar.style.backdropFilter = 'none';
+        navbar.style.webkitBackdropFilter = 'none';
         navbar.style.boxShadow = 'none';
         navbar.style.borderBottom = 'none';
     }
@@ -34,7 +36,7 @@ export const init = async () => {
 export const render = `
 <div style="position: relative; min-height: 100vh; display: flex; align-items: center; overflow: hidden; background: #000; margin-top: -80px;">
     <!-- Background Image -->
-    <div style="position: absolute; inset: 0; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url('/dorm-bg.jpg'); background-size: cover; background-position: center; z-index: 1;"></div>
+    <div style="position: absolute; inset: 0; background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.8)), url('/dorm-bg.jpg'); background-size: cover; background-position: center; z-index: 1;"></div>
     
     <div class="container" style="position: relative; z-index: 2; padding: 2rem; max-width: 1100px; margin: 0 auto;">
         <div style="text-align: center; animation: fadeIn 0.8s ease-out;">
@@ -97,6 +99,11 @@ a[href="#/login"]:hover {
 a[href="#/register"]:hover {
     background: rgba(255,255,255,0.2);
     border-color: rgba(255,255,255,0.4);
+}
+@media (max-width: 768px) {
+    h1 { font-size: 2rem !important; }
+    p { font-size: 1rem !important; }
+    div[style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
 }
 </style>
 `;
