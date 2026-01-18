@@ -16,27 +16,18 @@ export const init = async () => {
         const stats = await apiCall('/api/public/stats');
         const studentsEl = document.getElementById('stat-students');
         const roomsEl = document.getElementById('stat-rooms');
-        if (studentsEl) studentsEl.textContent = stats.students.toLocaleString();
+        if (studentsEl) studentsEl.textContent = stats.students.toLocaleString() + '+';
         if (roomsEl) roomsEl.textContent = stats.rooms.toLocaleString();
     } catch (e) {
         console.error('Failed to load stats', e);
     }
 
-    // Make navbar truly transparent on landing page
-    const navbar = document.querySelector('nav');
-    if (navbar) {
-        navbar.style.background = 'transparent';
-        navbar.style.backdropFilter = 'none';
-        navbar.style.webkitBackdropFilter = 'none';
-        navbar.style.boxShadow = 'none';
-        navbar.style.borderBottom = 'none';
-    }
 };
 
 export const render = `
 <div style="position: relative; min-height: 100vh; display: flex; align-items: center; overflow: hidden; background: #000; margin-top: -80px;">
     <!-- Background Image -->
-    <div style="position: absolute; inset: 0; background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.8)), url('/dorm-bg.jpg'); background-size: cover; background-position: center; z-index: 1;"></div>
+    <div style="position: absolute; inset: 0; background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.85)), url('/dorm-bg.jpg'); background-size: cover; background-position: center; z-index: 1;"></div>
     
     <div class="container" style="position: relative; z-index: 2; padding: 2rem; max-width: 1100px; margin: 0 auto;">
         <div style="text-align: center; animation: fadeIn 0.8s ease-out;">
@@ -69,17 +60,17 @@ export const render = `
 
             <!-- Stats -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 2rem; max-width: 600px; margin: 0 auto;">
-                <div style="background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 1.5rem;">
+                <div style="background: rgba(0,0,0,0.4); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); border-radius: 16px; padding: 1.5rem;">
                     <div id="stat-students" style="font-size: 2rem; font-weight: 800; color: #14b8a6; margin-bottom: 0.25rem;">...</div>
-                    <div style="color: rgba(255,255,255,0.7); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Students</div>
+                    <div style="color: rgba(255,255,255,0.8); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Students</div>
                 </div>
-                <div style="background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 1.5rem;">
+                <div style="background: rgba(0,0,0,0.4); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); border-radius: 16px; padding: 1.5rem;">
                     <div id="stat-rooms" style="font-size: 2rem; font-weight: 800; color: #14b8a6; margin-bottom: 0.25rem;">...</div>
-                    <div style="color: rgba(255,255,255,0.7); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Rooms</div>
+                    <div style="color: rgba(255,255,255,0.8); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Rooms</div>
                 </div>
-                <div style="background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 1.5rem;">
+                <div style="background: rgba(0,0,0,0.4); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); border-radius: 16px; padding: 1.5rem;">
                     <div style="font-size: 2rem; font-weight: 800; color: #14b8a6; margin-bottom: 0.25rem;">24/7</div>
-                    <div style="color: rgba(255,255,255,0.7); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Support</div>
+                    <div style="color: rgba(255,255,255,0.8); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Support</div>
                 </div>
             </div>
         </div>
