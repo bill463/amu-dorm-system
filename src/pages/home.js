@@ -50,11 +50,8 @@ export const render = `
             
             <!-- CTA Buttons -->
             <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 4rem;">
-                <a href="#/login" class="landing-btn landing-btn-primary">
+                <a href="#/login" class="landing-btn landing-btn-white">
                     Login to Portal
-                </a>
-                <a href="#/register" class="landing-btn landing-btn-outline">
-                    Register Now
                 </a>
             </div>
 
@@ -94,13 +91,13 @@ export const render = `
     justify-content: center;
     min-width: 180px;
 }
-.landing-btn-primary {
-    background: #000000;
-    color: white;
+.landing-btn-white {
+    background: #ffffff;
+    color: #000000;
     border: none;
 }
-.landing-btn-primary:hover {
-    background: #1a1a1a;
+.landing-btn-white:hover {
+    background: #f1f5f9;
     transform: translateY(-2px);
 }
 .landing-btn-outline {
