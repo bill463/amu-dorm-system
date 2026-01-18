@@ -5,7 +5,7 @@ export const render = `
 <div style="display: flex; min-height: 100vh; background: var(--background-color);">
     <!-- Right Side - Registration Form -->
     <div style="flex: 0.8; display: flex; align-items: center; justify-content: center; padding: 2rem;">
-        <div class="card" style="width: 100%; max-width: 540px; padding: 3rem; box-shadow: var(--shadow-xl); border-radius: 24px;">
+        <div class="card" style="width: 100%; max-width: 540px; padding: 3rem; border-radius: 24px;">
             
             <div style="text-align: center; margin-bottom: 2.5rem;">
                 <a href="#/" style="display: inline-block; margin-bottom: 1rem;">
@@ -102,37 +102,37 @@ export const render = `
 `;
 
 export const init = () => {
-  const form = document.getElementById('register-form');
-  if (form) {
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const btn = document.getElementById('btn-submit');
-      const originalText = btn.innerText;
+    const form = document.getElementById('register-form');
+    if (form) {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-submit');
+            const originalText = btn.innerText;
 
-      const id = document.getElementById('reg-id').value.trim();
-      const name = document.getElementById('reg-name').value.trim();
-      const dept = document.getElementById('reg-dept').value;
-      const email = document.getElementById('reg-email').value.trim();
-      const password = document.getElementById('reg-password').value;
+            const id = document.getElementById('reg-id').value.trim();
+            const name = document.getElementById('reg-name').value.trim();
+            const dept = document.getElementById('reg-dept').value;
+            const email = document.getElementById('reg-email').value.trim();
+            const password = document.getElementById('reg-password').value;
 
-      btn.disabled = true;
-      btn.innerHTML = 'Creating Account...';
+            btn.disabled = true;
+            btn.innerHTML = 'Creating Account...';
 
-      try {
-        const result = await apiCall('/auth/register', 'POST', { id, name, department: dept, email, password });
-        if (result.success) {
-          showToast('Registration Successful! Redirecting...', 'success');
-          setTimeout(() => window.location.hash = '#/login', 1500);
-        } else {
-          showToast(result.message || 'Registration failed', 'error');
-          btn.disabled = false;
-          btn.innerText = originalText;
-        }
-      } catch (error) {
-        showToast('Registration Error: ' + error.message, 'error');
-        btn.disabled = false;
-        btn.innerText = originalText;
-      }
-    });
-  }
+            try {
+                const result = await apiCall('/auth/register', 'POST', { id, name, department: dept, email, password });
+                if (result.success) {
+                    showToast('Registration Successful! Redirecting...', 'success');
+                    setTimeout(() => window.location.hash = '#/login', 1500);
+                } else {
+                    showToast(result.message || 'Registration failed', 'error');
+                    btn.disabled = false;
+                    btn.innerText = originalText;
+                }
+            } catch (error) {
+                showToast('Registration Error: ' + error.message, 'error');
+                btn.disabled = false;
+                btn.innerText = originalText;
+            }
+        });
+    }
 };

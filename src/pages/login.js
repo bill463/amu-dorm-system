@@ -30,7 +30,7 @@ export const render = `
 
     <!-- Right Side - Login Form -->
     <div style="flex: 0.8; display: flex; align-items: center; justify-content: center; padding: 2rem;">
-        <div class="card" style="width: 100%; max-width: 480px; padding: 3rem; box-shadow: var(--shadow-xl); border-radius: 24px;">
+        <div class="card" style="width: 100%; max-width: 480px; padding: 3rem; border-radius: 24px;">
             
             <div style="text-align: center; margin-bottom: 3rem;">
                 <a href="#/" style="display: inline-block; margin-bottom: 1.5rem;">

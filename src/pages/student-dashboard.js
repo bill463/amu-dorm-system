@@ -65,7 +65,7 @@ export const init = async () => {
         container.innerHTML = `
             <!-- Broadcast Banner -->
             ${latestMessage ? `
-                <div class="card" style="margin-bottom: 2rem; background: var(--primary-color); border: none; color: white; display: flex; align-items: center; gap: 1.5rem; padding: 1.5rem 2rem; box-shadow: var(--shadow-lg);">
+                <div class="card" style="margin-bottom: 2rem; background: var(--primary-color); border: none; color: white; display: flex; align-items: center; gap: 1.5rem; padding: 1.5rem 2rem;">
                     <div style="font-size: 2rem;">📢</div>
                     <div style="flex: 1;">
                         <h4 style="margin: 0; color: white; font-size: 1.1rem;">Broadcast from Admin</h4>
@@ -77,12 +77,12 @@ export const init = async () => {
 
             <div class="grid grid-2" style="margin-bottom: 2.5rem;">
                 <!-- My Room Card -->
-                <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; border-left: 6px solid var(--primary-color);">
+                <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
                     <div>
                         <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 2rem;">
                             <h3 style="margin: 0; font-size: 1.5rem;">Dormitory Assignment</h3>
                             <div style="padding: 0.5rem; background: var(--primary-light); border-radius: 12px; color: var(--primary-dark);">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
                             </div>
                         </div>
                         
@@ -99,48 +99,47 @@ export const init = async () => {
                                 </div>
                             </div>
                             
-                            <div style="margin-top: 2rem; padding: 1rem; background: var(--surface-hover); border-radius: 12px; border: 1px dashed var(--border-color);">
+                            <div style="margin-top: 2rem; padding: 1rem; background: var(--surface-hover); border-radius: 12px;">
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
                                     <span style="color: var(--text-secondary); font-weight: 500;">Room Status</span>
-                                    <span class="badge badge-success">Active Allocation</span>
+                                    <span class="badge badge-success">Active</span>
                                 </div>
                             </div>
                         ` : `
                             <div style="text-align: center; padding: 2rem 0;">
-                                <p style="font-weight: 700; color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 0.5rem;">Unallocated</p>
-                                <p style="color: var(--text-muted); font-size: 0.9rem;">You haven't been assigned a room yet.</p>
+                                <p style="font-weight: 700; color: var(--text-secondary);">Unallocated</p>
                             </div>
                         `}
                     </div>
                     
-                    <a href="#/room" class="btn btn-primary" style="margin-top: 2rem; width: 100%;">View Room Details & Roommates</a>
+                    <a href="#/room" class="btn btn-primary" style="margin-top: 2rem; width: 100%;">View Room Details</a>
                 </div>
 
                 <!-- Maintenance Card -->
-                <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; border-left: 6px solid var(--accent-color);">
+                <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
                     <div>
                         <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 2rem;">
-                            <h3 style="margin: 0; font-size: 1.5rem;">Maintenance & Help</h3>
+                            <h3 style="margin: 0; font-size: 1.5rem;">Maintenance</h3>
                             <div style="padding: 0.5rem; background: #fef3c7; border-radius: 12px; color: #d97706;">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
                             </div>
                         </div>
 
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                            <div style="background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.2); padding: 1.25rem; border-radius: 12px; text-align: center;">
-                                <div style="font-size: 2.5rem; font-weight: 800; color: var(--accent-color); line-height: 1;">${pendingCount}</div>
-                                <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin-top: 0.5rem;">Pending Issues</div>
+                            <div style="background: var(--surface-hover); padding: 1.25rem; border-radius: 12px; text-align: center;">
+                                <div style="font-size: 2.25rem; font-weight: 800; color: var(--accent-color); line-height: 1;">${pendingCount}</div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.5rem; font-weight: 600;">Pending</div>
                             </div>
-                            <div style="background: rgba(34, 197, 94, 0.05); border: 1px solid rgba(34, 197, 94, 0.2); padding: 1.25rem; border-radius: 12px; text-align: center;">
-                                <div style="font-size: 2.5rem; font-weight: 800; color: var(--success-color); line-height: 1;">${completedCount}</div>
-                                <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin-top: 0.5rem;">Resolved Repairs</div>
+                            <div style="background: var(--surface-hover); padding: 1.25rem; border-radius: 12px; text-align: center;">
+                                <div style="font-size: 2.25rem; font-weight: 800; color: var(--success-color); line-height: 1;">${completedCount}</div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.5rem; font-weight: 600;">Resolved</div>
                             </div>
                         </div>
                     </div>
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem;">
-                        <a href="#/maintenance" class="btn btn-outline">Report Issue</a>
-                        <a href="#/lost-found" class="btn btn-outline" style="border-color: var(--accent-color); color: var(--accent-color);">Lost Items</a>
+                        <a href="#/maintenance" class="btn btn-outline" style="font-size: 0.9rem;">Report Issue</a>
+                        <a href="#/lost-found" class="btn btn-outline" style="font-size: 0.9rem;">Lost Items</a>
                     </div>
                 </div>
             </div>

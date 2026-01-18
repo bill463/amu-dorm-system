@@ -44,7 +44,7 @@ export const renderNavbar = () => {
         rightSection = `
         <div class="profile-container" style="display: flex; align-items: center; gap: 1rem;">
             <button id="theme-toggle" class="theme-toggle" title="Toggle Dark/Light Mode">${themeIcon}</button>
-            <a href="#/profile" class="profile-link" style="display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: var(--text-primary);">
+            <a href="#/profile" class="profile-link" style="display: flex; align-items: center; gap: 0.75rem; color: var(--text-primary);">
                 <div style="${avatarStyle}">
                     ${user.profilePicture ? '' : user.name.charAt(0).toUpperCase()}
                 </div>
