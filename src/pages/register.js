@@ -5,13 +5,13 @@ export const render = `
 <div style="display: flex; min-height: 100vh; background: #ffffff;">
     <!-- Left Side - Portal Features -->
     <div class="desktop-only" style="flex: 1.25; position: relative; overflow: hidden; background: #000;">
-        <div style="position: absolute; inset: 0; background: linear-gradient(to right, rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url('/dorm-bg.jpg'); background-size: cover; background-position: center;"></div>
+        <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.4) 60%, transparent 100%), url('/dorm-bg.jpg'); background-size: cover; background-position: center;"></div>
         
         <div style="position: relative; height: 100%; display: flex; flex-direction: column; justify-content: space-between; padding: 3rem; z-index: 2; color: white;">
             <div>
-                <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 0.6rem 1.25rem; border-radius: 100px; display: inline-flex; align-items: center; gap: 0.75rem; border: 1px solid rgba(255,255,255,0.2);">
-                    <img src="/amu-logo.png" style="width: 20px; height: 20px;">
-                    <span style="font-weight: 700; font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase;">Arba Minch University</span>
+                <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 0.5rem 1rem; border-radius: 100px; display: inline-flex; align-items: center; gap: 0.6rem; border: 1px solid rgba(255,255,255,0.2);">
+                    <img src="/amu-logo.png" style="width: 18px; height: 18px;">
+                    <span style="font-weight: 700; font-size: 0.7rem; letter-spacing: 0.05em; text-transform: uppercase;">Arba Minch University</span>
                 </div>
             </div>
 
@@ -20,28 +20,28 @@ export const render = `
                     Digitalize<br>Your <span style="color: #14b8a6;">Residence</span>.
                 </h2>
                 
-                <div style="display: flex; flex-direction: column; gap: 2.5rem; margin-top: 1rem;">
+                <div style="display: flex; flex-direction: column; gap: 2rem; margin-top: 1rem;">
                     <div style="display: flex; gap: 1.25rem; align-items: start;">
-                        <div style="color: #14b8a6; font-size: 1.5rem; line-height: 1.2;">✦</div>
+                        <div style="color: #14b8a6; font-size: 1.25rem; line-height: 1; padding-top: 0.2rem;">✓</div>
                         <div>
-                            <h4 style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; color: white;">Instant Room Allocation Status</h4>
-                            <p style="font-size: 0.95rem; opacity: 0.7; line-height: 1.6; margin: 0;">Check your room assignment and availability in real-time. No more manual queues.</p>
+                            <h4 style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.4rem; color: white;">Instant Room Allocation Status</h4>
+                            <p style="font-size: 0.95rem; opacity: 0.75; line-height: 1.6; margin: 0;">Check your room assignment and availability in real-time. No more manual queues.</p>
                         </div>
                     </div>
 
                     <div style="display: flex; gap: 1.25rem; align-items: start;">
-                        <div style="color: #14b8a6; font-size: 1.5rem; line-height: 1.2;">✦</div>
+                        <div style="color: #14b8a6; font-size: 1.25rem; line-height: 1; padding-top: 0.2rem;">✓</div>
                         <div>
-                            <h4 style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; color: white;">Seamless Maintenance Requests</h4>
-                            <p style="font-size: 0.95rem; opacity: 0.7; line-height: 1.6; margin: 0;">Report issues and track resolution progress instantly through our unified dashboard.</p>
+                            <h4 style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.4rem; color: white;">Seamless Maintenance Requests</h4>
+                            <p style="font-size: 0.95rem; opacity: 0.75; line-height: 1.6; margin: 0;">Report issues and track resolution progress instantly through our unified dashboard.</p>
                         </div>
                     </div>
 
                     <div style="display: flex; gap: 1.25rem; align-items: start;">
-                        <div style="color: #14b8a6; font-size: 1.5rem; line-height: 1.2;">✦</div>
+                        <div style="color: #14b8a6; font-size: 1.25rem; line-height: 1; padding-top: 0.2rem;">✓</div>
                         <div>
-                            <h4 style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; color: white;">Direct Communication</h4>
-                            <p style="font-size: 0.95rem; opacity: 0.7; line-height: 1.6; margin: 0;">Communicate directly with dormitory administration and stay updated with official broadcasts.</p>
+                            <h4 style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.4rem; color: white;">Direct Communication</h4>
+                            <p style="font-size: 0.95rem; opacity: 0.75; line-height: 1.6; margin: 0;">Communicate directly with dormitory administration and stay updated with official broadcasts.</p>
                         </div>
                     </div>
                 </div>
