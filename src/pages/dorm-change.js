@@ -21,7 +21,7 @@ export const render = `
             <form id="change-form" style="display: flex; flex-direction: column; gap: 1.25rem;">
                 <div>
                     <label class="form-label">Preferred Room/Block</label>
-                    <input type="text" id="preferredDorm" class="form-input" required placeholder="e.g. Block A, Room 101">
+                    <input type="text" id="preferredDorm" class="form-input" required placeholder="e.g. B1-104">
                 </div>
                 <div>
                     <label class="form-label">Reason for Change</label>
