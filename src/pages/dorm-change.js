@@ -7,8 +7,8 @@ let activeSubTab = 'standard'; // 'standard' or 'swap'
 export const render = `
 <div class="container" style="max-width: 800px; margin: 0 auto;">
     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
-        <h2 style="margin: 0;">🔄 Dormitory Changes</h2>
-        <div style="display: flex; background: #f1f5f9; padding: 4px; border-radius: 8px;">
+        <h2 id="page-title" style="margin: 0;">🔄 Dormitory Changes</h2>
+        <div id="tab-container" style="display: flex; background: #f1f5f9; padding: 4px; border-radius: 8px;">
             <button id="tab-standard" class="sub-tab active">Standard Request</button>
             <button id="tab-swap" class="sub-tab">Roommate Swap</button>
         </div>
@@ -72,6 +72,17 @@ export const render = `
 export const init = async () => {
   const user = getUser();
   if (!user) return;
+
+  // Adapt to unallocated students
+  if (!user.roomId) {
+    const pageTitle = document.getElementById('page-title');
+    const tabContainer = document.getElementById('tab-container');
+    const formTitle = document.querySelector('#view-standard h3');
+
+    if (pageTitle) pageTitle.textContent = '🏠 Room Allocation';
+    if (tabContainer) tabContainer.style.display = 'none';
+    if (formTitle) formTitle.textContent = 'Request Allocation';
+  }
 
   // Tab switching logic
   const tabs = { standard: document.getElementById('tab-standard'), swap: document.getElementById('tab-swap') };

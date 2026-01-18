@@ -3,6 +3,23 @@ const router = express.Router();
 const { Op } = require('sequelize');
 const { User, Room, MaintenanceRequest, ClearanceRequest, LostItem, DormChangeRequest, Message, AuditLog, SwapRequest } = require('../models');
 
+// Public Stats for Landing Page
+router.get('/public/stats', async (req, res) => {
+  try {
+    const [studentCount, roomCount] = await Promise.all([
+      User.count({ where: { role: 'student' } }),
+      Room.count()
+    ]);
+    res.json({
+      students: studentCount,
+      rooms: roomCount,
+      support: '24/7'
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 const logAction = async (adminId, action, details, targetId = null) => {
   try {
     await AuditLog.create({ adminId, action, details, targetId });

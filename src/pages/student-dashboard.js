@@ -127,8 +127,11 @@ export const init = async () => {
                                 </div>
                             </div>
                         ` : `
-                            <div style="text-align: center; padding: 2rem 0;">
-                                <p style="font-weight: 700; color: var(--text-secondary);">Unallocated</p>
+                            <div style="text-align: center; padding: 1.5rem 0;">
+                                <div style="font-size: 3rem; margin-bottom: 1rem;">🏠</div>
+                                <p style="font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1.25rem;">No Room Assigned</p>
+                                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem;">You are currently not allocated to any dormitory.</p>
+                                <a href="#/dorm-change" class="btn btn-outline" style="width: 100%; border-color: var(--primary-color); color: var(--primary-color); font-weight: 700;">Request Allocation</a>
                             </div>
                         `}
                     </div>
