@@ -77,9 +77,9 @@ export const renderNavbar = () => {
     `;
     } else {
         rightSection = `
-        <div class="profile-container" style="border: none; display: flex; align-items: center; gap: 1rem;">
-            <a href="#/login" class="nav-link">Login</a>
-            <a href="#/register" class="btn btn-primary" style="padding: 0.4rem 1rem; font-size: 0.85rem;">Sign Up</a>
+        <div class="profile-container" style="border: none; display: flex; align-items: center; gap: 0.75rem;">
+            <a href="#/login" class="btn btn-outline" style="padding: 0.5rem 1.25rem; font-size: 0.85rem; min-width: 100px;">Login</a>
+            <a href="#/register" class="btn btn-primary" style="padding: 0.5rem 1.25rem; font-size: 0.85rem; min-width: 100px;">Sign Up</a>
         </div>
     `;
     }

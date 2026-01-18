@@ -20,20 +20,28 @@ export const render = `
                     Digitalize<br>Your <span style="color: #14b8a6;">Residence</span>.
                 </h2>
                 
-                <div style="display: flex; flex-direction: column; gap: 1.25rem;">
-                    <div style="display: flex; gap: 1rem; align-items: start; background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: 16px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);">
-                        <div style="width: 40px; height: 40px; background: #14b8a6; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;">✓</div>
+                <div style="display: flex; flex-direction: column; gap: 2.5rem; margin-top: 1rem;">
+                    <div style="display: flex; gap: 1.25rem; align-items: start;">
+                        <div style="color: #14b8a6; font-size: 1.5rem; line-height: 1.2;">✦</div>
                         <div>
-                            <h4 style="font-weight: 700; font-size: 1.05rem; margin-bottom: 0.25rem;">Instant Room Allocation Status</h4>
-                            <p style="font-size: 0.9rem; opacity: 0.8; line-height: 1.5; margin: 0;">Check your room assignment and availability in real-time.</p>
+                            <h4 style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; color: white;">Instant Room Allocation Status</h4>
+                            <p style="font-size: 0.95rem; opacity: 0.7; line-height: 1.6; margin: 0;">Check your room assignment and availability in real-time. No more manual queues.</p>
                         </div>
                     </div>
 
-                    <div style="display: flex; gap: 1rem; align-items: start; background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: 16px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);">
-                        <div style="width: 40px; height: 40px; background: #14b8a6; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;">⚡</div>
+                    <div style="display: flex; gap: 1.25rem; align-items: start;">
+                        <div style="color: #14b8a6; font-size: 1.5rem; line-height: 1.2;">✦</div>
                         <div>
-                            <h4 style="font-weight: 700; font-size: 1.05rem; margin-bottom: 0.25rem;">Seamless Maintenance Requests</h4>
-                            <p style="font-size: 0.9rem; opacity: 0.8; line-height: 1.5; margin: 0;">Report issues and track resolution progress instantly.</p>
+                            <h4 style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; color: white;">Seamless Maintenance Requests</h4>
+                            <p style="font-size: 0.95rem; opacity: 0.7; line-height: 1.6; margin: 0;">Report issues and track resolution progress instantly through our unified dashboard.</p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 1.25rem; align-items: start;">
+                        <div style="color: #14b8a6; font-size: 1.5rem; line-height: 1.2;">✦</div>
+                        <div>
+                            <h4 style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; color: white;">Direct Communication</h4>
+                            <p style="font-size: 0.95rem; opacity: 0.7; line-height: 1.6; margin: 0;">Communicate directly with dormitory administration and stay updated with official broadcasts.</p>
                         </div>
                     </div>
                 </div>
