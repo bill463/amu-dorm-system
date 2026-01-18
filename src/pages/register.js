@@ -107,7 +107,7 @@ export const render = `
 
 <style>
     @media (max-width: 1024px) { .desktop-only { display: none !important; } }
-    input:focus, select:focus { border-color: #14b8a6 !important; background: white !important; outline: none; }
+    input:focus, select:focus { border-color: #f1f5f9 !important; background: white !important; outline: none; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 </style>

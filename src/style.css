@@ -244,7 +244,6 @@ textarea {
 
 input:focus {
   outline: none;
-  border-color: var(--primary-color);
 }
 
 /* Navbar */
