@@ -375,10 +375,10 @@ const renderStudentsTab = (container, students) => {
                 <td style="padding: 1rem; font-family: monospace; font-weight: 500;">${s.id}</td>
                 <td style="padding: 1rem;">
                     <div style="display: flex; align-items: center; gap: 0.75rem;">
-                        <div style="width: 32px; height: 32px; background: var(--primary-color); border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold;">
-                            ${s.name.charAt(0).toUpperCase()}
+                        <div style="width: 36px; height: 36px; border-radius: 50%; background-color: var(--surface-hover); background-image: ${s.profilePicture ? `url(${s.profilePicture})` : 'none'}; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 700; color: var(--primary-color); border: 2px solid var(--primary-light); flex-shrink: 0;">
+                            ${s.profilePicture ? '' : s.name.charAt(0).toUpperCase()}
                         </div>
-                        ${s.name}
+                        <span style="font-weight: 500;">${s.name}</span>
                     </div>
                 </td>
                 <td style="padding: 1rem; color: var(--text-secondary);">${s.department}</td>
@@ -398,27 +398,28 @@ const renderStudentsTab = (container, students) => {
     html += '<div class="mobile-card-list" style="display: none;">';
     students.forEach(s => {
         html += `
-            <div class="card" style="margin-bottom: 1rem;">
-                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                    <div style="width: 48px; height: 48px; background: var(--primary-color); border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: bold; flex-shrink: 0;">
-                        ${s.name.charAt(0).toUpperCase()}
+            <div class="card" style="margin-bottom: 1rem; padding: 1.25rem;">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem;">
+                    <div style="width: 52px; height: 52px; border-radius: 50%; background-color: var(--surface-hover); background-image: ${s.profilePicture ? `url(${s.profilePicture})` : 'none'}; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 800; color: var(--primary-color); border: 2px solid var(--primary-light); flex-shrink: 0;">
+                        ${s.profilePicture ? '' : s.name.charAt(0).toUpperCase()}
                     </div>
                     <div style="flex: 1; min-width: 0;">
-                        <div style="font-weight: 600; margin-bottom: 0.25rem;">${s.name}</div>
-                        <div style="font-size: 0.85rem; color: var(--text-secondary); font-family: monospace;">${s.id}</div>
+                        <div style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.25rem; color: var(--text-primary);">${s.name}</div>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary); font-family: monospace; letter-spacing: 0.05em;">${s.id}</div>
                     </div>
                 </div>
-                <div style="padding: 0.75rem; background: var(--background-color); border-radius: 6px; margin-bottom: 1rem;">
-                    <div style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.25rem;">Department</div>
-                    <div style="font-weight: 500;">${s.department}</div>
+                <div style="padding: 0.75rem; background: var(--background-color); border-radius: 12px; margin-bottom: 1.25rem; border: 1px solid var(--border-color);">
+                    <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 0.25rem;">Department</div>
+                    <div style="font-weight: 600; color: var(--text-secondary);">${s.department}</div>
                 </div>
-                <div style="display: flex; gap: 0.5rem;">
-                    <button class="btn btn-outline" style="flex: 1; justify-content: center;" onclick="window.sendMessage('${s.id}', '${s.name}')">Message</button>
-                    <button class="btn btn-danger" style="flex: 1; justify-content: center;" onclick="window.deleteStudent('${s.id}', '${s.name}')">Remove</button>
+                <div style="display: flex; gap: 0.75rem;">
+                    <button class="btn btn-outline" style="flex: 1; justify-content: center; font-size: 0.9rem;" onclick="window.sendMessage('${s.id}', '${s.name}')">Message</button>
+                    <button class="btn btn-danger" style="flex: 1; justify-content: center; font-size: 0.9rem;" onclick="window.deleteStudent('${s.id}', '${s.name}')">Remove</button>
                 </div>
             </div>
         `;
     });
+
     html += '</div>';
 
     container.innerHTML = html;

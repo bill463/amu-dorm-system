@@ -154,13 +154,37 @@ router.post('/students', async (req, res) => {
 // Delete student (Admin only)
 router.delete('/students/:id', async (req, res) => {
   try {
-    const student = await User.findByPk(req.params.id);
+    const studentId = req.params.id;
+    const student = await User.findByPk(studentId);
     if (!student) return res.status(404).json({ error: 'Student not found' });
 
+    // Cleanup related records to avoid FK constraints
+    await MaintenanceRequest.destroy({ where: { studentId } });
+    await ClearanceRequest.destroy({ where: { studentId } });
+    await LostItem.destroy({ where: { studentId } });
+    await DormChangeRequest.destroy({ where: { studentId } });
+    await Message.destroy({
+      where: {
+        [sequelize.Sequelize.Op.or]: [
+          { senderId: studentId },
+          { receiverId: studentId }
+        ]
+      }
+    });
+    await SwapRequest.destroy({
+      where: {
+        [sequelize.Sequelize.Op.or]: [
+          { senderId: studentId },
+          { receiverId: studentId }
+        ]
+      }
+    });
+
     await student.destroy();
-    res.json({ success: true, message: 'Student deleted successfully' });
+    res.json({ success: true, message: 'Student and associated data deleted successfully' });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Delete Student Error:', error);
+    res.status(500).json({ error: 'Failed to delete student: ' + error.message });
   }
 });
 
