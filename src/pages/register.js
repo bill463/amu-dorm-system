@@ -5,13 +5,13 @@ export const render = `
 <div style="display: flex; min-height: 100vh; background: var(--background-color);">
     <!-- Right Side - Registration Form -->
     <div class="registration-container" style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 1.5rem;">
-        <div class="card registration-card" style="width: 100%; max-width: 540px; padding: 2.5rem; border-radius: 24px; box-shadow: var(--shadow-xl);">
+        <div class="registration-form-wrapper" style="width: 100%; max-width: 540px; padding: 2rem;">
             
             <div style="text-align: center; margin-bottom: 2rem;">
                 <a href="#/" style="display: inline-block; margin-bottom: 1rem;">
                     <img src="/amu-logo.png" alt="AMU Logo" style="width: 60px; height: 60px; object-fit: contain;">
                 </a>
-                <h1 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1.8rem; letter-spacing: -0.03em; font-weight: 800;">Join AMU Housing</h1>
+                <h1 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1.8rem; letter-spacing: -0.03em; font-weight: 800;">Register for AMU Portal</h1>
                 <p style="color: var(--text-secondary); font-size: 0.95rem;">Create your student profile today</p>
             </div>
             
