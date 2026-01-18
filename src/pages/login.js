@@ -27,20 +27,20 @@ export const render = `
                 <div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.6rem;">
                         <label style="font-weight: 700; font-size: 0.85rem; color: #334155; text-transform: uppercase; letter-spacing: 0.025em;">Password</label>
-                        <a href="#/register" style="color: #14b8a6; font-size: 0.85rem; font-weight: 700; text-decoration: none;">Forgot?</a>
+                        <a href="#/register" style="color: #000000; font-size: 0.85rem; font-weight: 700; text-decoration: none;">Forgot?</a>
                     </div>
                     <input type="password" id="login-password" required placeholder="••••••••"
                         style="width: 100%; padding: 0.9rem 1.25rem; border-radius: 14px; border: 2px solid #f1f5f9; font-size: 1rem; font-weight: 500; transition: all 0.2s; background: #f8fafc;">
                 </div>
                 
-                <button type="submit" id="login-submit" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem; border-radius: 14px; background: #14b8a6; font-weight: 800; color: white; margin-top: 1rem; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 10px 15px -3px rgba(20, 184, 166, 0.3); border: none;">
+                <button type="submit" id="login-submit" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem; border-radius: 14px; background: #000000; font-weight: 800; color: white; margin-top: 1rem; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border: none;">
                     Sign In
                 </button>
             </form>
             
             <div style="text-align: center; margin-top: 2rem; border-top: 1px solid #f1f5f9; padding-top: 1.5rem;">
                 <p style="color: #64748b; font-size: 1rem; font-weight: 500;">
-                    New student? <a href="#/register" style="color: #14b8a6; font-weight: 800; text-decoration: none;">Create Account</a>
+                    New student? <a href="#/register" style="color: #000000; font-weight: 800; text-decoration: none;">Create Account</a>
                 </p>
             </div>
         </div>

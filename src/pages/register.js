@@ -17,25 +17,25 @@ export const render = `
                 </div>
 
                 <h2 style="font-size: 3rem; font-weight: 900; line-height: 1.1; letter-spacing: -0.04em; margin-bottom: 2rem;">
-                    Digitalize<br>Your <span style="color: #14b8a6;">Residence</span>.
+                    Digitalize<br>Your <span style="color: #000000;">Residence</span>.
                 </h2>
                 
                 <!-- Functionalities as Inline Cards at the very Bottom -->
                 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-top: 1rem;">
                     <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 1rem; transition: all 0.3s ease;">
-                        <div style="color: #14b8a6; font-size: 1.1rem; margin-bottom: 0.5rem;">✓</div>
+                        <div style="color: #000000; font-size: 1.1rem; margin-bottom: 0.5rem;">✓</div>
                         <h4 style="font-weight: 700; font-size: 0.85rem; margin-bottom: 0.25rem; color: white; line-height: 1.3;">Allocation Status</h4>
                         <p style="font-size: 0.75rem; opacity: 0.7; line-height: 1.4; margin: 0;">Real-time room status updates.</p>
                     </div>
 
                     <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 1rem; transition: all 0.3s ease;">
-                        <div style="color: #14b8a6; font-size: 1.1rem; margin-bottom: 0.5rem;">✓</div>
+                        <div style="color: #000000; font-size: 1.1rem; margin-bottom: 0.5rem;">✓</div>
                         <h4 style="font-weight: 700; font-size: 0.85rem; margin-bottom: 0.25rem; color: white; line-height: 1.3;">Maintenance</h4>
                         <p style="font-size: 0.75rem; opacity: 0.7; line-height: 1.4; margin: 0;">Track requests instantly.</p>
                     </div>
 
                     <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 1rem; transition: all 0.3s ease;">
-                        <div style="color: #14b8a6; font-size: 1.1rem; margin-bottom: 0.5rem;">✓</div>
+                        <div style="color: #000000; font-size: 1.1rem; margin-bottom: 0.5rem;">✓</div>
                         <h4 style="font-weight: 700; font-size: 0.85rem; margin-bottom: 0.25rem; color: white; line-height: 1.3;">Direct Comms</h4>
                         <p style="font-size: 0.75rem; opacity: 0.7; line-height: 1.4; margin: 0;">Instant admin messaging.</p>
                     </div>
@@ -91,14 +91,14 @@ export const render = `
                         style="width: 100%; padding: 0.75rem 1rem; border-radius: 12px; border: 2px solid #f1f5f9; font-weight: 500; background: #f8fafc;">
                 </div>
 
-                <button type="submit" id="btn-submit" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem; border-radius: 12px; font-weight: 800; background: #14b8a6; color: white; margin-top: 1rem; box-shadow: 0 10px 15px -3px rgba(20, 184, 166, 0.4);">
+                <button type="submit" id="btn-submit" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem; border-radius: 12px; font-weight: 800; background: #000000; color: white; margin-top: 1rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);">
                     Complete Registration
                 </button>
             </form>
 
             <div style="text-align: center; margin-top: 2rem;">
                 <p style="color: #64748b; font-size: 1rem; font-weight: 500;">
-                    Have an account? <a href="#/login" style="color: #14b8a6; font-weight: 800; text-decoration: none;">Sign in →</a>
+                    Have an account? <a href="#/login" style="color: #000000; font-weight: 800; text-decoration: none;">Sign in →</a>
                 </p>
             </div>
         </div>

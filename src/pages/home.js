@@ -34,7 +34,7 @@ export const render = `
             
             <!-- Badge -->
             <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); color: rgba(255,255,255,0.9); padding: 0.5rem 1.25rem; border-radius: 100px; font-weight: 600; font-size: 0.75rem; margin-bottom: 2rem; border: 1px solid rgba(255,255,255,0.1); text-transform: uppercase; letter-spacing: 0.05em;">
-                <span style="width: 6px; height: 6px; background: #14b8a6; border-radius: 50%;"></span>
+                <span style="width: 6px; height: 6px; background: #000000; border-radius: 50%;"></span>
                 Arba Minch University
             </div>
             
@@ -61,15 +61,15 @@ export const render = `
             <!-- Stats -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 2rem; max-width: 600px; margin: 0 auto;">
                 <div style="background: rgba(0,0,0,0.4); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); border-radius: 16px; padding: 1.5rem;">
-                    <div id="stat-students" style="font-size: 2rem; font-weight: 800; color: #14b8a6; margin-bottom: 0.25rem;">...</div>
+                    <div id="stat-students" style="font-size: 2rem; font-weight: 800; color: #000000; margin-bottom: 0.25rem;">...</div>
                     <div style="color: rgba(255,255,255,0.8); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Students</div>
                 </div>
                 <div style="background: rgba(0,0,0,0.4); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); border-radius: 16px; padding: 1.5rem;">
-                    <div id="stat-rooms" style="font-size: 2rem; font-weight: 800; color: #14b8a6; margin-bottom: 0.25rem;">...</div>
+                    <div id="stat-rooms" style="font-size: 2rem; font-weight: 800; color: #000000; margin-bottom: 0.25rem;">...</div>
                     <div style="color: rgba(255,255,255,0.8); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Rooms</div>
                 </div>
                 <div style="background: rgba(0,0,0,0.4); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); border-radius: 16px; padding: 1.5rem;">
-                    <div style="font-size: 2rem; font-weight: 800; color: #14b8a6; margin-bottom: 0.25rem;">24/7</div>
+                    <div style="font-size: 2rem; font-weight: 800; color: #000000; margin-bottom: 0.25rem;">24/7</div>
                     <div style="color: rgba(255,255,255,0.8); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Support</div>
                 </div>
             </div>
@@ -95,12 +95,12 @@ export const render = `
     min-width: 180px;
 }
 .landing-btn-primary {
-    background: #14b8a6;
+    background: #000000;
     color: white;
     border: none;
 }
 .landing-btn-primary:hover {
-    background: #0d9488;
+    background: #1a1a1a;
     transform: translateY(-2px);
 }
 .landing-btn-outline {
