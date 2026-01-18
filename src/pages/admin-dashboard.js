@@ -385,7 +385,7 @@ const renderStudentsTab = (container, students) => {
                 <td style="padding: 1rem;">
                     <div style="display: flex; gap: 0.5rem;">
                         <button class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;" onclick="window.sendMessage('${s.id}', '${s.name}')">Message</button>
-                        <button class="btn btn-danger" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">Remove</button>
+                        <button class="btn btn-danger" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;" onclick="window.deleteStudent('${s.id}', '${s.name}')">Remove</button>
                     </div>
                 </td>
             </tr>
@@ -414,7 +414,7 @@ const renderStudentsTab = (container, students) => {
                 </div>
                 <div style="display: flex; gap: 0.5rem;">
                     <button class="btn btn-outline" style="flex: 1; justify-content: center;" onclick="window.sendMessage('${s.id}', '${s.name}')">Message</button>
-                    <button class="btn btn-danger" style="flex: 1; justify-content: center;">Remove</button>
+                    <button class="btn btn-danger" style="flex: 1; justify-content: center;" onclick="window.deleteStudent('${s.id}', '${s.name}')">Remove</button>
                 </div>
             </div>
         `;
@@ -443,6 +443,18 @@ const renderStudentsTab = (container, students) => {
             } catch (error) {
                 alert('Failed to send message: ' + error.message);
             }
+        }
+    };
+
+    window.deleteStudent = async (studentId, studentName) => {
+        if (!confirm(`Are you SURE you want to Delete ${studentName} (${studentId})? This action cannot be undone.`)) return;
+
+        try {
+            const res = await apiCall(`/api/students/${studentId}`, 'DELETE');
+            showToast(res.message, 'success');
+            updateTabContent();
+        } catch (error) {
+            showToast('Delete failed: ' + error.message, 'error');
         }
     };
 };

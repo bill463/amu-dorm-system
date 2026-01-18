@@ -59,7 +59,9 @@ export const init = async () => {
     // Personalize title
     const welcomeTitle = document.getElementById('welcome-title');
     if (welcomeTitle) {
-        welcomeTitle.textContent = `Welcome, ${user.name.split(' ')[0]}`;
+        const firstName = user.name.split(' ')[0];
+        const capitalized = firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase();
+        welcomeTitle.textContent = `Welcome, ${capitalized}`;
     }
 
     try {
@@ -166,7 +168,6 @@ export const init = async () => {
             <!-- Quick Access Services -->
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
                 <h3 style="margin: 0;">Online Services</h3>
-                <span style="font-size: 0.9rem; color: var(--text-muted); font-weight: 600;">PORTAL VERSION 2.1</span>
             </div>
 
             <div class="grid grid-3">

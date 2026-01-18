@@ -20,12 +20,13 @@ router.post('/rooms/reset', async (req, res) => {
 
     await Room.destroy({ where: {}, truncate: false }); // truncate: true might fail with FKs, use simple destroy
 
-    // Re-seed with new structure: 4 Blocks, 4 Floors, 16 Rooms
+    // Re-seed with new structure: 4 Blocks, 4 Floors, 20 Rooms
     const newRooms = [];
     for (let b = 1; b <= 4; b++) {
       for (let f = 1; f <= 4; f++) {
-        for (let r = 1; r <= 16; r++) {
-          const roomNum = `${f}${r.toString().padStart(2, '0')}`;
+        for (let r = 1; r <= 20; r++) {
+          // Room numbers start from 001. f=1 -> 001, f=2 -> 101, etc.
+          const roomNum = `${f - 1}${r.toString().padStart(2, '0')}`;
           newRooms.push({
             id: `B${b}-${roomNum}`,
             block: `Block ${b}`,
@@ -42,7 +43,7 @@ router.post('/rooms/reset', async (req, res) => {
     // Better to set their roomId to null
     await User.update({ roomId: null }, { where: { role: 'student' } });
 
-    res.json({ success: true, message: `Successfully reset rooms. Created ${newRooms.length} rooms (4 Blocks x 64 rooms). All students unassigned.` });
+    res.json({ success: true, message: `Successfully reset rooms. Created ${newRooms.length} rooms (4 Blocks x 80 rooms). All students unassigned.` });
   } catch (error) {
     console.error('Room Reset Error:', error);
     res.status(500).json({ error: error.message });
@@ -147,6 +148,19 @@ router.post('/students', async (req, res) => {
   } catch (error) {
     console.error('Error creating student:', error);
     res.status(500).json({ error: 'Failed to create student' });
+  }
+});
+
+// Delete student (Admin only)
+router.delete('/students/:id', async (req, res) => {
+  try {
+    const student = await User.findByPk(req.params.id);
+    if (!student) return res.status(404).json({ error: 'Student not found' });
+
+    await student.destroy();
+    res.json({ success: true, message: 'Student deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 
