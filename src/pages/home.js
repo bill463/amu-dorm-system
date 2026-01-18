@@ -24,47 +24,47 @@ export const init = async () => {
 };
 
 export const render = `
-<div style="position: relative; min-height: calc(100vh - 80px); display: flex; align-items: center; overflow: hidden; background: #000;">
+<div style="position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #000; margin-top: -80px;">
     <!-- Background Image with Overlay -->
-    <div style="position: absolute; inset: 0; background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.7)), url('/landing-bg.jpg'); background-size: cover; background-position: center; z-index: 1;"></div>
+    <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.8)), url('/landing-bg.jpg'); background-size: cover; background-position: center; z-index: 1;"></div>
     
-    <div class="container" style="position: relative; z-index: 2; padding-top: 4rem; padding-bottom: 4rem;">
-        <div style="max-width: 800px; animation: fadeInUp 1s ease-out;">
-            <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); color: #fff; padding: 0.5rem 1.25rem; border-radius: 100px; font-weight: 600; font-size: 0.9rem; margin-bottom: 2rem; border: 1px solid rgba(255,255,255,0.2);">
-                <span>🏫</span> Arba Minch Institute of Technology
-            </div>
+    <div class="container" style="position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; padding: 2rem;">
+        <div style="max-width: 900px; width: 100%; text-align: center; animation: zoomIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);">
             
-            <h1 style="font-size: clamp(3rem, 8vw, 5rem); line-height: 1; color: white; margin-bottom: 2rem; letter-spacing: -0.04em; font-weight: 800;">
-                Revolutionizing <br><span style="color: #14b8a6;">Dormitory</span> Life.
-            </h1>
-            
-            <p style="font-size: clamp(1.1rem, 2vw, 1.4rem); color: rgba(255,255,255,0.9); margin-bottom: 3rem; max-width: 600px; line-height: 1.6; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
-                The official Arba Minch University residence management portal. Secure access, automated allocations, and seamless student support.
-            </p>
-            
-            <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
-                <a href="#/login" class="btn" style="background: #0d9488; color: white; padding: 1.25rem 3rem; font-size: 1.2rem; font-weight: 700; border-radius: 12px; transition: all 0.3s ease;">
-                    Access Portal
-                </a>
-                <a href="#/register" class="btn" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 1.25rem 3rem; font-size: 1.2rem; font-weight: 600; border-radius: 12px; transition: all 0.3s ease;">
-                    Student Registry
-                </a>
-            </div>
+            <!-- Glass Card -->
+            <div style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.1); border-radius: 40px; padding: 4rem 2rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);">
+                
+                <div style="display: inline-flex; align-items: center; gap: 0.75rem; background: rgba(20, 184, 166, 0.2); color: #14b8a6; padding: 0.6rem 1.5rem; border-radius: 100px; font-weight: 700; font-size: 0.85rem; margin-bottom: 2.5rem; border: 1px solid rgba(20, 184, 166, 0.3); text-transform: uppercase; letter-spacing: 0.1em;">
+                    <span style="animation: pulse 2s infinite;">●</span> System Online
+                </div>
+                
+                <h1 style="font-size: clamp(2.5rem, 10vw, 5.5rem); line-height: 0.95; color: white; margin-bottom: 2rem; letter-spacing: -0.05em; font-weight: 900;">
+                    Your <span style="background: linear-gradient(135deg, #14b8a6, #2dd4bf); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Campus Home</span>, <br>Simplified.
+                </h1>
+                
+                <p style="font-size: clamp(1.1rem, 2vw, 1.35rem); color: rgba(255,255,255,0.8); margin-bottom: 3.5rem; max-width: 650px; margin-left: auto; margin-right: auto; line-height: 1.6; font-weight: 400;">
+                    Experience the next generation of residence management at Arba Minch University. Secure, intelligent, and designed for students.
+                </p>
+                
+                <div style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="#/login" class="btn" style="background: #14b8a6; color: white; padding: 1.25rem 3.5rem; font-size: 1.2rem; font-weight: 700; border-radius: 16px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: none; transform: perspective(1px) translateZ(0);">
+                        Login to Portal
+                    </a>
+                    <a href="#/register" class="btn" style="background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); color: white; border: 1px solid rgba(255,255,255,0.15); padding: 1.25rem 3.5rem; font-size: 1.2rem; font-weight: 700; border-radius: 16px; transition: all 0.3s ease;">
+                        Self-Registration
+                    </a>
+                </div>
 
-            <div style="margin-top: 5rem; display: flex; gap: 4rem; align-items: center; flex-wrap: wrap;">
-                <div>
-                    <div id="stat-students" style="font-size: 2rem; font-weight: 800; color: white;">...</div>
-                    <div style="color: rgba(255,255,255,0.6); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;">Students</div>
-                </div>
-                <div style="width: 1px; height: 40px; background: rgba(255,255,255,0.2);" class="desktop-only"></div>
-                <div>
-                    <div id="stat-rooms" style="font-size: 2rem; font-weight: 800; color: white;">...</div>
-                    <div style="color: rgba(255,255,255,0.6); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;">Daily Requests</div>
-                </div>
-                <div style="width: 1px; height: 40px; background: rgba(255,255,255,0.2);" class="desktop-only"></div>
-                <div>
-                    <div style="font-size: 2rem; font-weight: 800; color: white;">24/7</div>
-                    <div style="color: rgba(255,255,255,0.6); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;">Support</div>
+                <div style="margin-top: 5rem; display: flex; gap: 4rem; align-items: center; justify-content: center; flex-wrap: wrap; opacity: 0.8;">
+                    <div style="text-align: center;">
+                        <div id="stat-students" style="font-size: 2.5rem; font-weight: 900; color: white; line-height: 1;">...</div>
+                        <div style="color: rgba(255,255,255,0.5); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; margin-top: 0.5rem;">Active Students</div>
+                    </div>
+                    <div style="width: 1px; height: 50px; background: rgba(255,255,255,0.1);" class="desktop-only"></div>
+                    <div style="text-align: center;">
+                        <div id="stat-rooms" style="font-size: 2.5rem; font-weight: 900; color: white; line-height: 1;">...</div>
+                        <div style="color: rgba(255,255,255,0.5); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; margin-top: 0.5rem;">Available Rooms</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -72,17 +72,19 @@ export const render = `
 </div>
 
 <style>
-@keyframes fadeInUp {
-    from { transform: translateY(30px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+@keyframes zoomIn {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1; }
 }
 @media (max-width: 768px) {
     .desktop-only { display: none !important; }
-    .container { text-align: center; }
-    div[style*="justify-content: flex-start"] { justify-content: center !important; }
-    div[style*="display: flex; gap: 4rem"] { justify-content: center; gap: 2rem !important; }
-    div[style*="display: flex; gap: 1.5rem"] { justify-content: center; }
+    h1 { font-size: 3rem !important; }
+    div[style*="padding: 4rem 2rem"] { padding: 3rem 1.5rem !important; }
 }
 </style>
 `;
-

@@ -73,16 +73,7 @@ export const init = async () => {
   const user = getUser();
   if (!user) return;
 
-  // Adapt to unallocated students
-  if (!user.roomId) {
-    const pageTitle = document.getElementById('page-title');
-    const tabContainer = document.getElementById('tab-container');
-    const formTitle = document.querySelector('#view-standard h3');
 
-    if (pageTitle) pageTitle.textContent = '🏠 Room Allocation';
-    if (tabContainer) tabContainer.style.display = 'none';
-    if (formTitle) formTitle.textContent = 'Request Allocation';
-  }
 
   // Tab switching logic
   const tabs = { standard: document.getElementById('tab-standard'), swap: document.getElementById('tab-swap') };

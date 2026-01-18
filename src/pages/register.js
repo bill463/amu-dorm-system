@@ -2,101 +2,105 @@ import { apiCall } from '../utils/api.js';
 import { showToast } from '../components/Toast.js';
 
 export const render = `
-<div style="display: flex; min-height: 100vh; background: var(--background-color);">
-    <!-- Right Side - Registration Form -->
-    <div class="registration-container" style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 1.5rem;">
-        <div class="registration-form-wrapper" style="width: 100%; max-width: 540px; padding: 2rem;">
-            
-            <div style="text-align: center; margin-bottom: 2rem;">
-                <a href="#/" style="display: inline-block; margin-bottom: 1rem;">
-                    <img src="/amu-logo.png" alt="AMU Logo" style="width: 60px; height: 60px; object-fit: contain;">
-                </a>
-                <h1 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1.8rem; letter-spacing: -0.03em; font-weight: 800;">Register for AMU Portal</h1>
-                <p style="color: var(--text-secondary); font-size: 0.95rem;">Create your student profile today</p>
+<div style="display: flex; min-height: 100vh; background: #ffffff;">
+    <!-- Left Side - Visual Branding (Hidden on mobile) -->
+    <div class="desktop-only" style="flex: 1.25; position: relative; overflow: hidden; background: #000;">
+        <div style="position: absolute; inset: 0; background: linear-gradient(to right, rgba(0,0,0,0.4), rgba(13, 148, 136, 0.2)), url('/landing-bg.jpg'); background-size: cover; background-position: center; filter: brightness(0.8);"></div>
+        
+        <div style="position: relative; height: 100%; display: flex; flex-direction: column; justify-content: space-between; padding: 4rem; z-index: 2; color: white;">
+            <div>
+                <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 0.75rem 1.5rem; border-radius: 100px; display: inline-flex; align-items: center; gap: 0.75rem; border: 1px solid rgba(255,255,255,0.2);">
+                    <img src="/amu-logo.png" style="width: 24px; height: 24px;">
+                    <span style="font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase;">Arba Minch University</span>
+                </div>
             </div>
-            
-            <form id="register-form">
-                <div class="reg-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem;">
-                    <div class="form-group">
-                        <label style="font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); display: block; margin-bottom: 0.5rem;">Student ID</label>
-                        <input type="text" id="reg-id" required placeholder="NSR/1234/16" style="width: 100%;">
+
+            <div style="max-width: 500px; animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);">
+                <h2 style="font-size: 4rem; font-weight: 850; line-height: 1; letter-spacing: -0.05em; margin-bottom: 2rem;">Digitalize <br>Your <span style="color: #14b8a6;">Residence</span>.</h2>
+                <div style="display: grid; gap: 1.5rem;">
+                    <div style="display: flex; gap: 1rem; align-items: center; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 16px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);">
+                        <div style="width: 40px; height: 40px; background: #14b8a6; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">✓</div>
+                        <p style="font-weight: 500; font-size: 1rem;">Instant Room Allocation Status</p>
                     </div>
-                    <div class="form-group">
-                        <label style="font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); display: block; margin-bottom: 0.5rem;">Full Name</label>
-                        <input type="text" id="reg-name" required placeholder="Your Name" style="width: 100%;">
+                    <div style="display: flex; gap: 1rem; align-items: center; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 16px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);">
+                        <div style="width: 40px; height: 40px; background: #14b8a6; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">⚡</div>
+                        <p style="font-weight: 500; font-size: 1rem;">Seamless Maintenance Requests</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="font-size: 0.9rem; opacity: 0.7; font-weight: 500;">
+                © ${new Date().getFullYear()} AMU Housing Division. All rights reserved.
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Side - Registration Form -->
+    <div style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 2rem; background: #fefefe;">
+        <div style="width: 100%; max-width: 440px; animation: fadeIn 0.8s ease-out;">
+            <div style="margin-bottom: 2.5rem; text-align: center;">
+                <h1 style="font-size: 2.25rem; font-weight: 900; color: #0f172a; letter-spacing: -0.04em; margin-bottom: 0.5rem;">Create Account</h1>
+                <p style="color: #64748b; font-size: 1.1rem; font-weight: 500;">Fill in your details to get started.</p>
+            </div>
+
+            <form id="register-form" style="display: flex; flex-direction: column; gap: 1.25rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.025em;">Student ID</label>
+                        <input type="text" id="reg-id" required placeholder="NSR/..." 
+                            style="width: 100%; padding: 0.75rem 1rem; border-radius: 12px; border: 2px solid #f1f5f9; font-weight: 500; transition: all 0.2s; background: #f8fafc;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.025em;">Full Name</label>
+                        <input type="text" id="reg-name" required placeholder="Name" 
+                            style="width: 100%; padding: 0.75rem 1rem; border-radius: 12px; border: 2px solid #f1f5f9; font-weight: 500; transition: all 0.2s; background: #f8fafc;">
                     </div>
                 </div>
 
-                <div class="form-group" style="margin-bottom: 1.25rem;">
-                    <label style="font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); display: block; margin-bottom: 0.5rem;">Department</label>
-                    <select id="reg-dept" required style="width: 100%; padding: 0.8rem; border-radius: 10px; border: 1px solid var(--border-color); background: #fff;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.025em;">Department</label>
+                    <select id="reg-dept" required style="width: 100%; padding: 0.75rem 1rem; border-radius: 12px; border: 2px solid #f1f5f9; font-weight: 500; background: #f8fafc; cursor: pointer;">
                         <option value="">Select Department</option>
                         <option value="Architecture">Architecture</option>
                         <option value="Civil Engineering">Civil Engineering</option>
-                        <option value="Surveying Engineering">Surveying Engineering</option>
                         <option value="Software Engineering">Software Engineering</option>
                         <option value="Computer Science">Computer Science</option>
-                        <option value="Information Technology">Information Technology</option>
-                        <option value="Electrical & Computer Engineering">Electrical & Computer Engineering</option>
+                        <option value="Electrical & Computer Engineering">Electrical Engineering</option>
                         <option value="Mechanical Engineering">Mechanical Engineering</option>
                     </select>
                 </div>
 
-                <div class="form-group" style="margin-bottom: 1.25rem;">
-                    <label style="font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); display: block; margin-bottom: 0.5rem;">Official Email</label>
-                    <input type="email" id="reg-email" required placeholder="student@amu.edu.et" style="width: 100%;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.025em;">Official Email</label>
+                    <input type="email" id="reg-email" required placeholder="student@amu.edu.et" 
+                        style="width: 100%; padding: 0.75rem 1rem; border-radius: 12px; border: 2px solid #f1f5f9; font-weight: 500; background: #f8fafc;">
                 </div>
 
-                <div class="form-group" style="margin-bottom: 2rem;">
-                    <label style="font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); display: block; margin-bottom: 0.5rem;">Password</label>
-                    <input type="password" id="reg-password" required placeholder="••••••••" style="width: 100%;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.025em;">Password</label>
+                    <input type="password" id="reg-password" required placeholder="••••••••" 
+                        style="width: 100%; padding: 0.75rem 1rem; border-radius: 12px; border: 2px solid #f1f5f9; font-weight: 500; background: #f8fafc;">
                 </div>
 
-                <button type="submit" id="btn-submit" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1rem; border-radius: 12px; font-weight: 700; background: var(--primary-color);">Complete Registration</button>
+                <button type="submit" id="btn-submit" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem; border-radius: 12px; font-weight: 800; background: #14b8a6; color: white; margin-top: 1rem; box-shadow: 0 10px 15px -3px rgba(20, 184, 166, 0.4);">
+                    Complete Registration
+                </button>
             </form>
-            
-            <div style="text-align: center; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
-                <p style="color: var(--text-secondary); font-size: 0.9rem;">
-                    Already have an account? <a href="#/login" style="color: var(--primary-color); font-weight: 700; text-decoration: none;">Sign In</a>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <p style="color: #64748b; font-size: 1rem; font-weight: 500;">
+                    Have an account? <a href="#/login" style="color: #14b8a6; font-weight: 800; text-decoration: none;">Sign in ➔</a>
                 </p>
             </div>
         </div>
     </div>
-
-    <!-- Left Side - Info Overlay for Desktop -->
-    <div style="flex: 1.2; position: relative; overflow: hidden; display: none;" class="desktop-only text-reveal">
-        <div style="position: absolute; inset: 0; background: linear-gradient(rgba(13, 148, 136, 0.8), rgba(13, 148, 136, 0.9)), url('https://images.unsplash.com/photo-1541339907198-e08756ebafe1?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center;"></div>
-        <div style="position: relative; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 5rem; color: white;">
-            <h2 style="font-size: 3.5rem; margin-bottom: 2rem; color: white; letter-spacing: -0.04em; font-weight: 800; line-height: 1.1;">Secure Your <br>Placement.</h2>
-            <div style="display: grid; gap: 2rem; max-width: 400px;">
-                <div style="display: flex; gap: 1.25rem; align-items: start;">
-                    <div style="font-size: 1.5rem; background: rgba(255,255,255,0.2); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px);">🏛️</div>
-                    <div>
-                        <h4 style="color: white; margin-bottom: 0.25rem; font-size: 1.1rem;">Official Registry</h4>
-                        <p style="opacity: 0.8; font-size: 0.9rem; line-height: 1.5;">Register once to manage your entire housing journey at AMU.</p>
-                    </div>
-                </div>
-                <div style="display: flex; gap: 1.25rem; align-items: start;">
-                    <div style="font-size: 1.5rem; background: rgba(255,255,255,0.2); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px);">🛡️</div>
-                    <div>
-                        <h4 style="color: white; margin-bottom: 0.25rem; font-size: 1.1rem;">Safe & Secure</h4>
-                        <p style="opacity: 0.8; font-size: 0.9rem; line-height: 1.5;">Your data is protected by industry-standard encryption protocols.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
+
 <style>
-    @media (min-width: 1024px) {
-        .desktop-only { display: block !important; }
-        .registration-container { flex: 0.8 !important; }
-    }
-    @media (max-width: 600px) {
-        .registration-card { padding: 1.5rem !important; }
-        .reg-grid { grid-template-columns: 1fr !important; gap: 0.75rem !important; }
-        h1 { font-size: 1.5rem !important; }
-    }
+    @media (max-width: 1024px) { .desktop-only { display: none !important; } }
+    input:focus, select:focus { border-color: #14b8a6 !important; background: white !important; outline: none; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 </style>
 `;
 
@@ -115,12 +119,12 @@ export const init = () => {
             const password = document.getElementById('reg-password').value;
 
             btn.disabled = true;
-            btn.innerHTML = 'Creating Account...';
+            btn.innerHTML = '<span style="display: inline-flex; align-items: center; gap: 0.5rem;"><svg class="animate-spin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"></path></svg> Initializing...</span>';
 
             try {
                 const result = await apiCall('/auth/register', 'POST', { id, name, department: dept, email, password });
                 if (result.success) {
-                    showToast('Registration Successful! Redirecting...', 'success');
+                    showToast('Welcome aboard! Redirecting...', 'success');
                     setTimeout(() => window.location.hash = '#/login', 1500);
                 } else {
                     showToast(result.message || 'Registration failed', 'error');
@@ -135,3 +139,4 @@ export const init = () => {
         });
     }
 };
+
