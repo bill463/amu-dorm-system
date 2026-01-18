@@ -7,27 +7,18 @@ export const renderNavbar = () => {
     let mainLinks = '';
     let rightSection = '';
 
-    const currentTheme = localStorage.getItem('amu-theme') || 'light';
-    document.documentElement.setAttribute('data-theme', currentTheme);
-    const themeIcon = currentTheme === 'dark' ? '☀️' : '🌙';
+    // No theme toggle needed, default to light
+    document.documentElement.setAttribute('data-theme', 'light');
 
     if (user) {
         if (user.role === 'admin') {
             mainLinks = `
-                <a href="#/admin" class="nav-link" title="Dashboard">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-                    <span class="nav-text">Dashboard</span>
-                </a>
                 <a href="#/search" class="nav-link" title="Search">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                     <span class="nav-text">Search</span>
                 </a>`;
         } else {
             mainLinks = `
-                <a href="#/dashboard" class="nav-link" title="Dashboard">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                    <span class="nav-text">Dashboard</span>
-                </a>
                 <a href="#/search" class="nav-link" title="Search">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                     <span class="nav-text">Search</span>
@@ -70,7 +61,6 @@ export const renderNavbar = () => {
 
         rightSection = `
         <div class="profile-container" style="display: flex; align-items: center; gap: 0.75rem;">
-            <button id="theme-toggle" class="theme-toggle" title="Toggle Dark/Light Mode">${themeIcon}</button>
             <a href="#/profile" class="profile-link" style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary);">
                 <div style="${avatarStyle}">
                     ${user.profilePicture ? '' : user.name.charAt(0).toUpperCase()}
@@ -88,7 +78,6 @@ export const renderNavbar = () => {
     } else {
         rightSection = `
         <div class="profile-container" style="border: none; display: flex; align-items: center; gap: 1rem;">
-            <button id="theme-toggle" class="theme-toggle" title="Toggle Dark/Light Mode">${themeIcon}</button>
             <a href="#/login" class="nav-link">Login</a>
             <a href="#/register" class="btn btn-primary" style="padding: 0.4rem 1rem; font-size: 0.85rem;">Sign Up</a>
         </div>
@@ -137,21 +126,6 @@ export const renderNavbar = () => {
             .nav-header { gap: 0.5rem !important; }
             .nav-link { padding: 0.5rem; }
         }
-
-        .theme-toggle {
-            background: var(--surface-hover);
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            cursor: pointer;
-            width: 32px; height: 32px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1rem;
-            transition: var(--transition);
-        }
-        .theme-toggle:hover {
-            transform: rotate(15deg) scale(1.1);
-        }
     </style>
     `;
 };
@@ -160,17 +134,6 @@ document.addEventListener('click', (e) => {
     if (e.target.id === 'logout-btn' || e.target.closest('#logout-btn')) {
         logout();
     }
-
-    if (e.target.id === 'theme-toggle' || e.target.closest('#theme-toggle')) {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('amu-theme', newTheme);
-
-        const btn = document.getElementById('theme-toggle');
-        if (btn) btn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
-    }
 });
 
 export const updateNavBadge = async () => {
@@ -178,7 +141,7 @@ export const updateNavBadge = async () => {
     if (!user || user.role !== 'student') return;
 
     try {
-        const { count } = await apiCall(`/api/messages/unread-count?userId=${user.id}`);
+        const { count } = await apiCall(\`/api/messages/unread-count?userId=\${user.id}\`);
         const badge = document.getElementById('nav-unread-badge');
         if (badge) {
             if (count > 0) {

@@ -90,10 +90,11 @@ export const render = `
     .admin-tabs-container {
         -ms-overflow-style: none;
         scrollbar-width: none;
+        flex-wrap: wrap; /* Prevent horizontal scrolling */
     }
     
     .tab-btn {
-        padding: 1rem 1.5rem;
+        padding: 0.75rem 1rem;
         border: none;
         background: transparent;
         cursor: pointer;
@@ -101,12 +102,30 @@ export const render = `
         color: var(--text-secondary);
         transition: all 0.2s;
         border-bottom: 3px solid transparent;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
     }
     
     .tab-btn.active {
         color: var(--primary-color);
         border-bottom-color: var(--primary-color);
+    }
+
+    .room-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+        cursor: pointer;
+    }
+
+    .block-header {
+        cursor: pointer;
+        user-select: none;
+        transition: background 0.2s;
+    }
+    .block-header:hover {
+        background: var(--surface-hover);
     }
     
     /* Mobile-friendly tables */
@@ -116,6 +135,7 @@ export const render = `
         }
         #tab-content {
             padding: 1.25rem 0.75rem !important;
+            overflow-x: hidden; /* Remove horizontal scroll */
         }
         .card {
             padding: 1.25rem !important;
@@ -152,11 +172,12 @@ export const render = `
 
         /* Tabs segmented control feel on mobile */
         .admin-tabs-container {
-            padding: 0 0.5rem !important;
+            padding: 0.5rem !important;
+            gap: 0.25rem !important;
         }
         .tab-btn {
-            padding: 0.75rem 1rem !important;
-            font-size: 0.85rem !important;
+            padding: 0.5rem 0.75rem !important;
+            font-size: 0.8rem !important;
         }
     }
     
@@ -219,28 +240,40 @@ const renderRoomsTab = (container, rooms) => {
         blocks[r.block].push(r);
     });
 
-    let html = '';
+    let html = `
+        <div style="margin-bottom: 1.5rem;">
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Click a block to view rooms, and a room to see occupants.</p>
+        </div>
+    `;
+
     for (const [block, blockRooms] of Object.entries(blocks)) {
         html += `
-            <div style="margin-bottom: 2rem;">
-                <h3 style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-color);">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
-                    Block ${block}
-                </h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem;">
+            <div class="block-section" style="margin-bottom: 1rem; border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; background: white;">
+                <div class="block-header" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'grid' : 'none'" style="display: flex; align-items: center; justify-content: space-between; padding: 1.25rem; background: #f8fafc; border-bottom: 1px solid var(--border-color);">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                        <h3 style="margin: 0; font-size: 1.1rem;">Block ${block}</h3>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <span class="badge" style="background: var(--primary-light); color: var(--primary-dark);">${blockRooms.length} Rooms</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                    </div>
+                </div>
+                <div class="block-rooms-grid" style="display: none; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; padding: 1.25rem; background: white;">
         `;
         blockRooms.forEach(r => {
             const occCount = (r.occupants || []).length;
             const isFull = occCount >= r.capacity;
-            const color = isFull ? '#fff1f2' : '#f0fdf4';
-            const borderColor = isFull ? '#fda4af' : '#86efac';
             const statusColor = isFull ? 'var(--danger-color)' : 'var(--success-color)';
+            const occupantsJson = JSON.stringify(r.occupants || []).replace(/"/g, '&quot;');
 
             html += `
-                <div style="background: ${color}; border: 1px solid ${borderColor}; padding: 1rem; border-radius: 8px; text-align: center; transition: transform 0.2s;">
-                    <div style="font-weight: 700; font-size: 1.25rem; margin-bottom: 0.25rem;">${r.number}</div>
-                    <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Capacity: ${r.capacity}</div>
-                    <div style="display: inline-block; padding: 0.25rem 0.75rem; border-radius: 99px; background: white; font-size: 0.75rem; font-weight: 600; color: ${statusColor}; border: 1px solid ${borderColor};">
+                <div class="room-card" 
+                     onclick="window.showRoomOccupants('${r.number}', '${occupantsJson}')"
+                     style="background: white; border: 1.5px solid var(--border-color); padding: 1rem; border-radius: 10px; text-align: center; transition: all 0.2s;">
+                    <div style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.25rem;">Room ${r.number}</div>
+                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Cap: ${r.capacity}</div>
+                    <div style="display: inline-block; padding: 0.2rem 0.6rem; border-radius: 99px; background: ${isFull ? '#fee2e2' : '#dcfce7'}; font-size: 0.7rem; font-weight: 700; color: ${statusColor};">
                         ${occCount} / ${r.capacity}
                     </div>
                 </div>
@@ -249,6 +282,50 @@ const renderRoomsTab = (container, rooms) => {
         html += `</div></div>`;
     }
     container.innerHTML = html;
+};
+
+window.showRoomOccupants = (number, occupantsJson) => {
+    const occupants = JSON.parse(occupantsJson);
+    const modal = document.createElement('div');
+    modal.id = 'occupants-modal';
+    modal.style = "position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 2000; padding: 1rem; backdrop-filter: blur(4px);";
+
+    let occupantsHtml = '';
+    if (occupants.length === 0) {
+        occupantsHtml = '<p style="text-align: center; color: var(--text-secondary); padding: 2rem;">No students assigned to this room.</p>';
+    } else {
+        occupantsHtml = occupants.map(s => `
+            <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; border-bottom: 1px solid var(--border-color);">
+                <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--surface-hover); display: flex; align-items: center; justify-content: center; font-weight: 600; color: var(--primary-color);">
+                    ${s.name.charAt(0).toUpperCase()}
+                </div>
+                <div>
+                    <div style="font-weight: 600;">${s.name}</div>
+                    <div style="font-size: 0.8rem; color: var(--text-secondary);">${s.id} | ${s.department}</div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    modal.innerHTML = `
+        <div class="card" style="width: 100%; max-width: 400px; padding: 0; overflow: hidden; animation: fadeIn 0.3s ease;">
+            <div style="padding: 1.25rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="margin: 0;">Room ${number} Occupants</h3>
+                <button onclick="this.closest('#occupants-modal').remove()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-secondary);">&times;</button>
+            </div>
+            <div style="max-height: 300px; overflow-y: auto;">
+                ${occupantsHtml}
+            </div>
+            <div style="padding: 1.25rem; background: #f8fafc; text-align: right;">
+                <button class="btn btn-outline" onclick="this.closest('#occupants-modal').remove()" style="padding: 0.5rem 1rem;">Close</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+
+    modal.onclick = (e) => {
+        if (e.target === modal) modal.remove();
+    };
 };
 
 const renderStudentsTab = (container, students) => {
